@@ -1,0 +1,33 @@
+{
+	"name": "@loreweave/world",
+	"version": "0.1.0",
+	"private": true,
+	"description": "World engine — chunks, tiles, biomes, state management",
+	"type": "module",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		}
+	},
+	"scripts": {
+		"build": "tsc",
+		"dev": "tsc --watch",
+		"test": "vitest run --passWithNoTests",
+		"test:watch": "vitest",
+		"typecheck": "tsc --noEmit",
+		"clean": "rm -rf dist"
+	},
+	"dependencies": {
+		"@loreweave/types": "*",
+		"@loreweave/rules": "*"
+	},
+	"devDependencies": {
+		"vitest": "^3.1.1"
+	},
+	"files": [
+		"dist"
+	]
+}

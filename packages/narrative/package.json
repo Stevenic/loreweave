@@ -1,0 +1,33 @@
+{
+	"name": "@loreweave/narrative",
+	"version": "0.1.0",
+	"private": true,
+	"description": "Narrative engine — LLM bridge, prompt assembly, intent parser",
+	"type": "module",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		}
+	},
+	"scripts": {
+		"build": "tsc",
+		"dev": "tsc --watch",
+		"test": "vitest run --passWithNoTests",
+		"test:watch": "vitest",
+		"typecheck": "tsc --noEmit",
+		"clean": "rm -rf dist"
+	},
+	"dependencies": {
+		"@loreweave/types": "*",
+		"@loreweave/world": "*"
+	},
+	"devDependencies": {
+		"vitest": "^3.1.1"
+	},
+	"files": [
+		"dist"
+	]
+}

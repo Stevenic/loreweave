@@ -1,0 +1,26 @@
+{
+  "name": "loreweave",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A D&D-inspired text adventure engine with pixel-art rendering",
+  "workspaces": [
+    "packages/*",
+    "services/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "dev": "npm run dev --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "clean": "npm run clean --workspaces --if-present"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.9",
+    "typescript": "^6.0.2"
+  }
+}

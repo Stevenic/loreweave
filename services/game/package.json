@@ -1,0 +1,27 @@
+{
+	"name": "@loreweave/game",
+	"version": "0.1.0",
+	"private": true,
+	"description": "LoreWeave game server — composes all packages into the game loop",
+	"type": "module",
+	"main": "./dist/index.js",
+	"scripts": {
+		"build": "tsc",
+		"dev": "tsc --watch",
+		"start": "node dist/index.js",
+		"test": "vitest run --passWithNoTests",
+		"test:watch": "vitest",
+		"typecheck": "tsc --noEmit",
+		"clean": "rm -rf dist"
+	},
+	"dependencies": {
+		"@loreweave/types": "*",
+		"@loreweave/pixel": "*",
+		"@loreweave/rules": "*",
+		"@loreweave/world": "*",
+		"@loreweave/narrative": "*"
+	},
+	"devDependencies": {
+		"vitest": "^3.1.1"
+	}
+}
