@@ -97,6 +97,19 @@ export async function startServer(opts: ServerOptions): Promise<void> {
 
 	// ── Start ──
 
+	server.on('error', (err: NodeJS.ErrnoException) => {
+		if (err.code === 'EADDRINUSE') {
+			console.error(
+				`\n\x1b[31mError: Port ${port} is already in use.\x1b[0m\n` +
+					`  Another instance of pixel-explorer may be running.\n` +
+					`  Either stop the other process or use a different port:\n\n` +
+					`    pixel-explorer start --port ${port + 1}\n`,
+			);
+			process.exit(1);
+		}
+		throw err;
+	});
+
 	server.listen(port, () => {
 		console.log();
 		console.log(`\x1b[1m\x1b[36m  PixelExplorer\x1b[0m is running`);
@@ -316,7 +329,7 @@ async function apiListPalettes(res: ServerResponse, assetDir: string): Promise<v
 // ── API: Generate ──
 
 async function apiGenerate(res: ServerResponse, assetDir: string, body: string): Promise<void> {
-	let params: { prompt: string; type?: string; palette?: string };
+	let params: { prompt: string; type?: string; palette?: string; model?: string };
 	try {
 		params = JSON.parse(body);
 	} catch {
@@ -528,12 +541,21 @@ ${paletteContext}
 - The file must include the correct \`format\` field (e.g., "pixel-sprite-v1")
 - Name the file based on the asset name with the appropriate extension`;
 
+	// Model selection: request body > CLAUDE_MODEL env var > SDK default
+	const model = params.model || process.env.CLAUDE_MODEL || undefined;
+
+	// Capture stderr from the Claude Code subprocess for diagnostics
+	const stderrChunks: string[] = [];
+
 	try {
 		let resultText = '';
+		let resultErrors: string[] = [];
 		for await (const message of agentSdk.query({
 			prompt: params.prompt,
 			options: {
 				systemPrompt,
+				model,
+				env: process.env as Record<string, string>,
 				mcpServers: { pixel: pixelServer },
 				allowedTools: [
 					'mcp__pixel__validate_pixel',
@@ -546,17 +568,42 @@ ${paletteContext}
 				cwd,
 				permissionMode: 'acceptEdits' as const,
 				maxTurns: 20,
+				stderr: (data: string) => {
+					stderrChunks.push(data);
+					console.error('[agent-sdk stderr]', data);
+				},
 			},
 		})) {
-			if (message.type === 'result' && message.subtype === 'success') {
-				resultText = message.result;
+			if (message.type === 'result') {
+				if (message.subtype === 'success') {
+					resultText = message.result;
+				} else {
+					// error_during_execution, error_max_turns, etc.
+					resultErrors = message.errors;
+					console.error('[agent-sdk result error]', message.subtype, message.errors);
+				}
 			}
+		}
+
+		if (resultErrors.length > 0) {
+			const stderrOutput = stderrChunks.join('');
+			return sendJson(res, 500, {
+				error: `Generation failed: ${resultErrors.join('; ')}`,
+				details: stderrOutput || undefined,
+			});
 		}
 
 		sendJson(res, 200, { success: true, result: resultText });
 	} catch (err) {
+		const stderrOutput = stderrChunks.join('');
+		const errMsg = err instanceof Error ? err.message : String(err);
+		console.error('[agent-sdk exception]', errMsg);
+		if (stderrOutput) {
+			console.error('[agent-sdk stderr output]', stderrOutput);
+		}
 		sendJson(res, 500, {
-			error: `Generation failed: ${err instanceof Error ? err.message : String(err)}`,
+			error: `Generation failed: ${errMsg}`,
+			details: stderrOutput || undefined,
 		});
 	}
 }

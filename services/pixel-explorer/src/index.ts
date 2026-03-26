@@ -71,9 +71,12 @@ function printHelp(): void {
 
 \x1b[1mENVIRONMENT\x1b[0m
   ANTHROPIC_API_KEY  Required for asset generation (via Agent SDK)
+  CLAUDE_MODEL       Model to use for generation (default: SDK default)
+                     Examples: claude-sonnet-4-5-20250929, claude-haiku-4-5-20251001
 
   Reads .env from the current working directory on startup.
   Environment variables already set take precedence over .env values.
+  See example.env for a template.
 
 \x1b[1mEXAMPLES\x1b[0m
   pixel-explorer start

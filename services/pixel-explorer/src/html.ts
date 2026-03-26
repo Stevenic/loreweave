@@ -519,6 +519,14 @@ function initGenerate() {
 		+ '<select id="gen-type"><option value="sprite">Sprite</option><option value="tileset">Tileset</option><option value="tilemap">Tilemap</option><option value="scene">Scene</option></select>'
 		+ '<label>Palette</label>'
 		+ '<select id="gen-palette"><option value="">Default (fantasy32)</option></select>'
+		+ '<label>Model</label>'
+		+ '<select id="gen-model">'
+		+ '<option value="">Default (from env or SDK default)</option>'
+		+ '<option value="claude-sonnet-4-5-20250929">Sonnet 4.5</option>'
+		+ '<option value="claude-sonnet-4-6-20250514">Sonnet 4.6</option>'
+		+ '<option value="claude-haiku-4-5-20251001">Haiku 4.5</option>'
+		+ '<option value="claude-opus-4-6-20250514">Opus 4.6</option>'
+		+ '</select>'
 		+ '<button class="gen-btn" id="gen-submit">Generate</button>'
 		+ '</div>'
 		+ '<div class="gen-output" id="gen-output"></div>';
@@ -542,6 +550,7 @@ async function runGenerate() {
 	if (!prompt) return;
 	const type = document.getElementById('gen-type').value;
 	const palette = document.getElementById('gen-palette').value || undefined;
+	const model = document.getElementById('gen-model').value || undefined;
 	const btn = document.getElementById('gen-submit');
 	const output = document.getElementById('gen-output');
 
@@ -554,10 +563,10 @@ async function runGenerate() {
 		const data = await api('/api/generate', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ prompt, type, palette }),
+			body: JSON.stringify({ prompt, type, palette, model }),
 		});
 		if (data.error) {
-			output.textContent = 'Error: ' + data.error;
+			output.textContent = 'Error: ' + data.error + (data.details ? '\\n\\nDetails:\\n' + data.details : '');
 		} else {
 			output.textContent = data.result || 'Done. Asset generated successfully.';
 			cachedAssetData = {};

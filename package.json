@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "build": "tsc --build packages/types packages/rules packages/pixel packages/world packages/narrative services/game services/pixel-explorer",
+    "pixel-explorer": "node services/pixel-explorer/dist/index.js start",
     "dev": "npm run dev --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "lint": "biome check .",

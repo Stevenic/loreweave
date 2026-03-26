@@ -18,11 +18,11 @@
 		"clean": "rm -rf dist"
 	},
 	"dependencies": {
-		"@anthropic-ai/claude-agent-sdk": "^0.1.0",
+		"@anthropic-ai/claude-agent-sdk": "^0.2.84",
 		"@loreweave/pixel": "*",
 		"@loreweave/types": "*",
 		"ws": "^8.18.0",
-		"zod": "^3.24.0"
+		"zod": "^4.3.6"
 	},
 	"devDependencies": {
 		"@types/node": "^25.5.0",
