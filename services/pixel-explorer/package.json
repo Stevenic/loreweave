@@ -1,17 +1,17 @@
 {
-	"name": "@loreweave/asset-explorer",
-	"version": "0.1.0",
+	"name": "@loreweave/pixel-explorer",
+	"version": "0.2.0",
 	"private": true,
-	"description": "CLI tool to browse, validate, preview, and generate Pixel Format v1 assets",
+	"description": "Web-based pixel asset generator and explorer for Pixel Format v1",
 	"type": "module",
 	"main": "./dist/index.js",
 	"bin": {
-		"asset-explorer": "./dist/index.js"
+		"pixel-explorer": "./dist/index.js"
 	},
 	"scripts": {
 		"build": "tsc",
 		"dev": "tsc --watch",
-		"start": "node dist/index.js",
+		"start": "node dist/index.js start",
 		"test": "vitest run --passWithNoTests",
 		"test:watch": "vitest",
 		"typecheck": "tsc --noEmit",
@@ -21,10 +21,12 @@
 		"@anthropic-ai/claude-agent-sdk": "^0.1.0",
 		"@loreweave/pixel": "*",
 		"@loreweave/types": "*",
+		"ws": "^8.18.0",
 		"zod": "^3.24.0"
 	},
 	"devDependencies": {
 		"@types/node": "^25.5.0",
+		"@types/ws": "^8.18.0",
 		"vitest": "^3.1.1"
 	}
 }

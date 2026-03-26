@@ -17,7 +17,7 @@ LoreWeave will use the Claude Agent SDK (`@anthropic-ai/claude-agent-sdk`) as th
 - Pass `pixel-schema.llmd` or `pixel_format_llm_guide.md` as context in the system prompt
 - Key options: `allowedTools`, `permissionMode`, `mcpServers`, `systemPrompt`, `outputFormat` (structured JSON output)
 
-**Status (2026-03-26):** First implementation shipped in `@loreweave/asset-explorer` generate command.
+**Status (2026-03-26):** First implementation shipped in `@loreweave/pixel-explorer` generate command (renamed from asset-explorer).
 - SDK v0.1.77 installed, `tool()` takes 4 args (annotations not yet supported)
 - 3 MCP tools live: validate_pixel, preview_pixel, list_assets
-- CLI: `asset-explorer generate "prompt" --type sprite --palette <file> --output <dir>`
+- CLI: `pixel-explorer generate "prompt" --type sprite --palette <file> --output <dir>`

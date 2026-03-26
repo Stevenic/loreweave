@@ -34,7 +34,7 @@ For LoreWeave, Pixel Format v1 JSON assets (sprites, tilesets, scenes, palettes)
 Use `actions/checkout@v4`, never `@latest`. Reproducible builds require pinned versions at every level — actions, Node.js, dependencies.
 
 **Monorepo build order is explicit.**
-`tsc --build` in root `package.json` specifies package order: types → rules → pixel → world → narrative → services. CI must use `npm run build` (not per-workspace builds) to respect this dependency chain.
+`tsc --build` in root `package.json` specifies the full dependency chain: `packages/types → rules → pixel → world → narrative`, then `services/game → pixel-explorer`. CI must use `npm run build` (not per-workspace builds) to respect this order.
 
 **Root scripts are the CI interface.**
 Root `package.json` has `build`, `test`, `lint`, `typecheck`, and `clean` scripts that fan out to workspaces. CI should call these directly — don't reinvent workspace iteration in the workflow.

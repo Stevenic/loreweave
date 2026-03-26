@@ -56,3 +56,9 @@ No pre-rendered images on disk. Rasterize to offscreen `<canvas>` at load time, 
 
 ### Advisory constraints, not hard rejections
 Generation constraints (`maxColors`, `outline`, `noIslands`) and symmetry hints are advisory — generators should respect them, validators warn, but nothing rejects. This keeps the format permissive while guiding LLMs toward quality output. Hard constraints would make the format fragile and hostile to creative exploration.
+
+### Anchor abstract scale chains to world space
+Relative scaling (`baseScale`, `scale`, `scrollFactor`) is meaningless without an absolute reference point. PPU (Pixels Per Unit) solved this for the Pixel Format by tying pixel dimensions to world tiles. Any format with layered relative transforms needs a world-space anchor — otherwise generators and renderers can't reason about proportions.
+
+### Start focused, expand on signal
+The Pixel Format v1 revision started as a 2-feature proposal, expanded to 18, then 21, then a full rewrite — but only because stevenic explicitly signaled appetite at each step ("go for everything"). Start with the minimum viable proposal. Expand scope only when the user signals they want more. Don't self-limit, but don't over-propose either.

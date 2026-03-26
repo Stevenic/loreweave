@@ -43,7 +43,10 @@ Both loreweave_spec.md and pixel_v_1_spec.md are mature enough to code against d
 The canvas renderer accepts a `CanvasFactory` injection rather than importing browser globals. This makes renderers testable and portable (Node, browser, headless). Apply this pattern to any subsystem that depends on environment-specific APIs.
 
 ### Lazy-import optional heavy dependencies
-The asset-explorer dynamically imports Agent SDK and Zod so that non-generate commands work without them installed. Use this pattern for any CLI command that depends on large or optional packages — keeps the core fast and the install footprint small.
+The pixel-explorer dynamically imports Agent SDK and Zod so that non-generate commands work without them installed. Use this pattern for any CLI command that depends on large or optional packages — keeps the core fast and the install footprint small.
+
+### Agent SDK with in-process MCP tools for generation
+Use `createSdkMcpServer()` + `tool()` to expose domain validators/previewers as MCP tools the agent calls during generation. The agent gets the full Claude Code tool loop; we just add domain-specific tools. In-process — no external server needed. Pass spec docs as system prompt context so the agent generates spec-compliant output.
 
 ### Seeded PRNG for deterministic particle effects
 The emitter uses xorshift32 with a configurable seed so identical input produces identical particle output. Any system that introduces randomness (dice, particles, procedural generation) must accept a seed parameter to preserve determinism.

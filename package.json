@@ -8,7 +8,7 @@
     "services/*"
   ],
   "scripts": {
-    "build": "tsc --build packages/types packages/rules packages/pixel packages/world packages/narrative services/game services/asset-explorer",
+    "build": "tsc --build packages/types packages/rules packages/pixel packages/world packages/narrative services/game services/pixel-explorer",
     "dev": "npm run dev --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "lint": "biome check .",
