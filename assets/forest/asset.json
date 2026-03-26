@@ -1,0 +1,16 @@
+{
+	"version": 1,
+	"name": "Forest",
+	"type": "scene",
+	"views": {
+		"clearing": {
+			"file": "forest_clearing.scene.pixel.json",
+			"label": "Clearing"
+		},
+		"ground": {
+			"file": "forest_ground.tileset.pixel.json",
+			"label": "Ground"
+		}
+	},
+	"defaultView": "clearing"
+}

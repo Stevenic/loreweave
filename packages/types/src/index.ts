@@ -48,3 +48,88 @@ export type {
 	Track,
 	Variant,
 } from './pixel.js';
+
+export type {
+	// Seeds & Coordinates
+	WorldSeed,
+	ChunkCoord,
+	TileCoord,
+	// Biomes
+	BiomeType,
+	BiomeDefinition,
+	// Surface & Resources
+	SurfaceType,
+	ResourceType,
+	// Features
+	FeatureType,
+	// Structures
+	StructureID,
+	StructurePlacement,
+	StructureTile,
+	StructureTemplate,
+	// Spawns
+	SpawnRule,
+	SpawnPoint,
+	NPCSpawn,
+	LootTable,
+	LootEntry,
+	// World Tiles & Chunks
+	WorldTile,
+	ChunkStage,
+	Chunk,
+	StructureRef,
+	// Character System
+	AbilityName,
+	AbilityScores,
+	SkillName,
+	SkillAbilityMap,
+	Condition,
+	Item,
+	InventorySlot,
+	Character,
+	// Actions & Intent
+	ActionType,
+	GameAction,
+	Direction,
+	DirectionOffset,
+	ActionResult,
+	GameEffect,
+	// Dice
+	DiceRoll,
+	RollResult,
+	// Time & Weather
+	GameTime,
+	TimeOfDay,
+	Weather,
+	Season,
+	// World State
+	WorldState,
+	WorldEvent,
+	WorldEventType,
+	// Narrative Context
+	NarrativeContext,
+	EntityRef,
+	CharacterSummary,
+	ExitInfo,
+	// Crafting
+	Recipe,
+	RecipeIngredient,
+	// Scenarios
+	Scenario,
+	ScenarioConstraints,
+	Quest,
+	QuestObjective,
+	QuestReward,
+	// Dungeon Master
+	DMConfig,
+	DMResponse,
+	GameSession,
+	NarrativeAdapter,
+	WorldAccess,
+} from './game.js';
+
+export {
+	CHUNK_SIZE,
+	DIRECTION_OFFSETS,
+	SKILL_ABILITIES,
+} from './game.js';

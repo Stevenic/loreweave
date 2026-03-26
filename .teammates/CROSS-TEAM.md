@@ -18,6 +18,7 @@ The **Boundary Rule** (see PROTOCOL.md) applies to the **codebase** — source c
 | **Lexicon** | `.teammates/lexicon/**` | `src/narrative/prompts/**`, `.teammates/*/SOUL.md` (co-owned) |
 | **Pipeline** | `.teammates/pipeline/**` | `.github/**`, `Dockerfile`, `.env.example` |
 | **Scribe** | `.teammates/scribe/**` | `loreweave_spec.md`, `pixel_v_1_spec.md`, `README.md`, `docs/**`, `.teammates/*.md` |
+| **Bard** | `.teammates/bard/**` | `worlds/*/lore/**`, `worlds/*/factions/**`, `worlds/*/cultures/**`, `worlds/*/quests/**`, `worlds/*/npcs/**`, `worlds/*/archetypes/**`, `worlds/*/vocabulary/**`, `worlds/*/regions/**` |
 | **Loremaster** | `.teammates/loremaster/**` | `docs/rules/**` (primary), `packages/rules/src/**` (co-owned with Beacon) |
 | **stevenic** | `.teammates/stevenic/**` | N/A (human) |
 

@@ -1,0 +1,12 @@
+{
+	"version": 1,
+	"name": "Torch",
+	"type": "sprite",
+	"views": {
+		"default": {
+			"file": "torch.pixel.json",
+			"label": "Default"
+		}
+	},
+	"defaultView": "default"
+}

@@ -59,12 +59,15 @@ export type { LoadedResource, ManagedAsset, PixelFileType } from './loader.js';
 export {
 	classifyFile,
 	createManagedAsset,
+	deleteAssetView,
+	deleteManagedAsset,
 	findManagedAssets,
 	findPixelFiles,
 	findUnmanagedPixelFiles,
 	loadAllPixelFiles,
 	loadAssetMeta,
 	loadPixelFile,
+	renameAssetView,
 	slugifyAssetName,
 	writeAssetMeta,
 } from './loader.js';
@@ -79,6 +82,7 @@ export {
 // Validator
 export type { ValidationResult } from './validator.js';
 export {
+	validateCustomColors,
 	validateEmitter,
 	validateEmitterConfig,
 	validatePalette,

@@ -107,6 +107,11 @@ export function validatePalette(palette: PixelPalette): ValidationResult {
 
 	const entryKeys = Object.keys(palette.entries);
 
+	if (entryKeys.length > 64) {
+		warnings.push(
+			`Palette has ${entryKeys.length} entries. Standard palettes should have at most 64 entries, reserving 8 slots for per-asset custom colors.`,
+		);
+	}
 	if (entryKeys.length > 72) {
 		errors.push(`Palette has ${entryKeys.length} entries, max is 72`);
 	}
@@ -139,6 +144,46 @@ export function validatePalette(palette: PixelPalette): ValidationResult {
 					errors.push(`Ramp '${rampName}': key '${key}' does not exist in entries`);
 				}
 			}
+		}
+	}
+
+	const result = errors.length > 0 ? fail(...errors) : ok();
+	result.warnings = warnings;
+	return result;
+}
+
+// ─── Custom Colors Validation ───
+
+const MAX_CUSTOM_COLORS = 8;
+
+/** Validate asset-level custom colors (up to 8 entries, valid keys/colors, no palette collisions). */
+export function validateCustomColors(
+	customColors: Record<string, PixelColor>,
+	paletteEntries?: Record<string, PixelColor>,
+): ValidationResult {
+	const errors: string[] = [];
+	const warnings: string[] = [];
+	const keys = Object.keys(customColors);
+
+	if (keys.length > MAX_CUSTOM_COLORS) {
+		errors.push(
+			`Custom colors has ${keys.length} entries, max is ${MAX_CUSTOM_COLORS}`,
+		);
+	}
+
+	for (const [key, value] of Object.entries(customColors) as [string, PixelColor][]) {
+		if (key.length !== 1) {
+			errors.push(`Custom color key '${key}' must be a single character`);
+		} else if (!ALLOWED_PALETTE_KEYS.has(key)) {
+			errors.push(`Custom color key '${key}' is not an allowed character`);
+		}
+		if (value !== 'transparent' && !COLOR_REGEX.test(value)) {
+			errors.push(`Custom color key '${key}': invalid color '${value}'`);
+		}
+		if (paletteEntries && key in paletteEntries) {
+			warnings.push(
+				`Custom color key '${key}' overrides a base palette entry`,
+			);
 		}
 	}
 

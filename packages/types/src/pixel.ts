@@ -304,6 +304,12 @@ export type AssetMeta = {
 	references?: AssetReference[];
 	/** Palette to use for generation (path relative to assets root, or palette name). */
 	palette?: string;
+	/**
+	 * Up to 8 custom colors for this asset. Keys must be single characters
+	 * not already used in the base palette (indices 64–71 in the key space).
+	 * Merged on top of the base palette at render/generation time.
+	 */
+	customColors?: Record<string, PixelColor>;
 	/** Freeform tags for filtering/search. */
 	tags?: string[];
 	/** Freeform metadata. */

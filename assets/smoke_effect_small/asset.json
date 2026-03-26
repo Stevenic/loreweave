@@ -1,0 +1,13 @@
+{
+	"version": 1,
+	"name": "smoke effect small",
+	"type": "sprite",
+	"description": "Smoke emitted from a small fire",
+	"views": {
+		"default": {
+			"file": "smoke_effect_small.sprite.pixel.json",
+			"label": "Default"
+		}
+	},
+	"defaultView": "default"
+}

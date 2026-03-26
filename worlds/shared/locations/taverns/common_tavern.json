@@ -1,0 +1,39 @@
+{
+  "id": "tavern_common",
+  "type": "location",
+  "category": "tavern",
+  "name": "Common Tavern",
+  "description": "A standard village drinking establishment with a bar, seating, and a hearth",
+  "tier": ["hamlet", "village", "town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["bar_counter", "seating_area", "hearth"],
+    "common": ["notice_board", "kitchen", "storage_room"],
+    "rare": ["cellar", "back_room", "small_stage"]
+  },
+  "objects": {
+    "required": ["mugs", "barrels", "stools", "tables"],
+    "common": ["candles", "sign_board", "fireplace_tools", "broom"],
+    "rare": ["trophy_mount", "gambling_table", "dartboard", "musical_instrument"]
+  },
+  "npcs": {
+    "required": ["innkeeper"],
+    "common": ["barmaid", "regular_patron"],
+    "rare": ["bard", "stranger", "town_drunk"]
+  },
+  "exits": {
+    "required": ["front_door"],
+    "common": ["back_door", "stairs_up"],
+    "rare": ["cellar_hatch", "secret_passage"]
+  },
+  "atmosphere": {
+    "sounds": ["murmur_of_conversation", "clinking_mugs", "crackling_fire"],
+    "smells": ["pipe_smoke", "ale", "cooking_meat", "wood_smoke"],
+    "lighting": ["dim", "warm", "firelit"]
+  },
+  "layout": {
+    "footprint": "medium",
+    "floors": [1, 2],
+    "shape": ["rectangular", "L-shaped"]
+  }
+}

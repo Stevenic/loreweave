@@ -22,6 +22,7 @@
 	},
 	"dependencies": {
 		"@loreweave/types": "*",
+		"@loreweave/rules": "*",
 		"@loreweave/world": "*"
 	},
 	"devDependencies": {

@@ -1,0 +1,39 @@
+{
+  "id": "shop_apothecary",
+  "type": "location",
+  "category": "shop",
+  "name": "Apothecary",
+  "description": "A herbalist's shop selling potions, remedies, salves, and alchemical ingredients",
+  "tier": ["town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["counter", "ingredient_shelves", "mortar_and_pestle_station"],
+    "common": ["drying_rack", "distillation_apparatus", "herb_garden_window"],
+    "rare": ["locked_cabinet", "ritual_circle", "rare_specimen_collection"]
+  },
+  "objects": {
+    "required": ["healing_potions", "dried_herbs", "salves", "vials"],
+    "common": ["antidotes", "poultices", "smelling_salts", "ingredient_jars"],
+    "rare": ["rare_poison", "enchanted_elixir", "alchemist_notes", "exotic_ingredient"]
+  },
+  "npcs": {
+    "required": ["apothecary"],
+    "common": ["assistant"],
+    "rare": ["sick_customer", "suspicious_buyer"]
+  },
+  "exits": {
+    "required": ["front_door"],
+    "common": ["back_garden"],
+    "rare": ["stairs_up", "hidden_lab"]
+  },
+  "atmosphere": {
+    "sounds": ["bubbling_liquids", "grinding_pestle", "clinking_glass"],
+    "smells": ["lavender", "sulfur", "mint", "unknown_sharp_scent"],
+    "lighting": ["colored_glass_filtered", "candlelit", "dim_and_mysterious"]
+  },
+  "layout": {
+    "footprint": "small",
+    "floors": [1, 2],
+    "shape": ["narrow_deep"]
+  }
+}

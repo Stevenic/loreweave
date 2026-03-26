@@ -103,6 +103,12 @@ export interface GeneratePixelOptions {
 	abortSignal?: AbortSignal;
 
 	/**
+	 * Per-asset custom colors (up to 8). Merged on top of the base palette
+	 * and included in the system prompt so the agent can use them.
+	 */
+	customColors?: Record<string, import('@loreweave/types').PixelColor>;
+
+	/**
 	 * Pre-loaded context content. When provided, skips file loading.
 	 * Useful for runtime generation where context is already in memory.
 	 */
@@ -220,6 +226,7 @@ function buildSystemPrompt(
 	schema: string,
 	paletteSection: string,
 	sizingSection: string,
+	customColorsSection: string,
 ): string {
 	const formatSections: string[] = [];
 	if (schema) formatSections.push(`# Pixel Format Schema\n${schema}`);
@@ -230,6 +237,7 @@ You generate .pixel.json assets that conform to the Pixel Format v1 spec.
 
 ${formatSections.join('\n\n')}
 ${paletteSection}
+${customColorsSection}
 ${sizingSection}
 
 ## Instructions
@@ -314,6 +322,15 @@ export async function generatePixelAsset(
 	// Build sizing instructions for the specific asset being generated
 	const sizingSection = `\n\n${sizingTable}\n\n**For this specific request:** Based on the prompt, this is a "${archetype.label}" (${archetype.description}). Use dimensions **${sizing.width}×${sizing.height}** pixels with \`"ppu": ${sizing.ppu}\`.`;
 
+	// Build custom colors section
+	let customColorsSection = '';
+	if (options.customColors && Object.keys(options.customColors).length > 0) {
+		const entries = Object.entries(options.customColors)
+			.map(([key, color]) => `  "${key}": "${color}"`)
+			.join(',\n');
+		customColorsSection = `\n\n## Custom Colors for This Asset\nIn addition to the base palette, this asset has ${Object.keys(options.customColors).length} custom color(s) available:\n\`\`\`json\n{\n${entries}\n}\n\`\`\`\nYou may use these custom color keys in pixel data alongside the base palette keys.`;
+	}
+
 	// Load context and build system prompt
 	const { guide, schema, paletteSection } = await loadContext(options);
 	const systemPrompt = buildSystemPrompt(
@@ -323,6 +340,7 @@ export async function generatePixelAsset(
 		schema,
 		paletteSection,
 		sizingSection,
+		customColorsSection,
 	);
 
 	// Build adapter execution options

@@ -191,30 +191,55 @@ Returns:
 
 ### Purpose
 
-Convert player text → structured actions
+Convert player text → structured `GameAction` objects. **Deterministic keyword parsing** — no LLM involvement, fast and free.
 
-### Example
+### Action Types
 
-Input:
+The parser recognizes 10 action types:
 
-> “I sneak behind the goblin and stab it”
+| Action | Keywords | Requires |
+|--------|----------|----------|
+| `move` | go, walk, move, head, travel, run, flee | Direction |
+| `look` | look, examine, inspect, observe, survey | — |
+| `attack` | attack, hit, strike, fight, slash, stab, shoot | Target |
+| `search` | search, forage, dig, investigate, explore | — |
+| `rest` | rest, sleep, camp, nap, meditate | — |
+| `talk` | talk, speak, chat, ask, greet, hail, negotiate | Target |
+| `pickup` | pickup, grab, take, collect, loot, gather | Item |
+| `drop` | drop, discard, throw away, leave, abandon | Item |
+| `use_item` | use, drink, eat, consume, apply, activate, equip | Item |
+| `craft` | craft, make, build, create, forge, brew, cook | Item |
 
-Output:
+### Direction Matching
+
+Supports 8 cardinal directions plus natural aliases:
+
+* Cardinal: `north`, `south`, `east`, `west`, `northeast`, `northwest`, `southeast`, `southwest`
+* Abbreviations: `n`, `s`, `e`, `w`, `ne`, `nw`, `se`, `sw`
+* Aliases: `up`→north, `down`→south, `left`→west, `right`→east
+* Bare direction input (“north”) is treated as a move action
+
+### Target & Item Resolution
+
+* **Targets** resolved by substring matching against nearby entity names, then entity types
+* **Items** resolved by substring matching against inventory item names
+* Text after the action keyword is cleaned of prepositions (`to`, `with`, `at`, `the`, `a`, `an`) before matching
+
+### Stealth Modifier
+
+If the input contains `stealth`, `sneak`, `quietly`, or `silently`, the action is flagged with `stealth: true`.
+
+### Parse Result
 
 ```ts
-{
-  action: "attack",
-  stealth: true,
-  target: "goblin_123"
-}
+type ParseResult = {
+  action: GameAction | null;
+  raw: string;
+  failureHints: string[];  // e.g., 'no_direction', 'unrecognized_action', 'empty_input'
+};
 ```
 
----
-
-### Implementation (v1)
-
-* Rule-based + LLM hybrid
-* Constrained output schema
+On failure, `failureHints` provide context for the narrative engine to generate appropriate clarification responses (e.g., “Which direction?” or treating unrecognized input as roleplaying).
 
 ---
 
@@ -222,33 +247,121 @@ Output:
 
 ### Role
 
-Render **state → story text**
+Render **mechanical results → story text**. The LLM receives pre-resolved action outcomes and structured world context, then generates narrative prose. It never decides mechanical outcomes.
 
-### Input
+---
 
-```json
-{
-  "location": {...},
-  "visible_entities": [...],
-  "weather": "storm approaching",
-  "recent_events": [...],
-  "players": [...]
-}
+### 4.4.1 DM Turn Loop
+
+The core pipeline for each player turn:
+
+```
+Player Input → Intent Parser → Action Resolver → Effect Application
+                                                       ↓
+                                               Context Assembly → Prompt Building → LLM Generation
 ```
 
+1. **Parse** — Keyword parser converts raw text to `GameAction` (deterministic, free)
+2. **Resolve** — Rules engine resolves the action mechanically: dice rolls, damage, skill checks (deterministic via seeded RNG)
+3. **Apply** — `GameEffect[]` applied immutably to character and world state
+4. **Assemble** — `NarrativeContext` built from current game state (location, entities, weather, exits, quests)
+5. **Prompt** — System + user prompts constructed from context and mechanical results
+6. **Generate** — LLM produces narrative text describing what happened
+
+**Critical constraint:** The LLM only renders narrative FROM pre-resolved mechanical results. It never decides dice outcomes, damage values, or success/failure. The dice have already been rolled before the LLM sees anything.
+
+Turn counter incremented per turn; deterministic seed derived from `turnSeedBase XOR turnCount`.
+
 ---
 
-### Output
+### 4.4.2 Action Resolution
 
-> “The party emerges from dense woodland into a clearing…”
+Routes `GameAction` through the D&D 5e rules engine (pure functions from the Rules Engine, §4.2).
+
+* 10 resolvers matching the 10 intent types
+* Each resolver returns `ActionResult`:
+
+```ts
+type ActionResult = {
+  success: boolean;
+  action: GameAction;
+  effects: GameEffect[];
+  narrationHints: string[];  // Semantic hints for the LLM (e.g., 'river_crossing', 'critical_search')
+};
+```
+
+* `applyEffects()` produces a new character roster — no mutation of input state
+* World-level effects (resource depletion, structure placement) applied separately to the world event log
 
 ---
 
-### Rules
+### 4.4.3 Context Assembly
 
-* Must not invent entities
-* Must reflect spatial relationships
-* Must remain concise (2–5 sentences)
+Builds `NarrativeContext` from the current game session — everything the LLM needs to render narrative:
+
+| Component | Source |
+|-----------|--------|
+| Location tile | World engine tile at party position |
+| Visible entities | Known entities within view radius |
+| Weather / time / season | World clock |
+| Recent events | World event log (within view radius, capped by `recentEventCount`) |
+| Party summaries | Name, HP, conditions for each party member |
+| Exit descriptions | 8-directional scan of adjacent tiles (biome, walkability, features) |
+| Quest hints | Active quest objectives matching current location, nearby entities, or available resources |
+
+All assembly functions are pure — no side effects.
+
+---
+
+### 4.4.4 Prompt Architecture
+
+**System prompt** (relatively static, cacheable across turns):
+
+* DM persona: adventurous, immersive, second-person address
+* Narrative constraints: never override mechanical outcomes, never invent entities/items/abilities, never break fourth wall
+* Output format: vivid but concise (2–5 sentences), end with subtle action prompt
+* World state summary: turn count, party size, combat status
+
+**User prompt** (changes every turn):
+
+| Section | Content |
+|---------|---------|
+| Current Location | Biome, surface, elevation, features, structures, resources, river |
+| Environment | Time of day, season, weather |
+| Party | Per-character: name, HP/maxHP, conditions |
+| Nearby Entities | Name, type, hostility |
+| Exits | 8-directional: direction, biome description, walkability, notable features |
+| Recent Events | Timestamped events within view radius |
+| Quest Hints | Active objectives matching current context |
+| Player Action | Raw input, parsed action type, direction/target, stealth flag |
+| Mechanical Result | Success/failure, narration hints, effects to narrate |
+
+---
+
+### 4.4.5 NarrativeAdapter Interface
+
+Pluggable LLM backend — the engine is model-agnostic:
+
+```ts
+type NarrativeAdapter = {
+  generate(system: string, user: string): Promise<string>;
+};
+```
+
+Implementations can target Anthropic API, local models, or mock adapters for testing. Swap adapters at runtime via `DungeonMaster.setAdapter()`.
+
+---
+
+### 4.4.6 Configuration Defaults
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `viewRadius` | 5 | Tiles visible around player |
+| `defaultDC` | 12 | Default difficulty class for skill checks |
+| `actionTimeMinutes` | 5 | Game-time cost per standard action |
+| `restTimeMinutes` | 480 | Game-time cost for long rest (8 hours) |
+| `recentEventCount` | 10 | Max recent events included in context |
+| `recentEventDays` | 7 | Max age (game-days) for recent events |
 
 ---
 
@@ -436,22 +549,53 @@ Visual engine generates image
 
 ---
 
-# 9. Example Game Loop
+# 9. Game Loop
+
+### 9.1 Session Initialization
 
 ```ts
-function gameLoop(input) {
-  const intent = parseIntent(input);
-  const result = resolveAction(intent);
-  updateWorld(result);
+const session = createSession(sessionId, worldSeed, partyMembers);
+const dm = new DungeonMaster(session, narrativeAdapter, config?);
 
-  const state = getVisibleState();
-
-  const text = renderNarrative(state);
-  const image = renderScene(state);
-
-  return { text, image };
-}
+// Initial scene description (no player action — just describe where they are)
+const intro = await dm.describeSurroundings();
 ```
+
+`createSession()` constructs the `GameSession` with a fresh `World` instance, empty quest/entity lists, and `turnCount: 0`.
+
+### 9.2 Turn Processing
+
+Each player turn runs through the DungeonMaster pipeline:
+
+```ts
+const response = await dm.processTurn(playerInput, actorId?);
+// response.narrative  — LLM-generated story text
+// response.effects    — mechanical effects that were applied
+// response.party      — updated party state
+// response.time       — current game time
+```
+
+Internally, `processTurn()` executes the full §4.4.1 pipeline:
+
+1. Increment `turnCount`
+2. Derive turn-level RNG seed: `turnSeedBase XOR turnCount`
+3. Parse intent → `GameAction` (§4.3)
+4. Resolve action → `ActionResult` with `GameEffect[]` (§4.4.2)
+5. Apply effects immutably to character roster and world state
+6. Advance game clock by action time cost
+7. Assemble narrative context (§4.4.3)
+8. Update known entities based on new position
+9. Build prompts and call LLM (§4.4.4, §4.4.5)
+10. Return `DMResponse`
+
+### 9.3 Session Management
+
+The DungeonMaster provides methods for managing the session between turns:
+
+* `addPartyMember(character)` / `removePartyMember(id)` — party roster changes
+* `addQuest(quest)` / `completeQuest(id)` — quest tracking
+* `addKnownEntity(entity)` / `removeKnownEntity(id)` — entity awareness
+* `setAdapter(adapter)` — swap LLM backend at runtime
 
 ---
 

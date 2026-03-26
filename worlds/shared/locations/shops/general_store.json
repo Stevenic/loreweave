@@ -1,0 +1,39 @@
+{
+  "id": "shop_general_store",
+  "type": "location",
+  "category": "shop",
+  "name": "General Store",
+  "description": "A cluttered shop selling everyday supplies, tools, and provisions",
+  "tier": ["village", "town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["counter", "shelves", "storage_back"],
+    "common": ["display_window", "scale", "lockbox"],
+    "rare": ["living_quarters_above", "workshop_corner", "trade_ledger_wall"]
+  },
+  "objects": {
+    "required": ["rope", "rations", "torches", "basic_tools"],
+    "common": ["lanterns", "waterskins", "cloth_bolts", "nails_and_hardware"],
+    "rare": ["map", "minor_potion", "unusual_trinket", "imported_goods"]
+  },
+  "npcs": {
+    "required": ["shopkeeper"],
+    "common": ["assistant"],
+    "rare": ["supplier_visiting", "complaining_customer"]
+  },
+  "exits": {
+    "required": ["front_door"],
+    "common": ["back_door"],
+    "rare": ["stairs_up", "cellar"]
+  },
+  "atmosphere": {
+    "sounds": ["clinking_coins", "rummaging", "creaking_shelves"],
+    "smells": ["leather", "dried_herbs", "sawdust", "lamp_oil"],
+    "lighting": ["natural_daylight", "lamp_lit"]
+  },
+  "layout": {
+    "footprint": "small",
+    "floors": [1, 2],
+    "shape": ["rectangular"]
+  }
+}

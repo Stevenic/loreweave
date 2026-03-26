@@ -1,0 +1,39 @@
+{
+  "id": "tavern_rough_alehouse",
+  "type": "location",
+  "category": "tavern",
+  "name": "Rough Alehouse",
+  "description": "A dingy, low-ceilinged drinking hole. Cheap ale, questionable company.",
+  "tier": ["village", "town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["bar_counter", "seating_area"],
+    "common": ["back_room", "storage_closet"],
+    "rare": ["fighting_pit", "hidden_entrance", "gambling_den"]
+  },
+  "objects": {
+    "required": ["mugs", "barrels", "worn_tables"],
+    "common": ["dice", "knife_marks_in_table", "spittoon"],
+    "rare": ["concealed_weapon", "wanted_poster", "contraband_crate"]
+  },
+  "npcs": {
+    "required": ["innkeeper"],
+    "common": ["thug", "fence", "desperate_laborer"],
+    "rare": ["informant", "disguised_noble", "bounty_hunter"]
+  },
+  "exits": {
+    "required": ["front_door"],
+    "common": ["back_alley_exit"],
+    "rare": ["trapdoor", "sewer_access", "secret_passage"]
+  },
+  "atmosphere": {
+    "sounds": ["low_muttering", "coughing", "scraping_chairs", "argument_in_corner"],
+    "smells": ["sour_ale", "sweat", "sawdust", "damp_stone"],
+    "lighting": ["dim", "smoky", "shadowed"]
+  },
+  "layout": {
+    "footprint": "small",
+    "floors": [1],
+    "shape": ["rectangular", "cramped_irregular"]
+  }
+}

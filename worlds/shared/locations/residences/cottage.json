@@ -1,0 +1,39 @@
+{
+  "id": "residence_cottage",
+  "type": "location",
+  "category": "residence",
+  "name": "Cottage",
+  "description": "A small single-family dwelling, one or two rooms with a hearth",
+  "tier": ["hamlet", "village", "town"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["hearth", "bed", "table"],
+    "common": ["pantry_shelf", "chest", "window_shutters"],
+    "rare": ["herb_garden", "root_cellar", "loft"]
+  },
+  "objects": {
+    "required": ["cooking_pot", "blankets", "stool"],
+    "common": ["broom", "mending_basket", "water_pitcher"],
+    "rare": ["hidden_savings", "family_heirloom", "journal"]
+  },
+  "npcs": {
+    "required": ["resident"],
+    "common": ["spouse", "child"],
+    "rare": ["elderly_parent", "boarder"]
+  },
+  "exits": {
+    "required": ["front_door"],
+    "common": ["back_door"],
+    "rare": ["cellar_trapdoor", "loft_ladder"]
+  },
+  "atmosphere": {
+    "sounds": ["fire_crackling", "wind_outside", "domestic_clatter"],
+    "smells": ["wood_smoke", "cooking", "dried_flowers"],
+    "lighting": ["firelit", "natural_daylight"]
+  },
+  "layout": {
+    "footprint": "small",
+    "floors": [1],
+    "shape": ["rectangular", "square"]
+  }
+}

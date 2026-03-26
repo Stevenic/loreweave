@@ -1,0 +1,39 @@
+{
+  "id": "shop_blacksmith",
+  "type": "location",
+  "category": "shop",
+  "name": "Blacksmith",
+  "description": "A forge and workshop for metalwork, weapons, armor, and tools",
+  "tier": ["village", "town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["forge", "anvil", "workbench", "tool_wall"],
+    "common": ["quench_trough", "grinding_stone", "weapon_rack"],
+    "rare": ["display_case", "enchanting_circle", "apprentice_quarters"]
+  },
+  "objects": {
+    "required": ["hammers", "tongs", "horseshoes", "iron_ingots"],
+    "common": ["swords", "shields", "chain_links", "nails"],
+    "rare": ["masterwork_weapon", "exotic_metal", "commissioned_armor"]
+  },
+  "npcs": {
+    "required": ["blacksmith"],
+    "common": ["apprentice"],
+    "rare": ["traveling_weaponsmith", "knight_commissioning"]
+  },
+  "exits": {
+    "required": ["front_entrance"],
+    "common": ["yard_exit"],
+    "rare": ["living_quarters_door"]
+  },
+  "atmosphere": {
+    "sounds": ["hammer_on_anvil", "bellows_whooshing", "hissing_steam", "metal_scraping"],
+    "smells": ["hot_metal", "coal_smoke", "sweat", "quench_water"],
+    "lighting": ["forge_glow", "bright_from_fire", "dim_corners"]
+  },
+  "layout": {
+    "footprint": "medium",
+    "floors": [1],
+    "shape": ["rectangular_with_open_front", "L-shaped"]
+  }
+}

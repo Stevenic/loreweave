@@ -1,8 +1,28 @@
 /**
  * @loreweave/narrative — Narrative engine
  *
- * LLM integration bridge, prompt assembly, intent parsing,
- * and story rendering from world state.
+ * The Dungeon Master system: intent parsing, rules resolution,
+ * context assembly, prompt building, and LLM narrative generation.
+ *
+ * Architecture (per spec §4.4):
+ *   Player Input → Intent Parser → Rules Engine → World State Update
+ *                                                    ↓
+ *                                              Narrative Engine (LLM)
  */
 
-export {};
+// DM — the orchestrator
+export { DungeonMaster, createSession, DEFAULT_DM_CONFIG } from './dm.js';
+
+// Intent parsing — player text → GameAction
+export { parseIntent } from './intent-parser.js';
+export type { ParseResult } from './intent-parser.js';
+
+// Context assembly — world state → NarrativeContext
+export { assembleContext, getPartyLocation, scanExits, summarizeParty, gatherQuestHints } from './context-assembler.js';
+
+// Action resolution — GameAction → ActionResult via rules engine
+export { resolveAction, applyEffects } from './action-resolver.js';
+
+// Prompt building — NarrativeContext + ActionResult → LLM prompts
+export { buildPrompts, buildSystemPrompt, buildUserPrompt } from './prompt-builder.js';
+export type { PromptPair } from './prompt-builder.js';

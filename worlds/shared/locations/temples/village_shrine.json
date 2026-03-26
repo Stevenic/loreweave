@@ -1,0 +1,39 @@
+{
+  "id": "temple_village_shrine",
+  "type": "location",
+  "category": "temple",
+  "name": "Village Shrine",
+  "description": "A modest place of worship, often a single room with an altar and a few pews",
+  "tier": ["hamlet", "village"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["altar", "prayer_space"],
+    "common": ["offering_bowl", "religious_symbol", "candle_rack"],
+    "rare": ["reliquary", "healing_font", "burial_niche"]
+  },
+  "objects": {
+    "required": ["candles", "incense", "holy_text"],
+    "common": ["offering_coins", "prayer_beads", "vestments"],
+    "rare": ["minor_relic", "blessed_water", "ancient_scroll"]
+  },
+  "npcs": {
+    "required": ["priest"],
+    "common": ["acolyte"],
+    "rare": ["pilgrim", "penitent", "grieving_villager"]
+  },
+  "exits": {
+    "required": ["front_door"],
+    "common": ["side_garden"],
+    "rare": ["crypt_stairs", "vestry"]
+  },
+  "atmosphere": {
+    "sounds": ["quiet", "soft_chanting", "candle_flickering"],
+    "smells": ["incense", "old_stone", "beeswax"],
+    "lighting": ["candlelit", "dim_and_reverent", "stained_light"]
+  },
+  "layout": {
+    "footprint": "small",
+    "floors": [1],
+    "shape": ["rectangular", "round"]
+  }
+}

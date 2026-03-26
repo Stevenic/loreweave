@@ -6,7 +6,7 @@
  */
 
 import type { Dirent } from 'node:fs';
-import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readdir, readFile, rm, unlink, writeFile } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 import type {
 	AssetMeta,
@@ -258,4 +258,83 @@ export async function createManagedAsset(assetDir: string, meta: AssetMeta): Pro
 
 	await writeAssetMeta(folderPath, meta);
 	return folderPath;
+}
+
+/**
+ * Delete an entire managed asset folder and all its contents.
+ * Throws if the folder doesn't contain an asset.json (safety check).
+ */
+export async function deleteManagedAsset(assetFolder: string): Promise<void> {
+	// Safety: verify this is actually a managed asset folder
+	await loadAssetMeta(assetFolder);
+	await rm(assetFolder, { recursive: true, force: true });
+}
+
+/**
+ * Delete a single view from a managed asset.
+ * Removes the pixel file from disk and the view entry from asset.json.
+ * If the deleted view was the defaultView, resets defaultView to the first remaining view.
+ */
+export async function deleteAssetView(
+	assetFolder: string,
+	viewName: string,
+): Promise<AssetMeta> {
+	const meta = await loadAssetMeta(assetFolder);
+	const view = meta.views[viewName];
+	if (!view) {
+		throw new Error(`View "${viewName}" not found in asset`);
+	}
+
+	// Delete the pixel file
+	const filePath = join(assetFolder, view.file);
+	try {
+		await unlink(filePath);
+	} catch (e) {
+		if ((e as NodeJS.ErrnoException).code !== 'ENOENT') throw e;
+		// File already gone — that's fine
+	}
+
+	// Remove from metadata
+	delete meta.views[viewName];
+
+	// Reset defaultView if needed
+	if (meta.defaultView === viewName) {
+		const remaining = Object.keys(meta.views);
+		meta.defaultView = remaining.length > 0 ? remaining[0] : undefined;
+	}
+
+	await writeAssetMeta(assetFolder, meta);
+	return meta;
+}
+
+/**
+ * Rename a view within a managed asset.
+ * Updates the key in views and optionally the label. Does NOT rename the file on disk.
+ */
+export async function renameAssetView(
+	assetFolder: string,
+	oldName: string,
+	newName: string,
+	newLabel?: string,
+): Promise<AssetMeta> {
+	const meta = await loadAssetMeta(assetFolder);
+	const view = meta.views[oldName];
+	if (!view) {
+		throw new Error(`View "${oldName}" not found in asset`);
+	}
+	if (oldName !== newName && meta.views[newName]) {
+		throw new Error(`View "${newName}" already exists`);
+	}
+
+	// Move the entry
+	delete meta.views[oldName];
+	meta.views[newName] = { ...view, label: newLabel ?? view.label };
+
+	// Update defaultView if it pointed to the old name
+	if (meta.defaultView === oldName) {
+		meta.defaultView = newName;
+	}
+
+	await writeAssetMeta(assetFolder, meta);
+	return meta;
 }

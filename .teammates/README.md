@@ -8,6 +8,7 @@ A team of AI specialists building a persistent, multiplayer, LLM-powered narrati
 
 | Name | Persona | Primary Ownership | Last Active |
 |---|---|---|---|
+| **Bard** | Narrative Designer | `worlds/*/lore/**`, `worlds/*/factions/**`, `worlds/*/quests/**`, `worlds/*/npcs/**`, `worlds/*/archetypes/**`, `worlds/*/vocabulary/**`, `worlds/*/regions/**` | 2026-03-26 |
 | **Beacon** | Software Engineer | `src/**`, `assets/**`, `tests/**` | 2026-03-25 |
 | **Lexicon** | Prompt Engineer | `src/narrative/prompts/**`, `.teammates/*/SOUL.md` | 2026-03-25 |
 | **Pipeline** | DevOps Engineer | `.github/**` | 2026-03-25 |
@@ -18,11 +19,11 @@ A team of AI specialists building a persistent, multiplayer, LLM-powered narrati
 ## Dependency Flow
 
 ```
-Specs (Scribe) → Rules Specs (Loremaster) → Engine/Renderer/Narrative Code (Beacon) → CI/CD (Pipeline)
-                                              Prompt Architecture (Lexicon) ↗
+Specs (Scribe) → Lore & Story (Bard) → Rules Specs (Loremaster) → Engine/Renderer/Narrative Code (Beacon) → CI/CD (Pipeline)
+                                                                     Prompt Architecture (Lexicon) ↗
 ```
 
-Scribe defines specs (LoreWeave design, Pixel Format v1). Loremaster defines D&D rules specs and encounter designs. Beacon implements the game engine, pixel renderer, narrative bridge, and multiplayer layer. Lexicon designs narrative prompt architecture that Beacon integrates. Pipeline ships everything via CI/CD.
+Scribe defines specs (LoreWeave design, Pixel Format v1). Bard designs world lore, factions, quests, NPC archetypes, and vocabulary tables. Loremaster defines D&D rules specs and encounter designs. Beacon implements the game engine, pixel renderer, narrative bridge, and multiplayer layer. Lexicon designs narrative prompt architecture that Beacon integrates. Pipeline ships everything via CI/CD.
 
 ## Routing Guide
 
@@ -30,6 +31,7 @@ Scribe defines specs (LoreWeave design, Pixel Format v1). Loremaster defines D&D
 
 | Keywords | Teammate |
 |---|---|
+| lore, story, narrative content, faction, culture, quest, NPC, archetype, vocabulary, flavor text, world history, pantheon, dialog, dialogue, backstory, settlement design, building archetype, tavern, shop, inn | **Bard** |
 | engine, world, state, renderer, pixel, sprite, tileset, scene, palette, asset, multiplayer, sync, persistence, TypeScript, build, test, code, implementation | **Beacon** |
 | D&D, rules, combat, encounter, ability, spell, class, race, species, monster, stat block, CR, challenge rating, hit points, armor class, saving throw, skill check, initiative, action economy, conditions, DM, dungeon master, character creation, level up, proficiency, feat, magic item, dice, d20 | **Loremaster** |
 | prompt, token, distance, compression, decompression, attention, context window, narrative, narration, story, dialogue, LLM, system prompt, RAG, retrieval | **Lexicon** |

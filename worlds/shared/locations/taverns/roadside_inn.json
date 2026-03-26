@@ -1,0 +1,39 @@
+{
+  "id": "tavern_roadside_inn",
+  "type": "location",
+  "category": "tavern",
+  "name": "Roadside Inn",
+  "description": "A larger establishment on a trade road, offering rooms, stabling, and meals",
+  "tier": ["village", "town"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["bar_counter", "common_room", "hearth", "guest_rooms", "stable"],
+    "common": ["kitchen", "private_dining", "well_or_pump", "notice_board"],
+    "rare": ["bathhouse", "merchant_lockbox", "courtyard", "shrine_corner"]
+  },
+  "objects": {
+    "required": ["mugs", "beds", "washbasins", "lanterns"],
+    "common": ["horse_trough", "hitching_post", "ledger_book", "cooking_pot"],
+    "rare": ["strongbox", "map_on_wall", "guest_book", "mounted_antlers"]
+  },
+  "npcs": {
+    "required": ["innkeeper", "stablehand"],
+    "common": ["cook", "serving_girl", "traveling_merchant"],
+    "rare": ["retired_soldier", "courier", "pilgrim"]
+  },
+  "exits": {
+    "required": ["front_door", "stable_door"],
+    "common": ["back_door", "stairs_up", "kitchen_exit"],
+    "rare": ["root_cellar", "attic_hatch"]
+  },
+  "atmosphere": {
+    "sounds": ["horses_outside", "creaking_floorboards", "laughter", "sizzling_food"],
+    "smells": ["hay", "roasting_meat", "leather", "road_dust"],
+    "lighting": ["warm", "lamp_lit", "firelit"]
+  },
+  "layout": {
+    "footprint": "large",
+    "floors": [2],
+    "shape": ["rectangular", "U-shaped_with_courtyard"]
+  }
+}

@@ -13,6 +13,8 @@ import { CliProxyAdapter, type ProgressEvent } from '@loreweave/agents';
 import {
 	classifyFile,
 	createManagedAsset,
+	deleteAssetView,
+	deleteManagedAsset,
 	findManagedAssets,
 	findPixelFiles,
 	findUnmanagedPixelFiles,
@@ -22,6 +24,7 @@ import {
 	loadAssetMeta,
 	loadPixelFile,
 	type PixelAssetType,
+	renameAssetView,
 	type ValidationResult,
 	validateEmitter,
 	validatePalette,
@@ -34,6 +37,7 @@ import {
 import type {
 	AssetMeta,
 	AssetType,
+	PixelColor,
 	PixelEmitter,
 	PixelPalette,
 	PixelScene,
@@ -51,6 +55,21 @@ export interface ServerOptions {
 }
 
 let debugMode = false;
+
+// ── Generation Task Tracking ──
+
+interface GenerationTask {
+	folder: string;
+	viewName: string;
+	prompt: string;
+	startedAt: number;
+}
+
+/** Currently active generation tasks, keyed by "folder/viewName". */
+const generatingTasks = new Map<string, GenerationTask>();
+
+/** Broadcast function — set by startServer once WebSocket is ready. */
+let broadcastFn: (data: object) => void = () => {};
 
 export async function startServer(opts: ServerOptions): Promise<void> {
 	const { port, assetDir, debug } = opts;
@@ -86,6 +105,7 @@ export async function startServer(opts: ServerOptions): Promise<void> {
 			}
 		}
 	}
+	broadcastFn = broadcast;
 
 	// ── File Watcher ──
 
@@ -176,6 +196,18 @@ async function handleRequest(
 			const body = await readBody(req);
 			return apiUpdateAsset(res, assetDir, assetPath, body);
 		}
+		if (req.method === 'DELETE') return apiDeleteAsset(res, assetDir, assetPath);
+	}
+	if (path === '/api/asset/view') {
+		const assetPath = url.searchParams.get('path');
+		const viewName = url.searchParams.get('view');
+		if (!assetPath || !viewName)
+			return sendJson(res, 400, { error: 'Missing path or view parameter' });
+		if (req.method === 'DELETE') return apiDeleteView(res, assetDir, assetPath, viewName);
+		if (req.method === 'PUT') {
+			const body = await readBody(req);
+			return apiRenameView(res, assetDir, assetPath, viewName, body);
+		}
 	}
 	if (path === '/api/asset/file' && req.method === 'GET') {
 		const filePath = url.searchParams.get('path');
@@ -191,6 +223,9 @@ async function handleRequest(
 	if (path === '/api/generate' && req.method === 'POST') {
 		const body = await readBody(req);
 		return apiGenerate(res, assetDir, body);
+	}
+	if (path === '/api/generate/status' && req.method === 'GET') {
+		return apiGenerateStatus(res);
 	}
 
 	sendJson(res, 404, { error: 'Not found' });
@@ -245,6 +280,12 @@ async function apiListAssets(res: ServerResponse, assetDir: string): Promise<voi
 		unmanaged[f.fileType].push({ path: f.path, relativePath: relPath });
 	}
 
+	// Build set of folders currently generating
+	const generatingFolders: string[] = [];
+	for (const task of generatingTasks.values()) {
+		generatingFolders.push(task.folder);
+	}
+
 	sendJson(res, 200, {
 		managed: managed.map((m) => ({
 			folder: m.relativePath,
@@ -252,6 +293,7 @@ async function apiListAssets(res: ServerResponse, assetDir: string): Promise<voi
 		})),
 		unmanaged,
 		total: managed.length + unmanagedFiles.length,
+		generating: generatingFolders,
 	});
 }
 
@@ -430,12 +472,94 @@ async function apiUpdateAsset(
 		if (updates.defaultView !== undefined) existing.defaultView = updates.defaultView;
 		if (updates.references !== undefined) existing.references = updates.references;
 		if (updates.palette !== undefined) existing.palette = updates.palette;
+		if (updates.customColors !== undefined) existing.customColors = updates.customColors;
 		if (updates.tags !== undefined) existing.tags = updates.tags;
 
 		await writeAssetMeta(absPath, existing);
 		sendJson(res, 200, { folder: relative(assetDir, absPath).replace(/\\/g, '/'), meta: existing });
 	} catch (err) {
 		sendJson(res, 404, { error: `Asset not found: ${(err as Error).message}` });
+	}
+}
+
+// ── API: Delete Asset ──
+
+async function apiDeleteAsset(
+	res: ServerResponse,
+	assetDir: string,
+	assetPath: string,
+): Promise<void> {
+	const absPath = resolve(assetDir, assetPath);
+	if (!absPath.startsWith(assetDir)) {
+		return sendJson(res, 403, { error: 'Path traversal not allowed' });
+	}
+
+	try {
+		await deleteManagedAsset(absPath);
+		sendJson(res, 200, { deleted: assetPath });
+	} catch (err) {
+		sendJson(res, 404, { error: `Failed to delete asset: ${(err as Error).message}` });
+	}
+}
+
+// ── API: Delete View ──
+
+async function apiDeleteView(
+	res: ServerResponse,
+	assetDir: string,
+	assetPath: string,
+	viewName: string,
+): Promise<void> {
+	const absPath = resolve(assetDir, assetPath);
+	if (!absPath.startsWith(assetDir)) {
+		return sendJson(res, 403, { error: 'Path traversal not allowed' });
+	}
+
+	try {
+		const meta = await deleteAssetView(absPath, viewName);
+		sendJson(res, 200, {
+			folder: relative(assetDir, absPath).replace(/\\/g, '/'),
+			meta,
+			deletedView: viewName,
+		});
+	} catch (err) {
+		sendJson(res, 404, { error: `Failed to delete view: ${(err as Error).message}` });
+	}
+}
+
+// ── API: Rename View ──
+
+async function apiRenameView(
+	res: ServerResponse,
+	assetDir: string,
+	assetPath: string,
+	viewName: string,
+	body: string,
+): Promise<void> {
+	const absPath = resolve(assetDir, assetPath);
+	if (!absPath.startsWith(assetDir)) {
+		return sendJson(res, 403, { error: 'Path traversal not allowed' });
+	}
+
+	let params: { newName?: string; newLabel?: string };
+	try {
+		params = JSON.parse(body);
+	} catch {
+		return sendJson(res, 400, { error: 'Invalid JSON body' });
+	}
+
+	if (!params.newName?.trim()) {
+		return sendJson(res, 400, { error: 'Missing newName' });
+	}
+
+	try {
+		const meta = await renameAssetView(absPath, viewName, params.newName.trim(), params.newLabel);
+		sendJson(res, 200, {
+			folder: relative(assetDir, absPath).replace(/\\/g, '/'),
+			meta,
+		});
+	} catch (err) {
+		sendJson(res, 400, { error: `Failed to rename view: ${(err as Error).message}` });
 	}
 }
 
@@ -537,6 +661,23 @@ async function apiListPalettes(res: ServerResponse, assetDir: string): Promise<v
 
 // ── API: Generate ──
 
+// ── API: Generate Status ──
+
+function apiGenerateStatus(res: ServerResponse): void {
+	const tasks: Array<{ folder: string; viewName: string; prompt: string; elapsed: number }> = [];
+	for (const task of generatingTasks.values()) {
+		tasks.push({
+			folder: task.folder,
+			viewName: task.viewName,
+			prompt: task.prompt,
+			elapsed: Date.now() - task.startedAt,
+		});
+	}
+	sendJson(res, 200, { tasks });
+}
+
+// ── API: Generate (non-blocking, supports parallel) ──
+
 async function apiGenerate(res: ServerResponse, assetDir: string, body: string): Promise<void> {
 	let params: {
 		prompt: string;
@@ -565,34 +706,93 @@ async function apiGenerate(res: ServerResponse, assetDir: string, body: string):
 		});
 	}
 
+	const assetFolder = params.assetFolder || '';
+	const viewName = params.viewName || 'default';
+	const taskKey = `${assetFolder}/${viewName}`;
+
+	// Check if this specific asset/view is already being generated
+	if (generatingTasks.has(taskKey)) {
+		return sendJson(res, 409, {
+			error: `Generation already in progress for ${assetFolder} / ${viewName}`,
+		});
+	}
+
+	// Validate path traversal before going async
+	let outputDirOverride: string | undefined;
+	if (params.assetFolder) {
+		outputDirOverride = resolve(assetDir, params.assetFolder);
+		if (!outputDirOverride.startsWith(assetDir)) {
+			return sendJson(res, 403, { error: 'Path traversal not allowed' });
+		}
+	}
+
+	// Load custom colors from asset metadata if generating into managed asset
+	let customColors: Record<string, PixelColor> | undefined;
+	if (params.assetFolder) {
+		try {
+			const folderPath = resolve(assetDir, params.assetFolder);
+			const meta = await loadAssetMeta(folderPath);
+			if (meta.customColors && Object.keys(meta.customColors).length > 0) {
+				customColors = meta.customColors;
+			}
+		} catch {
+			// Not fatal — proceed without custom colors
+		}
+	}
+
+	// Register task and respond immediately
+	const task: GenerationTask = {
+		folder: assetFolder,
+		viewName,
+		prompt: params.prompt,
+		startedAt: Date.now(),
+	};
+	generatingTasks.set(taskKey, task);
+
+	// Broadcast generation started
+	broadcastFn({
+		type: 'generate-start',
+		folder: assetFolder,
+		viewName,
+		prompt: params.prompt,
+	});
+
+	// Return 202 Accepted immediately — generation runs in background
+	sendJson(res, 202, {
+		status: 'started',
+		folder: assetFolder,
+		viewName,
+		message: 'Generation started. Watch for WebSocket events.',
+	});
+
+	// ── Run generation in background ──
+
 	const model = params.model || process.env.CLAUDE_MODEL || undefined;
 	const assetType = (params.type ?? 'sprite') as PixelAssetType;
-
+	const detailLevel = params.detailLevel ?? 'standard';
 	const prefix = '\x1b[36m[debug]\x1b[0m';
 
 	if (debugMode) {
-		console.log(`${prefix} Starting generation...`);
+		console.log(`${prefix} Starting generation for ${taskKey}...`);
 		console.log(`${prefix} Prompt: ${params.prompt}`);
 		console.log(`${prefix} Type: ${assetType}`);
 		console.log(`${prefix} Model: ${model ?? '(default)'}`);
-		if (params.assetFolder) console.log(`${prefix} Asset folder: ${params.assetFolder}`);
-		if (params.viewName) console.log(`${prefix} View name: ${params.viewName}`);
 	}
 
 	const onProgress = debugMode
 		? (event: ProgressEvent) => {
 				switch (event.type) {
 					case 'start':
-						console.log(`${prefix} ${event.message}`);
+						console.log(`${prefix} [${taskKey}] ${event.message}`);
 						break;
 					case 'text':
-						console.log(`${prefix} \x1b[2m${event.content.trimEnd()}\x1b[0m`);
+						console.log(`${prefix} [${taskKey}] \x1b[2m${event.content.trimEnd()}\x1b[0m`);
 						break;
 					case 'error':
-						console.error(`${prefix} \x1b[31m${event.message}\x1b[0m`);
+						console.error(`${prefix} [${taskKey}] \x1b[31m${event.message}\x1b[0m`);
 						break;
 					case 'done':
-						console.log(`${prefix} \x1b[32m${event.message}\x1b[0m`);
+						console.log(`${prefix} [${taskKey}] \x1b[32m${event.message}\x1b[0m`);
 						break;
 				}
 			}
@@ -604,67 +804,69 @@ async function apiGenerate(res: ServerResponse, assetDir: string, body: string):
 		timeout: 5 * 60 * 1000,
 	});
 
-	const detailLevel = params.detailLevel ?? 'standard';
-
-	// If generating into a managed asset folder, set outputDir to that folder
-	let outputDirOverride: string | undefined;
-	if (params.assetFolder) {
-		outputDirOverride = resolve(assetDir, params.assetFolder);
-		if (!outputDirOverride.startsWith(assetDir)) {
-			return sendJson(res, 403, { error: 'Path traversal not allowed' });
-		}
-	}
-
-	const result: GeneratePixelResult = await generatePixelAsset(adapter, {
-		prompt: params.prompt,
-		type: assetType,
-		detailLevel: detailLevel as 'low' | 'standard' | 'high' | number,
-		assetDir,
-		outputDir: outputDirOverride,
-		palette: params.palette,
-		model,
-		env: { ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY },
-		onProgress,
-	});
-
-	if (!result.success) {
-		return sendJson(res, 500, {
-			error: result.error ?? 'Generation failed',
-			details: result.errorDetails,
+	try {
+		const result: GeneratePixelResult = await generatePixelAsset(adapter, {
+			prompt: params.prompt,
+			type: assetType,
+			detailLevel: detailLevel as 'low' | 'standard' | 'high' | number,
+			assetDir,
+			outputDir: outputDirOverride,
+			palette: params.palette,
+			customColors,
+			model,
+			env: { ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY },
+			onProgress,
 		});
-	}
 
-	// If generating into a managed asset folder, update asset.json with the new view
-	if (params.assetFolder && result.assetPath) {
-		try {
-			const folderPath = resolve(assetDir, params.assetFolder);
-			const meta = await loadAssetMeta(folderPath);
-			const viewName = params.viewName || 'default';
-			const fileName = relative(folderPath, result.assetPath).replace(/\\/g, '/');
-
-			meta.views[viewName] = {
-				file: fileName,
-				label: viewName.charAt(0).toUpperCase() + viewName.slice(1),
-			};
-
-			// Set as default view if it's the first one
-			if (Object.keys(meta.views).length === 1) {
-				meta.defaultView = viewName;
-			}
-
-			await writeAssetMeta(folderPath, meta);
-		} catch (err) {
-			// Non-fatal — asset was generated but metadata wasn't updated
-			console.error('Failed to update asset.json after generation:', (err as Error).message);
+		if (!result.success) {
+			broadcastFn({
+				type: 'generate-complete',
+				folder: assetFolder,
+				viewName,
+				success: false,
+				error: result.error ?? 'Generation failed',
+			});
+			return;
 		}
-	}
 
-	sendJson(res, 200, {
-		success: true,
-		result: result.output,
-		changedFiles: result.changedFiles,
-		validation: result.validation,
-		assetPath: result.assetPath,
-		sizing: result.sizing,
-	});
+		// Update asset.json with the new view
+		if (params.assetFolder && result.assetPath) {
+			try {
+				const folderPath = resolve(assetDir, params.assetFolder);
+				const meta = await loadAssetMeta(folderPath);
+
+				meta.views[viewName] = {
+					file: relative(folderPath, result.assetPath).replace(/\\/g, '/'),
+					label: viewName.charAt(0).toUpperCase() + viewName.slice(1),
+				};
+
+				if (Object.keys(meta.views).length === 1) {
+					meta.defaultView = viewName;
+				}
+
+				await writeAssetMeta(folderPath, meta);
+			} catch (err) {
+				console.error('Failed to update asset.json after generation:', (err as Error).message);
+			}
+		}
+
+		broadcastFn({
+			type: 'generate-complete',
+			folder: assetFolder,
+			viewName,
+			success: true,
+			validation: result.validation,
+			sizing: result.sizing,
+		});
+	} catch (err) {
+		broadcastFn({
+			type: 'generate-complete',
+			folder: assetFolder,
+			viewName,
+			success: false,
+			error: `Generation failed: ${(err as Error).message}`,
+		});
+	} finally {
+		generatingTasks.delete(taskKey);
+	}
 }

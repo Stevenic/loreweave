@@ -31,28 +31,87 @@ Every world has a single **world seed** — a 64-bit integer provided at world c
 type WorldSeed = bigint; // 64-bit
 ```
 
-If the player provides a string instead of a number, hash it to a 64-bit integer (e.g., via FNV-1a or similar).
+If the player provides a string instead of a number, hash it to a 64-bit integer via **FNV-1a** (see §2.2).
 
-### 2.2 Positional RNG
+### 2.2 Positional RNG — FNV-1a + xorshift32
 
-For any operation that needs randomness at a specific location, derive a **positional seed** by combining the world seed with the coordinates:
+For any operation that needs randomness at a specific location, derive a **positional seed** by combining the world seed with the coordinates using **FNV-1a hashing**, then feed it into an **xorshift32 PRNG** for the random sequence.
 
+#### FNV-1a Hash (Seed Derivation)
+
+FNV-1a converts `(worldSeed, x, y)` into a 32-bit seed with good spatial distribution. Small coordinate changes produce wildly different seeds — no correlation between adjacent tiles.
+
+```ts
+function fnv1a(data: number[]): number {
+  let hash = 0x811c9dc5;                   // FNV offset basis
+  for (const byte of data) {
+    hash ^= byte;
+    hash = Math.imul(hash, 0x01000193);    // FNV prime
+  }
+  return hash >>> 0;                        // unsigned 32-bit
+}
+
+function positionalSeed(worldSeed: number, x: number, y: number): number {
+  return fnv1a([worldSeed, x, y]);
+}
 ```
-positionalSeed(worldSeed, x, y) = hash(worldSeed, x, y)
+
+**Why FNV-1a**: Fastest hash with adequate distribution for spatial seed derivation. 5 lines of code, one byte at a time, multiply + XOR. Not cryptographic — not needed here. Alternatives considered: SHA-256 (overkill), MurmurHash3 (good but heavier), djb2 (higher collision rate).
+
+#### xorshift32 PRNG (Random Sequences)
+
+For discrete random choices (feature placement, spawn rolls, archetype selection), use a **xorshift32** PRNG seeded from the positional hash:
+
+```ts
+function createRng(seed: number): () => number {
+  let state = seed || 1;
+  return () => {
+    state ^= state << 13;
+    state ^= state >>> 17;
+    state ^= state << 5;
+    return (state >>> 0) / 0x100000000;    // float [0, 1)
+  };
+}
 ```
+
+**Why xorshift32**: 4 bytes of state (vs. 2.5 KB for Mersenne Twister), 3 XOR + shift operations per call, 2^32 - 1 period (~4 billion values). We create thousands of RNG instances (one per chunk, per feature pass, per emitter) — minimal memory matters.
+
+#### RNG Stream Isolation
+
+Each subsystem within a chunk gets its own independent RNG stream, derived from the chunk seed with a domain-specific salt:
+
+```ts
+const chunkSeed = positionalSeed(worldSeed, chunkX, chunkY);
+const chunkRng = createRng(chunkSeed);
+
+// Each pass gets a further-derived seed
+const BIOME_SALT    = 0x00000001;
+const SURFACE_SALT  = 0x00000002;
+const RESOURCE_SALT = 0x00000003;
+const FEATURE_SALT  = 0x00000004;
+const SPAWN_SALT    = 0x00000005;
+
+const featureRng = createRng(chunkSeed ^ FEATURE_SALT);
+const spawnRng   = createRng(chunkSeed ^ SPAWN_SALT);
+```
+
+**Invariant**: Adding or removing features from one generation pass does not change the output of any other pass within the same chunk. Without stream isolation, any change to one pass would cascade through all downstream passes.
 
 This ensures:
 - Same position always produces the same random sequence
 - Different positions produce uncorrelated sequences
+- Different subsystems within the same chunk produce independent sequences
 - Generation order does not affect output (unlike Minecraft, where chunk order can cause non-determinism)
 
-### 2.3 Noise Functions
+### 2.3 Noise Functions — OpenSimplex2
 
-All terrain generation uses **gradient noise** (Perlin or Simplex). Noise functions are seeded from the world seed with a domain-specific offset so each noise layer is independent.
+All terrain generation uses **OpenSimplex2** gradient noise. Noise functions are seeded from the world seed with a domain-specific offset so each noise layer is independent.
+
+**Why OpenSimplex2**: Produces smooth, coherent randomness (nearby coordinates → nearby values) with no grid-aligned artifacts. Public domain license. Fixes the 2D axis-alignment issues present in the original OpenSimplex. Alternatives considered: Perlin noise (45°/90° grid artifacts), original Simplex (patented until 2022, directional bias in 2D), OpenSimplex v1 (some axis alignment in 2D).
 
 Key properties:
 - Output range: `[-1.0, 1.0]`
-- Continuous: nearby inputs produce nearby outputs
+- Continuous: nearby inputs produce nearby outputs (coherent — terrain looks like terrain, not random static)
 - Deterministic: same input always produces same output
 
 **Octave noise** combines multiple noise samples at different frequencies and amplitudes to create natural-looking variation:
@@ -62,6 +121,33 @@ octaveNoise(x, y, octaves, persistence) =
   Σ (amplitude_i × noise(x × frequency_i, y × frequency_i))
   where frequency_i = 2^i, amplitude_i = persistence^i
 ```
+
+Each octave adds a layer of detail: octave 1 = continental shapes, octave 2 = regional hills, octave 3 = local variation, octave 4+ = surface roughness.
+
+**Ridged noise** (used for rivers, §4.4) inverts and sharpens the noise to create sharp linear features:
+
+```ts
+ridgedNoise(x, y) = 1.0 - abs(octaveNoise(x, y, ...))
+```
+
+### 2.4 Algorithm Stack Summary
+
+The three randomness primitives serve complementary roles:
+
+| Algorithm | Purpose | Where Used |
+|-----------|---------|-----------|
+| **OpenSimplex2** | Smooth, coherent spatial values (terrain shape) | Biome parameters, elevation, surface variation, resource density, river paths |
+| **FNV-1a** | Coordinate → seed derivation (decorrelation) | `positionalSeed(worldSeed, x, y)` — turns coordinates into independent chunk/tile seeds |
+| **xorshift32** | Fast seeded random sequences (discrete choices) | Feature placement, spawn rolls, structure frequency checks, dice rolls, emitters |
+
+**Data flow for a single tile**:
+
+```
+(worldSeed, x, y) → FNV-1a → chunkSeed → xorshift32 → discrete random choices
+                   → OpenSimplex2(seed + offset, x, y) → continuous terrain values
+```
+
+All three are deterministic. All three are pure (output depends only on input). Together they produce a world that is infinite, varied, reproducible, and order-independent.
 
 ---
 
@@ -551,9 +637,26 @@ Output: Chunk with fully populated WorldTile[] array
 Unlike Minecraft, where chunk generation order can cause minor non-determinism (overlapping feature placement), LoreWeave enforces strict determinism:
 
 1. **No cross-chunk feature bleeding**: Features are placed within chunk boundaries only. The 4-tile biome blend reads neighbor *biome data* (stage 1) but does not write to neighbor tiles.
-2. **Positional RNG everywhere**: Every random decision uses `positionalRNG(seed, x, y, context)`, never a shared mutable RNG state.
-3. **Idempotent stages**: Running a stage twice on the same input produces the same output.
-4. **Structure reservation before feature placement**: Structures claim tiles before features run, so there's no race condition.
+2. **Positional RNG everywhere**: Every random decision uses `positionalRNG(seed, x, y, context)`, never a shared mutable RNG state. See §2.2 for the FNV-1a + xorshift32 implementation.
+3. **RNG stream isolation**: Each generation pass (biomes, surface, resources, features, spawns) uses an independently-seeded RNG stream (§2.2). Modifying one pass cannot affect another.
+4. **Idempotent stages**: Running a stage twice on the same input produces the same output.
+5. **Structure reservation before feature placement**: Structures claim tiles before features run, so there's no race condition.
+6. **Pure functions**: All generation and rules functions are pure — output depends only on inputs, no global state, no side effects, no mutation of input objects. This is the foundation for multiplayer input-sync: two clients with the same world seed applying the same action sequence arrive at identical world state without communicating.
+
+```ts
+// CORRECT — pure: same inputs, same output, original untouched
+function applyDamage(target: Character, amount: number): Character {
+  const newHp = Math.max(0, target.hp - amount);
+  return { ...target, hp: newHp };
+}
+
+// WRONG — impure: mutates input, breaks determinism across clients
+function applyDamageBad(target: Character, amount: number): void {
+  target.hp -= amount;
+}
+```
+
+**Exception**: The `World` class maintains a mutable chunk cache for performance. The cache is an optimization, not state — discarding and regenerating from seed produces identical chunks. Generation itself is pure; caching is a practical concession.
 
 **Invariant**: For any given `(worldSeed, cx, cy)`, the output `Chunk` is byte-identical regardless of what other chunks have been generated, in what order, or how many times.
 
@@ -626,4 +729,4 @@ These items need decisions before or during implementation:
 2. **Water body generation**: Rivers are covered (§4.4). Lakes and oceans are not yet specified. Should oceans exist, or is LoreWeave landlocked? If oceans exist, add a `continentalness` noise parameter.
 3. **Underground/dungeon generation**: `cave_entrance` structures are defined as markers. The actual underground generation (dungeon layouts, underground biomes) is deferred — it's a significant subsystem.
 4. **Elevation cost formula**: §5.2 states elevation affects movement cost but doesn't define the formula. The rules engine owns this, but the spec should define the data contract.
-5. **Noise library choice**: Perlin vs. Simplex vs. OpenSimplex2. Simplex is generally preferred for 2D (no axis-aligned artifacts). Recommend OpenSimplex2 for licensing clarity.
+5. ~~**Noise library choice**~~: **Resolved** — OpenSimplex2 selected. Public domain, no grid artifacts, best quality-to-complexity ratio for 2D. See §2.3.

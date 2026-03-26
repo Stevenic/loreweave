@@ -226,8 +226,53 @@ body{display:flex}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading{text-align:center;padding:40px;color:var(--text2)}
 
+/* Generation overlay on gallery cards */
+.card-generating{position:relative;pointer-events:none;opacity:.7}
+.card-generating::after{content:'';position:absolute;inset:0;background:rgba(13,17,23,.6);display:flex;align-items:center;justify-content:center;border-radius:8px}
+.card-gen-spinner{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none}
+.card-gen-spinner .spinner{width:24px;height:24px;border-width:3px}
+.card-gen-spinner .gen-label{font-size:11px;color:var(--cyan);white-space:nowrap}
+
+/* Custom Colors Editor */
+.custom-colors{margin-top:16px}
+.custom-colors h3{font-size:15px;margin-bottom:8px}
+.cc-grid{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.cc-entry{display:flex;align-items:center;gap:4px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:4px 8px}
+.cc-key{font-family:monospace;font-size:14px;font-weight:600;color:var(--cyan);width:16px;text-align:center}
+.cc-swatch{width:20px;height:20px;border-radius:3px;border:1px solid var(--border);cursor:pointer}
+.cc-color-input{width:0;height:0;padding:0;border:0;position:absolute;visibility:hidden}
+.cc-remove{background:none;border:none;color:var(--text2);cursor:pointer;font-size:12px;padding:0 2px;line-height:1}
+.cc-remove:hover{color:var(--red)}
+.cc-add-btn{background:var(--bg3);border:1px dashed var(--border);border-radius:6px;padding:4px 12px;color:var(--text2);cursor:pointer;font-size:12px;transition:all .15s}
+.cc-add-btn:hover{border-color:var(--accent);color:var(--accent)}
+.cc-hint{font-size:11px;color:var(--text2);margin-top:4px}
+
 /* Section divider */
 .section-divider{margin:32px 0 16px;padding-bottom:8px;border-bottom:1px solid var(--border);font-size:14px;color:var(--text2);font-weight:600}
+
+/* Danger button */
+.btn-danger{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:6px 14px;color:var(--red);cursor:pointer;font-size:13px;transition:all .15s}
+.btn-danger:hover{background:var(--red);color:#fff;border-color:var(--red)}
+.btn-icon{background:none;border:none;color:var(--text2);cursor:pointer;font-size:14px;padding:2px 6px;border-radius:4px;transition:all .15s;line-height:1}
+.btn-icon:hover{color:var(--text);background:var(--bg3)}
+.btn-icon.danger:hover{color:var(--red);background:rgba(248,81,73,.1)}
+.btn-icon.edit:hover{color:var(--accent);background:rgba(88,166,255,.1)}
+
+/* Inline actions bar */
+.detail-actions{display:flex;gap:8px;margin-left:auto}
+.view-tab-group{display:flex;align-items:center;gap:2px}
+.view-tab-group .view-tab{border-radius:6px 0 0 6px}
+.view-tab-group .btn-icon{border-radius:0 6px 6px 0;border:1px solid var(--border);background:var(--bg3);padding:6px 6px}
+
+/* Confirm dialog */
+.confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;display:flex;align-items:center;justify-content:center}
+.confirm-dialog{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px;width:400px;max-width:90vw}
+.confirm-dialog h2{font-size:18px;margin-bottom:12px}
+.confirm-dialog p{color:var(--text2);font-size:14px;margin-bottom:20px;line-height:1.6}
+.confirm-dialog .actions{display:flex;gap:8px;justify-content:flex-end}
+.confirm-dialog .actions button{border-radius:6px;padding:8px 20px;font-size:14px;font-weight:600;cursor:pointer}
+.confirm-dialog .btn-confirm-danger{background:var(--red);border:1px solid var(--red);color:#fff}
+.confirm-dialog .btn-confirm-danger:hover{opacity:.85}
 `;
 }
 
@@ -240,6 +285,43 @@ let allUnmanagedAssets = {};
 let currentFilter = 'all';
 let cachedAssetData = {};
 let paletteEntriesCache = {};
+let cachedPaletteList = [];
+let generatingFolders = new Set();
+
+// ── IndexedDB Preferences ──
+
+const PREFS_DB = 'PixelExplorerPrefs';
+const PREFS_STORE = 'prefs';
+const PREFS_KEY = 'generate';
+
+function openPrefsDb() {
+	return new Promise((resolve, reject) => {
+		const req = indexedDB.open(PREFS_DB, 1);
+		req.onupgradeneeded = () => { req.result.createObjectStore(PREFS_STORE); };
+		req.onsuccess = () => resolve(req.result);
+		req.onerror = () => reject(req.error);
+	});
+}
+
+async function loadPrefs() {
+	try {
+		const db = await openPrefsDb();
+		return new Promise((resolve) => {
+			const tx = db.transaction(PREFS_STORE, 'readonly');
+			const req = tx.objectStore(PREFS_STORE).get(PREFS_KEY);
+			req.onsuccess = () => resolve(req.result || {});
+			req.onerror = () => resolve({});
+		});
+	} catch { return {}; }
+}
+
+async function savePrefs(prefs) {
+	try {
+		const db = await openPrefsDb();
+		const tx = db.transaction(PREFS_STORE, 'readwrite');
+		tx.objectStore(PREFS_STORE).put(prefs, PREFS_KEY);
+	} catch { /* ignore */ }
+}
 
 // ── Animation State ──
 let animPlaying = false;
@@ -256,6 +338,7 @@ async function preloadPalettes() {
 	try {
 		const data = await api('/api/palettes');
 		const pals = data.palettes || [];
+		cachedPaletteList = pals;
 		for (const p of pals) {
 			try {
 				const asset = await api('/api/asset/file?path=' + encodeURIComponent(p.path));
@@ -311,6 +394,9 @@ async function loadGallery() {
 		const data = await api('/api/assets');
 		allManagedAssets = data.managed || [];
 		allUnmanagedAssets = data.unmanaged || {};
+		if (data.generating) {
+			generatingFolders = new Set(data.generating);
+		}
 		renderGallery();
 	} catch {
 		el.innerHTML = '<div class="loading">Failed to load assets.</div>';
@@ -351,7 +437,9 @@ function renderGallery() {
 		const meta = a.meta;
 		const viewCount = Object.keys(meta.views).length;
 		const refCount = (meta.references || []).length;
-		html += '<div class="asset-card" data-folder="' + esc(a.folder) + '">'
+		const isGenerating = generatingFolders.has(a.folder);
+		html += '<div class="asset-card' + (isGenerating ? ' card-generating' : '') + '" data-folder="' + esc(a.folder) + '">'
+			+ (isGenerating ? '<div class="card-gen-spinner"><div class="spinner"></div><span class="gen-label">Generating...</span></div>' : '')
 			+ '<div class="card-preview"><canvas width="64" height="64"></canvas></div>'
 			+ '<div class="card-info">'
 			+ '<div class="card-name">' + esc(meta.name) + '</div>'
@@ -424,7 +512,7 @@ async function renderManagedThumbnail(canvas, folder) {
 		if (!defaultView || !asset.views[defaultView]) return drawPlaceholder(canvas.getContext('2d'), canvas, meta.type, meta.name, 180);
 		const viewData = asset.views[defaultView];
 		if (!viewData.data) return drawPlaceholder(canvas.getContext('2d'), canvas, meta.type, meta.name, 180);
-		drawAsset(canvas, viewData.data, viewData.fileType, 180);
+		drawAsset(canvas, viewData.data, viewData.fileType, 180, meta.customColors);
 	} catch { /* skip */ }
 }
 
@@ -495,6 +583,90 @@ function showCreateModal() {
 	document.getElementById('create-name').focus();
 }
 
+// ── Confirm Dialog ──
+
+function showConfirm(title, message, confirmLabel, onConfirm) {
+	const existing = document.querySelector('.confirm-overlay');
+	if (existing) existing.remove();
+
+	const overlay = document.createElement('div');
+	overlay.className = 'confirm-overlay';
+	overlay.innerHTML =
+		'<div class="confirm-dialog">'
+		+ '<h2>' + title + '</h2>'
+		+ '<p>' + message + '</p>'
+		+ '<div class="actions">'
+		+ '<button class="btn-cancel" id="confirm-cancel">Cancel</button>'
+		+ '<button class="btn-confirm-danger" id="confirm-ok">' + esc(confirmLabel) + '</button>'
+		+ '</div>'
+		+ '</div>';
+
+	document.body.appendChild(overlay);
+
+	overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+	document.getElementById('confirm-cancel').addEventListener('click', () => overlay.remove());
+	document.getElementById('confirm-ok').addEventListener('click', async () => {
+		overlay.remove();
+		await onConfirm();
+	});
+}
+
+// ── Edit Asset Modal ──
+
+function showEditAssetModal(meta) {
+	const existing = document.querySelector('.modal-overlay');
+	if (existing) existing.remove();
+
+	const overlay = document.createElement('div');
+	overlay.className = 'modal-overlay';
+	overlay.innerHTML =
+		'<div class="modal">'
+		+ '<h2>Edit Asset</h2>'
+		+ '<label>Name</label>'
+		+ '<input type="text" id="edit-name" value="' + esc(meta.name) + '">'
+		+ '<label>Description</label>'
+		+ '<textarea id="edit-desc">' + esc(meta.description || '') + '</textarea>'
+		+ '<label>Tags (comma-separated)</label>'
+		+ '<input type="text" id="edit-tags" value="' + esc((meta.tags || []).join(', ')) + '">'
+		+ '<div class="modal-error" id="edit-error"></div>'
+		+ '<div class="modal-actions">'
+		+ '<button class="btn-cancel" id="edit-cancel">Cancel</button>'
+		+ '<button class="btn-create" id="edit-submit">Save</button>'
+		+ '</div>'
+		+ '</div>';
+
+	document.body.appendChild(overlay);
+
+	overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+	document.getElementById('edit-cancel').addEventListener('click', () => overlay.remove());
+	document.getElementById('edit-submit').addEventListener('click', async () => {
+		const name = document.getElementById('edit-name').value.trim();
+		const description = document.getElementById('edit-desc').value.trim();
+		const tagsStr = document.getElementById('edit-tags').value.trim();
+		const errEl = document.getElementById('edit-error');
+
+		if (!name) { errEl.textContent = 'Name is required.'; return; }
+
+		const tags = tagsStr ? tagsStr.split(',').map(t => t.trim()).filter(Boolean) : undefined;
+
+		try {
+			const result = await api('/api/asset?path=' + encodeURIComponent(currentAssetFolder), {
+				method: 'PUT',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ name, description: description || undefined, tags }),
+			});
+			if (result.error) { errEl.textContent = result.error; return; }
+			overlay.remove();
+			currentAssetMeta = result.meta;
+			renderAssetDetail(document.getElementById('view-asset'));
+		} catch (e) {
+			errEl.textContent = 'Failed to update: ' + e.message;
+		}
+	});
+
+	document.getElementById('edit-name').focus();
+}
+
 // ── Asset Detail ──
 
 let currentAssetFolder = null;
@@ -529,11 +701,17 @@ function renderAssetDetail(el) {
 	const viewNames = Object.keys(meta.views);
 
 	let html = '<button class="detail-back" id="asset-back-btn">&#8592; Back to Gallery</button>';
-	html += '<div class="view-header"><h1>' + esc(meta.name) + '</h1>'
-		+ '<span class="badge badge-' + meta.type + '">' + meta.type + '</span></div>';
+	html += '<div class="view-header"><h1 id="asset-name-display">' + esc(meta.name) + '</h1>'
+		+ '<span class="badge badge-' + meta.type + '">' + meta.type + '</span>'
+		+ '<div class="detail-actions">'
+		+ '<button class="btn-icon edit" id="edit-asset-btn" title="Edit asset">&#9998;</button>'
+		+ '<button class="btn-danger" id="delete-asset-btn">Delete Asset</button>'
+		+ '</div></div>';
 
 	if (meta.description) {
-		html += '<p style="color:var(--text2);margin:-12px 0 16px">' + esc(meta.description) + '</p>';
+		html += '<p style="color:var(--text2);margin:-12px 0 16px" id="asset-desc-display">' + esc(meta.description) + '</p>';
+	} else {
+		html += '<p style="color:var(--text2);margin:-12px 0 16px;font-style:italic" id="asset-desc-display">No description</p>';
 	}
 
 	// View tabs
@@ -541,7 +719,10 @@ function renderAssetDetail(el) {
 	for (const vn of viewNames) {
 		const v = meta.views[vn];
 		const label = v.label || vn;
-		html += '<button class="view-tab' + (vn === currentViewName ? ' active' : '') + '" data-view="' + esc(vn) + '">' + esc(label) + '</button>';
+		html += '<div class="view-tab-group">'
+			+ '<button class="view-tab' + (vn === currentViewName ? ' active' : '') + '" data-view="' + esc(vn) + '">' + esc(label) + '</button>'
+			+ '<button class="btn-icon danger delete-view-btn" data-view="' + esc(vn) + '" title="Delete view">&#10005;</button>'
+			+ '</div>';
 	}
 	html += '<button class="view-tab view-tab-add" id="add-view-btn">+ Add View</button>';
 	html += '</div>';
@@ -622,6 +803,27 @@ function renderAssetDetail(el) {
 		html += '<p style="color:var(--text2);font-size:13px;margin-top:8px">No references. Other assets can be linked here for composition.</p>';
 	}
 
+	// Custom colors editor
+	html += '<div class="custom-colors">';
+	html += '<h3>Custom Colors <span style="font-size:11px;color:var(--text2);font-weight:400">(up to 8)</span></h3>';
+	const cc = meta.customColors || {};
+	const ccKeys = Object.keys(cc);
+	html += '<div class="cc-grid" id="cc-grid">';
+	for (const [key, color] of Object.entries(cc)) {
+		html += '<div class="cc-entry" data-key="' + esc(key) + '">'
+			+ '<span class="cc-key">' + esc(key) + '</span>'
+			+ '<div class="cc-swatch" style="background:' + esc(color) + '" data-key="' + esc(key) + '"></div>'
+			+ '<input type="color" class="cc-color-input" value="' + esc(color) + '" data-key="' + esc(key) + '">'
+			+ '<button class="cc-remove" data-key="' + esc(key) + '" title="Remove">\\u2715</button>'
+			+ '</div>';
+	}
+	if (ccKeys.length < 8) {
+		html += '<button class="cc-add-btn" id="cc-add-btn">+ Add</button>';
+	}
+	html += '</div>';
+	html += '<div class="cc-hint">Custom palette keys available to this asset only. Merged with base palette for generation and rendering.</div>';
+	html += '</div>';
+
 	// Current view properties
 	if (currentViewName && views[currentViewName] && views[currentViewName].data) {
 		const vd = views[currentViewName].data;
@@ -657,11 +859,50 @@ function renderAssetDetail(el) {
 		location.hash = 'gallery';
 	});
 
+	// Delete asset
+	document.getElementById('delete-asset-btn').addEventListener('click', () => {
+		showConfirm(
+			'Delete Asset',
+			'Are you sure you want to delete <strong>' + esc(meta.name) + '</strong> and all its views? This cannot be undone.',
+			'Delete',
+			async () => {
+				try {
+					await api('/api/asset?path=' + encodeURIComponent(currentAssetFolder), { method: 'DELETE' });
+					location.hash = 'gallery';
+				} catch (e) { alert('Failed to delete: ' + e.message); }
+			}
+		);
+	});
+
+	// Edit asset metadata
+	document.getElementById('edit-asset-btn').addEventListener('click', () => {
+		showEditAssetModal(meta);
+	});
+
 	// View tabs
 	el.querySelectorAll('.view-tab[data-view]').forEach(tab => {
 		tab.addEventListener('click', () => {
 			currentViewName = tab.dataset.view;
 			renderAssetDetail(el);
+		});
+	});
+
+	// Delete view buttons
+	el.querySelectorAll('.delete-view-btn').forEach(btn => {
+		btn.addEventListener('click', (e) => {
+			e.stopPropagation();
+			const viewName = btn.dataset.view;
+			showConfirm(
+				'Delete View',
+				'Delete view <strong>' + esc(viewName) + '</strong> and its pixel file? This cannot be undone.',
+				'Delete',
+				async () => {
+					try {
+						await api('/api/asset/view?path=' + encodeURIComponent(currentAssetFolder) + '&view=' + encodeURIComponent(viewName), { method: 'DELETE' });
+						loadAssetDetail(currentAssetFolder);
+					} catch (e) { alert('Failed to delete view: ' + e.message); }
+				}
+			);
 		});
 	});
 
@@ -678,6 +919,9 @@ function renderAssetDetail(el) {
 		});
 	});
 
+	// Custom colors event handlers
+	wireCustomColors(el);
+
 	// Render preview
 	const box = document.getElementById('asset-preview-box');
 	if (currentViewName && views[currentViewName] && views[currentViewName].data) {
@@ -685,7 +929,7 @@ function renderAssetDetail(el) {
 		const vt = views[currentViewName].fileType;
 		const canvas = document.createElement('canvas');
 		canvas.id = 'anim-canvas';
-		drawAsset(canvas, vd, vt, 320);
+		drawAsset(canvas, vd, vt, 320, meta.customColors);
 		box.appendChild(canvas);
 
 		// Show JSON
@@ -840,9 +1084,123 @@ function inferArchetypeClient(prompt) {
 	return best || ARCHETYPES.find(a => a.key === 'character');
 }
 
+function wireCustomColors(el) {
+	// Color swatch click → open color picker
+	el.querySelectorAll('.cc-swatch').forEach(swatch => {
+		const key = swatch.dataset.key;
+		const input = el.querySelector('.cc-color-input[data-key="' + key + '"]');
+		if (input) {
+			swatch.addEventListener('click', () => input.click());
+			input.addEventListener('input', async function() {
+				swatch.style.background = this.value;
+				await saveCustomColor(key, this.value);
+			});
+		}
+	});
+
+	// Remove button
+	el.querySelectorAll('.cc-remove').forEach(btn => {
+		btn.addEventListener('click', async () => {
+			await removeCustomColor(btn.dataset.key);
+		});
+	});
+
+	// Add button
+	const addBtn = document.getElementById('cc-add-btn');
+	if (addBtn) {
+		addBtn.addEventListener('click', () => showAddCustomColorModal());
+	}
+}
+
+async function saveCustomColor(key, color) {
+	const cc = Object.assign({}, currentAssetMeta.customColors || {});
+	cc[key] = color;
+	try {
+		const result = await api('/api/asset?path=' + encodeURIComponent(currentAssetFolder), {
+			method: 'PUT',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ customColors: cc }),
+		});
+		if (result.meta) currentAssetMeta = result.meta;
+	} catch { /* ignore */ }
+}
+
+async function removeCustomColor(key) {
+	const cc = Object.assign({}, currentAssetMeta.customColors || {});
+	delete cc[key];
+	try {
+		const result = await api('/api/asset?path=' + encodeURIComponent(currentAssetFolder), {
+			method: 'PUT',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ customColors: Object.keys(cc).length ? cc : undefined }),
+		});
+		if (result.meta) currentAssetMeta = result.meta;
+		renderAssetDetail(document.getElementById('view-asset'));
+	} catch { /* ignore */ }
+}
+
+function showAddCustomColorModal() {
+	const existing = document.querySelector('.modal-overlay');
+	if (existing) existing.remove();
+
+	// Find next available key (prefer lowercase letters not in base palette)
+	const usedKeys = new Set(Object.keys(currentAssetMeta.customColors || {}));
+	const candidates = 'xyzwvutsrqponmlkjihgfedcba'.split('').filter(k => !usedKeys.has(k));
+	const defaultKey = candidates[0] || '';
+
+	const overlay = document.createElement('div');
+	overlay.className = 'modal-overlay';
+	overlay.innerHTML =
+		'<div class="modal">'
+		+ '<h2>Add Custom Color</h2>'
+		+ '<label>Key (single character)</label>'
+		+ '<input type="text" id="cc-new-key" maxlength="1" value="' + defaultKey + '" style="width:60px;text-align:center;font-family:monospace;font-size:18px">'
+		+ '<label>Color</label>'
+		+ '<input type="color" id="cc-new-color" value="#ff6600" style="width:60px;height:40px;cursor:pointer;background:none;border:1px solid var(--border);border-radius:4px">'
+		+ '<div class="modal-error" id="cc-error"></div>'
+		+ '<div class="modal-actions">'
+		+ '<button class="btn-cancel" id="cc-cancel">Cancel</button>'
+		+ '<button class="btn-create" id="cc-submit">Add</button>'
+		+ '</div>'
+		+ '</div>';
+
+	document.body.appendChild(overlay);
+
+	overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+	document.getElementById('cc-cancel').addEventListener('click', () => overlay.remove());
+	document.getElementById('cc-submit').addEventListener('click', async () => {
+		const key = document.getElementById('cc-new-key').value.trim();
+		const color = document.getElementById('cc-new-color').value;
+		const errEl = document.getElementById('cc-error');
+
+		if (!key || key.length !== 1) { errEl.textContent = 'Key must be a single character.'; return; }
+		const cc = Object.assign({}, currentAssetMeta.customColors || {});
+		if (Object.keys(cc).length >= 8) { errEl.textContent = 'Maximum 8 custom colors.'; return; }
+		if (cc[key]) { errEl.textContent = 'Key "' + key + '" is already in use.'; return; }
+
+		cc[key] = color;
+		try {
+			const result = await api('/api/asset?path=' + encodeURIComponent(currentAssetFolder), {
+				method: 'PUT',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ customColors: cc }),
+			});
+			if (result.meta) currentAssetMeta = result.meta;
+			overlay.remove();
+			renderAssetDetail(document.getElementById('view-asset'));
+		} catch (e) {
+			errEl.textContent = 'Failed: ' + e.message;
+		}
+	});
+
+	document.getElementById('cc-new-key').focus();
+}
+
 function wireGenerateForm() {
 	const promptEl = document.getElementById('gen-prompt');
 	const detailEl = document.getElementById('gen-detail');
+	const paletteEl = document.getElementById('gen-palette');
+	const modelEl = document.getElementById('gen-model');
 	const sizingHint = document.getElementById('gen-sizing-hint');
 	if (!promptEl) return;
 
@@ -858,17 +1216,34 @@ function wireGenerateForm() {
 	promptEl.addEventListener('input', updateSizingHint);
 	detailEl.addEventListener('change', updateSizingHint);
 
-	// Load palette options
-	api('/api/palettes').then(data => {
-		const sel = document.getElementById('gen-palette');
-		if (!sel) return;
-		for (const p of (data.palettes || [])) {
+	// Populate palette options synchronously from cache (prevents duplicate appends)
+	if (paletteEl) {
+		for (const p of cachedPaletteList) {
 			const opt = document.createElement('option');
 			opt.value = p.path;
 			opt.textContent = p.name + ' (' + p.entryCount + ' colors)';
-			sel.appendChild(opt);
+			paletteEl.appendChild(opt);
 		}
-	}).catch(() => {});
+	}
+
+	// Restore saved preferences from IndexedDB
+	loadPrefs().then(prefs => {
+		if (prefs.detailLevel && detailEl) { detailEl.value = prefs.detailLevel; }
+		if (prefs.palette && paletteEl) { paletteEl.value = prefs.palette; }
+		if (prefs.model && modelEl) { modelEl.value = prefs.model; }
+	});
+
+	// Save preferences on change
+	function persistPrefs() {
+		savePrefs({
+			detailLevel: detailEl ? detailEl.value : '',
+			palette: paletteEl ? paletteEl.value : '',
+			model: modelEl ? modelEl.value : '',
+		});
+	}
+	if (detailEl) detailEl.addEventListener('change', persistPrefs);
+	if (paletteEl) paletteEl.addEventListener('change', persistPrefs);
+	if (modelEl) modelEl.addEventListener('change', persistPrefs);
 
 	document.getElementById('gen-submit').addEventListener('click', runGenerate);
 }
@@ -889,7 +1264,7 @@ async function runGenerate() {
 	btn.disabled = true;
 	btn.innerHTML = '<span class="spinner"></span> Generating...';
 	output.classList.add('visible');
-	output.textContent = 'Generating... This may take a minute.';
+	output.textContent = 'Generation started. You can navigate away \\u2014 the spinner in the gallery shows progress.';
 
 	try {
 		const data = await api('/api/generate', {
@@ -907,18 +1282,13 @@ async function runGenerate() {
 		});
 		if (data.error) {
 			output.textContent = 'Error: ' + data.error + (data.details ? '\\n\\nDetails:\\n' + data.details : '');
-		} else {
-			let msg = 'View "' + viewName + '" generated successfully.';
-			if (data.sizing) {
-				msg += '\\n\\nSizing: ' + data.sizing.archetype + ' \\u2192 ' + data.sizing.width + '\\u00d7' + data.sizing.height + ' px (PPU ' + data.sizing.ppu + ')';
-			}
-			output.textContent = msg;
-			// Reload the asset detail to show the new view
-			setTimeout(() => loadAssetDetail(currentAssetFolder), 500);
+			btn.disabled = false;
+			btn.textContent = 'Generate View';
 		}
+		// On 202 Accepted, keep button disabled — WebSocket will notify completion
+		// The generate-complete event handler calls showGenStatus and re-enables the button
 	} catch (e) {
 		output.textContent = 'Request failed: ' + e.message;
-	} finally {
 		btn.disabled = false;
 		btn.textContent = 'Generate View';
 	}
@@ -1172,7 +1542,8 @@ function renderAnimFrame(clip, elapsed) {
 	const ctx = canvas.getContext('2d');
 	if (!ctx) return;
 	const d = animAssetData;
-	const entries = resolvePaletteEntries(d);
+	const cc = currentAssetMeta ? currentAssetMeta.customColors : undefined;
+	const entries = resolvePaletteEntries(d, cc);
 	if (!entries) return;
 	const props = sampleClip(clip, elapsed);
 	const w = d.width, h = d.height;
@@ -1198,10 +1569,14 @@ function renderAnimFrame(clip, elapsed) {
 
 // ── Pixel Renderer ──
 
-function resolvePaletteEntries(data) {
-	if (typeof data.palette === 'object' && data.palette !== null && data.palette.entries) return data.palette.entries;
-	if (typeof data.palette === 'string' && paletteEntriesCache[data.palette]) return paletteEntriesCache[data.palette];
-	return null;
+function resolvePaletteEntries(data, customColors) {
+	let entries = null;
+	if (typeof data.palette === 'object' && data.palette !== null && data.palette.entries) entries = data.palette.entries;
+	else if (typeof data.palette === 'string' && paletteEntriesCache[data.palette]) entries = paletteEntriesCache[data.palette];
+	if (entries && customColors && Object.keys(customColors).length > 0) {
+		entries = Object.assign({}, entries, customColors);
+	}
+	return entries;
 }
 
 function hexToRgba(hex) {
@@ -1248,13 +1623,13 @@ function drawPixelRows(ctx, rows, entries, w, h, scale, ox, oy) {
 	}
 }
 
-function drawAsset(canvas, data, fileType, maxSize) {
+function drawAsset(canvas, data, fileType, maxSize, customColors) {
 	const ctx = canvas.getContext('2d');
 	if (!ctx) return;
 	maxSize = maxSize || 180;
 
 	if (fileType === 'sprite') {
-		const entries = resolvePaletteEntries(data);
+		const entries = resolvePaletteEntries(data, customColors);
 		if (!entries) return drawPlaceholder(ctx, canvas, 'Sprite', data.name, maxSize);
 		const w = data.width, h = data.height;
 		if (!w || !h) return drawPlaceholder(ctx, canvas, 'Sprite', data.name, maxSize);
@@ -1267,7 +1642,7 @@ function drawAsset(canvas, data, fileType, maxSize) {
 		ctx.imageSmoothingEnabled = false;
 		drawPixelRows(ctx, rows, entries, w, h, scale, 0, 0);
 	} else if (fileType === 'tileset') {
-		const entries = resolvePaletteEntries(data);
+		const entries = resolvePaletteEntries(data, customColors);
 		if (!entries || !data.tiles) return drawPlaceholder(ctx, canvas, 'Tileset', data.name, maxSize);
 		const tileNames = Object.keys(data.tiles);
 		const cols = Math.ceil(Math.sqrt(tileNames.length));
@@ -1363,9 +1738,65 @@ function connectWs() {
 				else if (hash.startsWith('asset/')) {
 					loadAssetDetail(decodeURIComponent(hash.slice(6)));
 				}
+			} else if (msg.type === 'generate-start') {
+				generatingFolders.add(msg.folder);
+				updateGallerySpinners();
+				// If viewing this asset, show inline status
+				if (currentAssetFolder === msg.folder) {
+					showGenStatus('Generating view "' + msg.viewName + '"...', false);
+				}
+			} else if (msg.type === 'generate-complete') {
+				generatingFolders.delete(msg.folder);
+				updateGallerySpinners();
+				// If viewing this asset, update status and reload
+				if (currentAssetFolder === msg.folder) {
+					if (msg.success) {
+						showGenStatus('View "' + msg.viewName + '" generated successfully!', true);
+						setTimeout(() => loadAssetDetail(currentAssetFolder), 500);
+					} else {
+						showGenStatus('Generation failed: ' + (msg.error || 'Unknown error'), true);
+					}
+				}
+				// Refresh gallery if visible
+				const hash = location.hash.slice(1) || 'gallery';
+				if (hash === 'gallery') loadGallery();
 			}
 		} catch { /* ignore */ }
 	});
+}
+
+// ── Gallery Spinner Update (in-place, no full re-render) ──
+
+function updateGallerySpinners() {
+	const el = document.getElementById('view-gallery');
+	if (!el) return;
+	el.querySelectorAll('.asset-card[data-folder]').forEach(card => {
+		const folder = card.dataset.folder;
+		const isGen = generatingFolders.has(folder);
+		const hasClass = card.classList.contains('card-generating');
+		if (isGen && !hasClass) {
+			card.classList.add('card-generating');
+			const spinner = document.createElement('div');
+			spinner.className = 'card-gen-spinner';
+			spinner.innerHTML = '<div class="spinner"></div><span class="gen-label">Generating...</span>';
+			card.prepend(spinner);
+		} else if (!isGen && hasClass) {
+			card.classList.remove('card-generating');
+			const sp = card.querySelector('.card-gen-spinner');
+			if (sp) sp.remove();
+		}
+	});
+}
+
+function showGenStatus(msg, done) {
+	const output = document.getElementById('gen-output');
+	if (!output) return;
+	output.classList.add('visible');
+	output.textContent = msg;
+	if (done) {
+		const btn = document.getElementById('gen-submit');
+		if (btn) { btn.disabled = false; btn.textContent = 'Generate View'; }
+	}
 }
 
 // ── Utility ──
