@@ -10,6 +10,7 @@
 import { readFileSync } from 'node:fs';
 import { mkdir } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import { migrateUnmanagedAssets } from './migration.js';
 import { startServer } from './server.js';
 
 const ASSET_DIRS = ['sprites', 'tilesets', 'tilemaps', 'scenes', 'palettes', 'emitters'];
@@ -127,6 +128,16 @@ async function main(): Promise<void> {
 	// Scaffold asset directories
 	console.log(`\x1b[2mScaffolding asset directories in ${resolvedDir}...\x1b[0m`);
 	await scaffoldDirectories(resolvedDir);
+
+	// Migrate unmanaged pixel files into managed asset folders
+	try {
+		const migrated = await migrateUnmanagedAssets(resolvedDir);
+		if (migrated > 0) {
+			console.log(`\x1b[2mMigrated ${migrated} asset(s) to managed folders.\x1b[0m`);
+		}
+	} catch (err) {
+		console.warn(`\x1b[33mWarning: Migration failed: ${(err as Error).message}\x1b[0m`);
+	}
 
 	// Start the server
 	await startServer({ port, assetDir: resolvedDir, debug });

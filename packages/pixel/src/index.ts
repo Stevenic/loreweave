@@ -55,12 +55,18 @@ export {
 export type { Particle } from './emitter.js';
 export { ParticleEmitter, SeededRNG } from './emitter.js';
 // Loader
-export type { LoadedResource, PixelFileType } from './loader.js';
+export type { LoadedResource, ManagedAsset, PixelFileType } from './loader.js';
 export {
 	classifyFile,
+	createManagedAsset,
+	findManagedAssets,
 	findPixelFiles,
+	findUnmanagedPixelFiles,
 	loadAllPixelFiles,
+	loadAssetMeta,
 	loadPixelFile,
+	slugifyAssetName,
+	writeAssetMeta,
 } from './loader.js';
 
 // Terminal Renderer

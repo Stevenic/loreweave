@@ -23,11 +23,11 @@ import type {
 } from '@loreweave/types';
 import { findPixelFiles } from './loader.js';
 import {
-	type ComputedDimensions,
-	type DetailLevel,
-	DETAIL_LEVEL_PPU,
 	buildSizingTable,
+	type ComputedDimensions,
 	computeDimensions,
+	DETAIL_LEVEL_PPU,
+	type DetailLevel,
 	inferArchetype,
 } from './sizing.js';
 import type { ValidationResult } from './validator.js';
@@ -64,9 +64,16 @@ export interface GeneratePixelOptions {
 
 	/**
 	 * Root asset directory (contains sprites/, tilesets/, palettes/, etc.).
-	 * Output is written to the appropriate subdirectory.
+	 * Output is written to the appropriate subdirectory unless outputDir is set.
 	 */
 	assetDir: string;
+
+	/**
+	 * Explicit output directory for the generated file.
+	 * When set, overrides the default type-based subdirectory.
+	 * Used for generating into a managed asset folder.
+	 */
+	outputDir?: string;
 
 	/**
 	 * Directory containing context files (pixel_format_llm_guide.md, pixel-schema.llmd).
@@ -239,10 +246,7 @@ ${sizingSection}
 
 // ── Post-generation validation ──
 
-function validateAssetByType(
-	data: unknown,
-	fileType: string,
-): ValidationResult {
+function validateAssetByType(data: unknown, fileType: string): ValidationResult {
 	switch (fileType) {
 		case 'sprite':
 			return validateSprite(data as PixelSprite);
@@ -296,7 +300,8 @@ export async function generatePixelAsset(
 	options: GeneratePixelOptions,
 ): Promise<GeneratePixelResult> {
 	const assetType = options.type ?? 'sprite';
-	const outputDir = resolve(options.assetDir, OUTPUT_SUBDIRS[assetType] ?? 'sprites');
+	const outputDir =
+		options.outputDir ?? resolve(options.assetDir, OUTPUT_SUBDIRS[assetType] ?? 'sprites');
 	const cwd = options.contextDir ?? resolve(options.assetDir, '..');
 
 	// Auto-sizing: infer archetype from prompt, compute dimensions
@@ -311,7 +316,14 @@ export async function generatePixelAsset(
 
 	// Load context and build system prompt
 	const { guide, schema, paletteSection } = await loadContext(options);
-	const systemPrompt = buildSystemPrompt(assetType, outputDir, guide, schema, paletteSection, sizingSection);
+	const systemPrompt = buildSystemPrompt(
+		assetType,
+		outputDir,
+		guide,
+		schema,
+		paletteSection,
+		sizingSection,
+	);
 
 	// Build adapter execution options
 	const executeOptions: ExecuteOptions = {

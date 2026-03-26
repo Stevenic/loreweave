@@ -249,3 +249,63 @@ export type PixelScene = {
 	layers: PixelSceneLayer[];
 	meta?: Record<string, unknown>;
 };
+
+// ─── Asset Management ───
+
+/** Relationship type between assets. */
+export type AssetReferenceRole = 'component' | 'variant' | 'attachment' | 'dependency';
+
+/** A reference from one managed asset to another. */
+export type AssetReference = {
+	/** Name/id of the referenced asset (matches another asset folder name). */
+	asset: string;
+	/** Relationship type. */
+	role: AssetReferenceRole;
+	/** Optional description of the relationship. */
+	description?: string;
+};
+
+/** A named view within a managed asset — maps to a .pixel.json file. */
+export type AssetView = {
+	/** Filename of the .pixel.json file (relative to the asset folder). */
+	file: string;
+	/** Human-readable label for this view. */
+	label?: string;
+	/** Optional description of what this view represents. */
+	description?: string;
+};
+
+/** Primary asset type for managed assets. */
+export type AssetType = 'sprite' | 'tileset' | 'tilemap' | 'scene' | 'emitter';
+
+/**
+ * Asset metadata stored in asset.json within each asset folder.
+ *
+ * Each managed asset lives in its own directory under the assets root.
+ * The asset.json file organizes the individual .pixel.json view files
+ * and tracks relationships to other assets.
+ */
+export type AssetMeta = {
+	/** Schema version for forward compatibility. */
+	version: 1;
+	/** Human-readable display name. */
+	name: string;
+	/** Primary asset type. */
+	type: AssetType;
+	/** Optional description. */
+	description?: string;
+	/** Detail level preference for generation. */
+	detailLevel?: 'low' | 'standard' | 'high';
+	/** Named views — each maps to a .pixel.json file in this folder. */
+	views: Record<string, AssetView>;
+	/** Default view to show in gallery thumbnail. */
+	defaultView?: string;
+	/** References to other assets (for composition). */
+	references?: AssetReference[];
+	/** Palette to use for generation (path relative to assets root, or palette name). */
+	palette?: string;
+	/** Freeform tags for filtering/search. */
+	tags?: string[];
+	/** Freeform metadata. */
+	meta?: Record<string, unknown>;
+};

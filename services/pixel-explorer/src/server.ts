@@ -2,19 +2,24 @@
  * Pixel Explorer web server.
  *
  * HTTP server with REST API, WebSocket for live reload, and file watcher.
+ * Supports managed assets (folder + asset.json) and unmanaged pixel files.
  */
 
 import { watch } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
-import { relative, resolve } from 'node:path';
+import { join, relative, resolve } from 'node:path';
 import { CliProxyAdapter, type ProgressEvent } from '@loreweave/agents';
 import {
 	classifyFile,
+	createManagedAsset,
+	findManagedAssets,
 	findPixelFiles,
-	generatePixelAsset,
+	findUnmanagedPixelFiles,
 	type GeneratePixelResult,
+	generatePixelAsset,
 	loadAllPixelFiles,
+	loadAssetMeta,
 	loadPixelFile,
 	type PixelAssetType,
 	type ValidationResult,
@@ -24,8 +29,11 @@ import {
 	validateSprite,
 	validateTilemap,
 	validateTileset,
+	writeAssetMeta,
 } from '@loreweave/pixel';
 import type {
+	AssetMeta,
+	AssetType,
 	PixelEmitter,
 	PixelPalette,
 	PixelScene,
@@ -87,11 +95,12 @@ export async function startServer(opts: ServerOptions): Promise<void> {
 			if (!filename) return;
 			const name = typeof filename === 'string' ? filename : filename.toString();
 			const fileType = classifyFile(name);
-			if (fileType) {
+			const isAssetJson = name.endsWith('asset.json');
+			if (fileType || isAssetJson) {
 				broadcast({
 					type: 'asset-changed',
 					path: name.replace(/\\/g, '/'),
-					fileType,
+					fileType: fileType ?? 'meta',
 				});
 			}
 		});
@@ -152,13 +161,26 @@ async function handleRequest(
 	}
 
 	// API routes
-	if (path === '/api/assets' && req.method === 'GET') {
-		return apiListAssets(res, assetDir);
+	if (path === '/api/assets') {
+		if (req.method === 'GET') return apiListAssets(res, assetDir);
+		if (req.method === 'POST') {
+			const body = await readBody(req);
+			return apiCreateAsset(res, assetDir, body);
+		}
 	}
-	if (path === '/api/asset' && req.method === 'GET') {
+	if (path === '/api/asset') {
+		const assetPath = url.searchParams.get('path');
+		if (!assetPath) return sendJson(res, 400, { error: 'Missing path parameter' });
+		if (req.method === 'GET') return apiGetAsset(res, assetDir, assetPath);
+		if (req.method === 'PUT') {
+			const body = await readBody(req);
+			return apiUpdateAsset(res, assetDir, assetPath, body);
+		}
+	}
+	if (path === '/api/asset/file' && req.method === 'GET') {
 		const filePath = url.searchParams.get('path');
 		if (!filePath) return sendJson(res, 400, { error: 'Missing path parameter' });
-		return apiGetAsset(res, assetDir, filePath);
+		return apiGetPixelFile(res, assetDir, filePath);
 	}
 	if (path === '/api/validate' && req.method === 'GET') {
 		return apiValidateAll(res, assetDir);
@@ -197,10 +219,10 @@ function sendJson(res: ServerResponse, status: number, data: unknown): void {
 }
 
 function readBody(req: IncomingMessage): Promise<string> {
-	return new Promise((resolve, reject) => {
+	return new Promise((resolveBody, reject) => {
 		const chunks: Buffer[] = [];
 		req.on('data', (chunk: Buffer) => chunks.push(chunk));
-		req.on('end', () => resolve(Buffer.concat(chunks).toString()));
+		req.on('end', () => resolveBody(Buffer.concat(chunks).toString()));
 		req.on('error', reject);
 	});
 }
@@ -208,24 +230,110 @@ function readBody(req: IncomingMessage): Promise<string> {
 // ── API: List Assets ──
 
 async function apiListAssets(res: ServerResponse, assetDir: string): Promise<void> {
-	const files = await findPixelFiles(assetDir);
+	// Find managed assets (folders with asset.json)
+	const managed = await findManagedAssets(assetDir);
 
-	const grouped: Record<string, Array<{ path: string; relativePath: string }>> = {};
-	for (const f of files) {
+	// Find unmanaged pixel files (not inside any managed asset folder)
+	const managedFolders = new Set(managed.map((m) => m.folderPath));
+	const unmanagedFiles = await findUnmanagedPixelFiles(assetDir, managedFolders);
+
+	// Group unmanaged files by type (palettes, loose sprites, etc.)
+	const unmanaged: Record<string, Array<{ path: string; relativePath: string }>> = {};
+	for (const f of unmanagedFiles) {
 		const relPath = relative(assetDir, f.path).replace(/\\/g, '/');
-		if (!grouped[f.fileType]) grouped[f.fileType] = [];
-		grouped[f.fileType].push({ path: f.path, relativePath: relPath });
+		if (!unmanaged[f.fileType]) unmanaged[f.fileType] = [];
+		unmanaged[f.fileType].push({ path: f.path, relativePath: relPath });
 	}
 
-	sendJson(res, 200, { assets: grouped, total: files.length });
+	sendJson(res, 200, {
+		managed: managed.map((m) => ({
+			folder: m.relativePath,
+			meta: m.meta,
+		})),
+		unmanaged,
+		total: managed.length + unmanagedFiles.length,
+	});
 }
 
-// ── API: Get Single Asset ──
+// ── API: Get Asset (managed folder or pixel file) ──
 
-async function apiGetAsset(res: ServerResponse, assetDir: string, filePath: string): Promise<void> {
+async function apiGetAsset(
+	res: ServerResponse,
+	assetDir: string,
+	assetPath: string,
+): Promise<void> {
+	try {
+		const absPath = resolve(assetDir, assetPath);
+		if (!absPath.startsWith(assetDir)) {
+			return sendJson(res, 403, { error: 'Path traversal not allowed' });
+		}
+
+		// Try loading as a managed asset (folder with asset.json)
+		try {
+			const meta = await loadAssetMeta(absPath);
+
+			// Load view file data for each view
+			const views: Record<
+				string,
+				{ file: string; label?: string; description?: string; data: unknown; fileType: string }
+			> = {};
+			for (const [viewName, view] of Object.entries(meta.views) as [
+				string,
+				{ file: string; label?: string; description?: string },
+			][]) {
+				try {
+					const viewFilePath = join(absPath, view.file);
+					const resource = await loadPixelFile(viewFilePath, assetDir);
+					views[viewName] = {
+						file: view.file,
+						label: view.label,
+						description: view.description,
+						data: resource.data,
+						fileType: resource.fileType,
+					};
+				} catch {
+					views[viewName] = {
+						file: view.file,
+						label: view.label,
+						description: view.description,
+						data: null,
+						fileType: 'unknown',
+					};
+				}
+			}
+
+			return sendJson(res, 200, {
+				type: 'managed',
+				folder: relative(assetDir, absPath).replace(/\\/g, '/'),
+				meta,
+				views,
+			});
+		} catch {
+			// Not a managed asset folder — fall through to pixel file loading
+		}
+
+		// Try loading as a single pixel file
+		const resource = await loadPixelFile(absPath, assetDir);
+		sendJson(res, 200, {
+			type: 'file',
+			path: resource.relativePath.replace(/\\/g, '/'),
+			fileType: resource.fileType,
+			data: resource.data,
+		});
+	} catch (err) {
+		sendJson(res, 404, { error: `Asset not found: ${(err as Error).message}` });
+	}
+}
+
+// ── API: Get Single Pixel File ──
+
+async function apiGetPixelFile(
+	res: ServerResponse,
+	assetDir: string,
+	filePath: string,
+): Promise<void> {
 	try {
 		const absPath = resolve(assetDir, filePath);
-		// Security: ensure the resolved path is within assetDir
 		if (!absPath.startsWith(assetDir)) {
 			return sendJson(res, 403, { error: 'Path traversal not allowed' });
 		}
@@ -235,6 +343,97 @@ async function apiGetAsset(res: ServerResponse, assetDir: string, filePath: stri
 			fileType: resource.fileType,
 			data: resource.data,
 		});
+	} catch (err) {
+		sendJson(res, 404, { error: `File not found: ${(err as Error).message}` });
+	}
+}
+
+// ── API: Create Asset ──
+
+async function apiCreateAsset(res: ServerResponse, assetDir: string, body: string): Promise<void> {
+	let params: {
+		name: string;
+		type?: string;
+		description?: string;
+		palette?: string;
+		tags?: string[];
+		detailLevel?: string;
+	};
+	try {
+		params = JSON.parse(body);
+	} catch {
+		return sendJson(res, 400, { error: 'Invalid JSON body' });
+	}
+
+	if (!params.name?.trim()) {
+		return sendJson(res, 400, { error: 'Missing asset name' });
+	}
+
+	const assetType = (params.type ?? 'sprite') as AssetType;
+	const validTypes: AssetType[] = ['sprite', 'tileset', 'tilemap', 'scene', 'emitter'];
+	if (!validTypes.includes(assetType)) {
+		return sendJson(res, 400, {
+			error: `Invalid asset type: ${assetType}. Must be one of: ${validTypes.join(', ')}`,
+		});
+	}
+
+	const meta: AssetMeta = {
+		version: 1,
+		name: params.name.trim(),
+		type: assetType,
+		description: params.description?.trim() || undefined,
+		detailLevel: (params.detailLevel as AssetMeta['detailLevel']) || undefined,
+		views: {},
+		palette: params.palette || undefined,
+		tags: params.tags?.length ? params.tags : undefined,
+	};
+
+	try {
+		const folderPath = await createManagedAsset(assetDir, meta);
+		const relPath = relative(assetDir, folderPath).replace(/\\/g, '/');
+		sendJson(res, 201, { folder: relPath, meta });
+	} catch (err) {
+		const msg = (err as Error).message;
+		const status = msg.includes('already exists') ? 409 : 500;
+		sendJson(res, status, { error: msg });
+	}
+}
+
+// ── API: Update Asset Metadata ──
+
+async function apiUpdateAsset(
+	res: ServerResponse,
+	assetDir: string,
+	assetPath: string,
+	body: string,
+): Promise<void> {
+	const absPath = resolve(assetDir, assetPath);
+	if (!absPath.startsWith(assetDir)) {
+		return sendJson(res, 403, { error: 'Path traversal not allowed' });
+	}
+
+	let updates: Partial<AssetMeta>;
+	try {
+		updates = JSON.parse(body);
+	} catch {
+		return sendJson(res, 400, { error: 'Invalid JSON body' });
+	}
+
+	try {
+		const existing = await loadAssetMeta(absPath);
+
+		// Merge updates (shallow — views and references are replaced wholesale)
+		if (updates.name !== undefined) existing.name = updates.name;
+		if (updates.description !== undefined) existing.description = updates.description;
+		if (updates.detailLevel !== undefined) existing.detailLevel = updates.detailLevel;
+		if (updates.views !== undefined) existing.views = updates.views;
+		if (updates.defaultView !== undefined) existing.defaultView = updates.defaultView;
+		if (updates.references !== undefined) existing.references = updates.references;
+		if (updates.palette !== undefined) existing.palette = updates.palette;
+		if (updates.tags !== undefined) existing.tags = updates.tags;
+
+		await writeAssetMeta(absPath, existing);
+		sendJson(res, 200, { folder: relative(assetDir, absPath).replace(/\\/g, '/'), meta: existing });
 	} catch (err) {
 		sendJson(res, 404, { error: `Asset not found: ${(err as Error).message}` });
 	}
@@ -339,7 +538,15 @@ async function apiListPalettes(res: ServerResponse, assetDir: string): Promise<v
 // ── API: Generate ──
 
 async function apiGenerate(res: ServerResponse, assetDir: string, body: string): Promise<void> {
-	let params: { prompt: string; type?: string; palette?: string; model?: string; detailLevel?: string | number };
+	let params: {
+		prompt: string;
+		type?: string;
+		palette?: string;
+		model?: string;
+		detailLevel?: string | number;
+		assetFolder?: string;
+		viewName?: string;
+	};
 	try {
 		params = JSON.parse(body);
 	} catch {
@@ -350,8 +557,6 @@ async function apiGenerate(res: ServerResponse, assetDir: string, body: string):
 		return sendJson(res, 400, { error: 'Missing prompt' });
 	}
 
-	// Claude CLI needs ANTHROPIC_API_KEY to avoid interactive credential prompts
-	// that fail when running headless from a web server (exit code 11 on Windows).
 	if (!process.env.ANTHROPIC_API_KEY) {
 		return sendJson(res, 500, {
 			error:
@@ -360,7 +565,6 @@ async function apiGenerate(res: ServerResponse, assetDir: string, body: string):
 		});
 	}
 
-	// Model selection: request body > CLAUDE_MODEL env var > default
 	const model = params.model || process.env.CLAUDE_MODEL || undefined;
 	const assetType = (params.type ?? 'sprite') as PixelAssetType;
 
@@ -371,9 +575,10 @@ async function apiGenerate(res: ServerResponse, assetDir: string, body: string):
 		console.log(`${prefix} Prompt: ${params.prompt}`);
 		console.log(`${prefix} Type: ${assetType}`);
 		console.log(`${prefix} Model: ${model ?? '(default)'}`);
+		if (params.assetFolder) console.log(`${prefix} Asset folder: ${params.assetFolder}`);
+		if (params.viewName) console.log(`${prefix} View name: ${params.viewName}`);
 	}
 
-	// Debug progress callback
 	const onProgress = debugMode
 		? (event: ProgressEvent) => {
 				switch (event.type) {
@@ -393,21 +598,29 @@ async function apiGenerate(res: ServerResponse, assetDir: string, body: string):
 			}
 		: undefined;
 
-	// Create adapter and delegate to @loreweave/pixel generator
 	const adapter = new CliProxyAdapter({
 		preset: 'claude',
 		model,
 		timeout: 5 * 60 * 1000,
 	});
 
-	// Detail level: request body > default 'standard'
 	const detailLevel = params.detailLevel ?? 'standard';
+
+	// If generating into a managed asset folder, set outputDir to that folder
+	let outputDirOverride: string | undefined;
+	if (params.assetFolder) {
+		outputDirOverride = resolve(assetDir, params.assetFolder);
+		if (!outputDirOverride.startsWith(assetDir)) {
+			return sendJson(res, 403, { error: 'Path traversal not allowed' });
+		}
+	}
 
 	const result: GeneratePixelResult = await generatePixelAsset(adapter, {
 		prompt: params.prompt,
 		type: assetType,
 		detailLevel: detailLevel as 'low' | 'standard' | 'high' | number,
 		assetDir,
+		outputDir: outputDirOverride,
 		palette: params.palette,
 		model,
 		env: { ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY },
@@ -419,6 +632,31 @@ async function apiGenerate(res: ServerResponse, assetDir: string, body: string):
 			error: result.error ?? 'Generation failed',
 			details: result.errorDetails,
 		});
+	}
+
+	// If generating into a managed asset folder, update asset.json with the new view
+	if (params.assetFolder && result.assetPath) {
+		try {
+			const folderPath = resolve(assetDir, params.assetFolder);
+			const meta = await loadAssetMeta(folderPath);
+			const viewName = params.viewName || 'default';
+			const fileName = relative(folderPath, result.assetPath).replace(/\\/g, '/');
+
+			meta.views[viewName] = {
+				file: fileName,
+				label: viewName.charAt(0).toUpperCase() + viewName.slice(1),
+			};
+
+			// Set as default view if it's the first one
+			if (Object.keys(meta.views).length === 1) {
+				meta.defaultView = viewName;
+			}
+
+			await writeAssetMeta(folderPath, meta);
+		} catch (err) {
+			// Non-fatal — asset was generated but metadata wasn't updated
+			console.error('Failed to update asset.json after generation:', (err as Error).message);
+		}
 	}
 
 	sendJson(res, 200, {

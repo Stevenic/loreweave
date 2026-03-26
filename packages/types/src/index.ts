@@ -6,6 +6,12 @@
  */
 
 export type {
+	// Asset Management
+	AssetMeta,
+	AssetReference,
+	AssetReferenceRole,
+	AssetType,
+	AssetView,
 	Attachment,
 	AttachRef,
 	BlendMode,
