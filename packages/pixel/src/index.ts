@@ -84,3 +84,13 @@ export {
 // Generator
 export type { GeneratePixelOptions, GeneratePixelResult, PixelAssetType } from './generator.js';
 export { generatePixelAsset } from './generator.js';
+// Sizing
+export type { ComputedDimensions, DetailLevel, SpriteArchetype } from './sizing.js';
+export {
+	buildSizingTable,
+	computeDimensions,
+	DETAIL_LEVEL_LABELS,
+	DETAIL_LEVEL_PPU,
+	inferArchetype,
+	SPRITE_ARCHETYPES,
+} from './sizing.js';

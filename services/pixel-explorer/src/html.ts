@@ -161,6 +161,7 @@ body{display:flex}
 .gen-btn:disabled{opacity:.5;cursor:not-allowed}
 .gen-output{margin-top:24px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px;font-size:13px;white-space:pre-wrap;font-family:monospace;max-height:400px;overflow:auto;display:none}
 .gen-output.visible{display:block}
+.gen-sizing-hint{font-size:12px;color:var(--cyan);margin-top:6px;min-height:18px;font-family:monospace}
 
 /* Animation controls */
 .anim-controls{display:flex;align-items:center;gap:10px;margin-top:12px;padding:8px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;flex-wrap:wrap}
@@ -622,6 +623,39 @@ function renderValidation(el, data) {
 	);
 }
 
+// ── Sprite Archetypes (client-side mirror of @loreweave/pixel/sizing) ──
+
+const ARCHETYPES = [
+	{ key: 'icon', label: 'Icon', worldWidth: 0.5, worldHeight: 0.5, keywords: ['icon','ui','minimap','marker','indicator','badge','symbol'] },
+	{ key: 'small-item', label: 'Small Item', worldWidth: 0.5, worldHeight: 0.5, keywords: ['potion','key','coin','gem','scroll','ring','amulet','vial','herb','arrow','bolt','rune','orb','small'] },
+	{ key: 'item', label: 'Item / Equipment', worldWidth: 1, worldHeight: 1, keywords: ['sword','shield','axe','bow','staff','wand','hammer','mace','helmet','armor','boot','glove','lantern','torch','chest','crate','barrel','weapon','equipment','tool','item'] },
+	{ key: 'character', label: 'Character', worldWidth: 1, worldHeight: 1.5, keywords: ['character','person','human','elf','dwarf','halfling','gnome','warrior','mage','rogue','cleric','ranger','paladin','bard','wizard','sorcerer','druid','monk','warlock','barbarian','knight','archer','thief','priest','villager','merchant','guard','king','queen','npc','hero','player'] },
+	{ key: 'creature', label: 'Creature', worldWidth: 1, worldHeight: 1, keywords: ['wolf','goblin','skeleton','slime','rat','bat','spider','snake','imp','zombie','ghost','fox','cat','dog','boar','deer','bird','rabbit','frog','beetle','creature','monster','animal','beast','pet','familiar','companion'] },
+	{ key: 'large-creature', label: 'Large Creature', worldWidth: 2, worldHeight: 2, keywords: ['ogre','troll','bear','giant','minotaur','centaur','golem','elemental','wyvern','griffon','owlbear','hydra','large','big','huge','dire'] },
+	{ key: 'boss', label: 'Boss / Dragon', worldWidth: 3, worldHeight: 3, keywords: ['dragon','boss','titan','colossus','leviathan','ancient','elder','wyrm','behemoth','kraken','massive','colossal'] },
+	{ key: 'prop', label: 'Prop / Furniture', worldWidth: 1, worldHeight: 1, keywords: ['table','chair','sign','fence','campfire','fire','fountain','well','lamp','post','rock','boulder','stump','log','bush','prop','furniture','tombstone','grave','altar','pedestal'] },
+	{ key: 'tree', label: 'Tree / Tall Prop', worldWidth: 2, worldHeight: 3, keywords: ['tree','pine','oak','willow','birch','palm','pillar','column','banner','flag','totem','statue'] },
+	{ key: 'building', label: 'Building', worldWidth: 3, worldHeight: 3, keywords: ['house','shop','inn','tavern','cabin','hut','cottage','shed','tent','building','home','dwelling'] },
+	{ key: 'large-building', label: 'Large Building', worldWidth: 4, worldHeight: 4, keywords: ['castle','temple','mansion','lodge','fortress','cathedral','palace','tower','keep','citadel','church','monastery','gate','gatehouse','wall','fortification'] },
+	{ key: 'tile', label: 'Tile', worldWidth: 1, worldHeight: 1, keywords: ['tile','ground','floor','wall','terrain','grass','dirt','stone','water','sand','snow','lava'] },
+];
+
+function inferArchetypeClient(prompt) {
+	const lower = prompt.toLowerCase();
+	const words = lower.split(/\\s+/);
+	let best = null;
+	let bestScore = 0;
+	for (const a of ARCHETYPES) {
+		let score = 0;
+		for (const kw of a.keywords) {
+			if (words.includes(kw)) score += 2;
+			else if (lower.includes(kw)) score += 1;
+		}
+		if (score > bestScore) { bestScore = score; best = a; }
+	}
+	return best || ARCHETYPES.find(a => a.key === 'character');
+}
+
 // ── Generate ──
 
 let generateInitialized = false;
@@ -634,7 +668,14 @@ function initGenerate() {
 		'<div class="view-header"><h1>Generate</h1></div>'
 		+ '<div class="gen-form">'
 		+ '<label>Prompt</label>'
-		+ '<textarea id="gen-prompt" placeholder="A 16x16 warrior holding a sword, facing right..."></textarea>'
+		+ '<textarea id="gen-prompt" placeholder="A warrior holding a sword, facing right..."></textarea>'
+		+ '<label>Detail Level</label>'
+		+ '<select id="gen-detail">'
+		+ '<option value="low">Low (16 PPU) \u2014 retro, chunky pixels</option>'
+		+ '<option value="standard" selected>Standard (32 PPU) \u2014 classic pixel art</option>'
+		+ '<option value="high">High (64 PPU) \u2014 detailed, smooth</option>'
+		+ '</select>'
+		+ '<div class="gen-sizing-hint" id="gen-sizing-hint"></div>'
 		+ '<label>Asset Type</label>'
 		+ '<select id="gen-type"><option value="sprite">Sprite</option><option value="tileset">Tileset</option><option value="tilemap">Tilemap</option><option value="scene">Scene</option></select>'
 		+ '<label>Palette</label>'
@@ -650,6 +691,21 @@ function initGenerate() {
 		+ '<button class="gen-btn" id="gen-submit">Generate</button>'
 		+ '</div>'
 		+ '<div class="gen-output" id="gen-output"></div>';
+
+	// Sizing hint — updates as user types prompt or changes detail level
+	const sizingHint = document.getElementById('gen-sizing-hint');
+	function updateSizingHint() {
+		const prompt = document.getElementById('gen-prompt').value.trim();
+		const detail = document.getElementById('gen-detail').value;
+		if (!prompt) { sizingHint.textContent = ''; return; }
+		const archetype = inferArchetypeClient(prompt);
+		const ppu = { low: 16, standard: 32, high: 64 }[detail] || 32;
+		const w = Math.round(archetype.worldWidth * ppu);
+		const h = Math.round(archetype.worldHeight * ppu);
+		sizingHint.textContent = 'Auto-sized: ' + archetype.label + ' \\u2192 ' + w + '\\u00d7' + h + ' px at ' + ppu + ' PPU';
+	}
+	document.getElementById('gen-prompt').addEventListener('input', updateSizingHint);
+	document.getElementById('gen-detail').addEventListener('change', updateSizingHint);
 
 	// Load palette options
 	api('/api/palettes').then(data => {
@@ -669,6 +725,7 @@ async function runGenerate() {
 	const prompt = document.getElementById('gen-prompt').value.trim();
 	if (!prompt) return;
 	const type = document.getElementById('gen-type').value;
+	const detailLevel = document.getElementById('gen-detail').value;
 	const palette = document.getElementById('gen-palette').value || undefined;
 	const model = document.getElementById('gen-model').value || undefined;
 	const btn = document.getElementById('gen-submit');
@@ -677,18 +734,22 @@ async function runGenerate() {
 	btn.disabled = true;
 	btn.innerHTML = '<span class="spinner"></span> Generating...';
 	output.classList.add('visible');
-	output.textContent = 'Generating with Claude Agent SDK... This may take a minute.';
+	output.textContent = 'Generating... This may take a minute.';
 
 	try {
 		const data = await api('/api/generate', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ prompt, type, palette, model }),
+			body: JSON.stringify({ prompt, type, detailLevel, palette, model }),
 		});
 		if (data.error) {
 			output.textContent = 'Error: ' + data.error + (data.details ? '\\n\\nDetails:\\n' + data.details : '');
 		} else {
-			output.textContent = data.result || 'Done. Asset generated successfully.';
+			let msg = data.result || 'Done. Asset generated successfully.';
+			if (data.sizing) {
+				msg += '\\n\\nSizing: ' + data.sizing.archetype + ' \\u2192 ' + data.sizing.width + '\\u00d7' + data.sizing.height + ' px (PPU ' + data.sizing.ppu + ')';
+			}
+			output.textContent = msg;
 			cachedAssetData = {};
 		}
 	} catch (e) {

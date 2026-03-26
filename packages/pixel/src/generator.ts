@@ -22,6 +22,14 @@ import type {
 	PixelTileset,
 } from '@loreweave/types';
 import { findPixelFiles } from './loader.js';
+import {
+	type ComputedDimensions,
+	type DetailLevel,
+	DETAIL_LEVEL_PPU,
+	buildSizingTable,
+	computeDimensions,
+	inferArchetype,
+} from './sizing.js';
 import type { ValidationResult } from './validator.js';
 import {
 	validateEmitter,
@@ -44,6 +52,15 @@ export interface GeneratePixelOptions {
 
 	/** Asset type to generate. Defaults to 'sprite'. */
 	type?: PixelAssetType;
+
+	/**
+	 * Detail level for auto-sizing. Determines PPU and pixel dimensions.
+	 * Can be a named level ('low'|'standard'|'high') or a raw PPU number.
+	 * When set, the generator infers the object category from the prompt
+	 * and computes dimensions automatically — no manual width/height needed.
+	 * Defaults to 'standard' (32 PPU).
+	 */
+	detailLevel?: DetailLevel | number;
 
 	/**
 	 * Root asset directory (contains sprites/, tilesets/, palettes/, etc.).
@@ -110,6 +127,9 @@ export interface GeneratePixelResult {
 
 	/** Path to the generated asset file (if found). */
 	assetPath?: string;
+
+	/** Auto-computed dimensions used for generation. */
+	sizing?: ComputedDimensions;
 
 	/** Error message if generation failed. */
 	error?: string;
@@ -192,6 +212,7 @@ function buildSystemPrompt(
 	guide: string,
 	schema: string,
 	paletteSection: string,
+	sizingSection: string,
 ): string {
 	const formatSections: string[] = [];
 	if (schema) formatSections.push(`# Pixel Format Schema\n${schema}`);
@@ -202,13 +223,14 @@ You generate .pixel.json assets that conform to the Pixel Format v1 spec.
 
 ${formatSections.join('\n\n')}
 ${paletteSection}
+${sizingSection}
 
 ## Instructions
 - Generate a ${assetType} asset based on the user's prompt
 - The output MUST be valid JSON conforming to the Pixel Format v1 spec
 - Write the final .pixel.json file to: ${outputDir}
 - Use the palette provided — reference keys from the palette entries
-- For sprites: each pixel row must be exactly \`width\` characters long, using single-character palette keys
+- For sprites: use the dimensions from the sizing table above based on what the object is. Each pixel row must be exactly \`width\` characters long, using single-character palette keys. Set \`ppu\` to match the detail level.
 - The file must include the correct \`format\` field (e.g., "pixel-sprite-v1")
 - Name the file based on the asset name with the appropriate extension (e.g., warrior.sprite.pixel.json)
 - Do NOT include any explanation or commentary — just write the file
@@ -277,9 +299,19 @@ export async function generatePixelAsset(
 	const outputDir = resolve(options.assetDir, OUTPUT_SUBDIRS[assetType] ?? 'sprites');
 	const cwd = options.contextDir ?? resolve(options.assetDir, '..');
 
+	// Auto-sizing: infer archetype from prompt, compute dimensions
+	const detailLevel = options.detailLevel ?? 'standard';
+	const ppu = typeof detailLevel === 'number' ? detailLevel : DETAIL_LEVEL_PPU[detailLevel];
+	const archetype = inferArchetype(options.prompt);
+	const sizing = computeDimensions(archetype, ppu);
+	const sizingTable = buildSizingTable(detailLevel);
+
+	// Build sizing instructions for the specific asset being generated
+	const sizingSection = `\n\n${sizingTable}\n\n**For this specific request:** Based on the prompt, this is a "${archetype.label}" (${archetype.description}). Use dimensions **${sizing.width}×${sizing.height}** pixels with \`"ppu": ${sizing.ppu}\`.`;
+
 	// Load context and build system prompt
 	const { guide, schema, paletteSection } = await loadContext(options);
-	const systemPrompt = buildSystemPrompt(assetType, outputDir, guide, schema, paletteSection);
+	const systemPrompt = buildSystemPrompt(assetType, outputDir, guide, schema, paletteSection, sizingSection);
 
 	// Build adapter execution options
 	const executeOptions: ExecuteOptions = {
@@ -316,6 +348,7 @@ export async function generatePixelAsset(
 			changedFiles: result.changedFiles,
 			validation: validationResult?.validation,
 			assetPath: validationResult?.assetPath,
+			sizing,
 		};
 	} catch (err) {
 		const errMsg = err instanceof Error ? err.message : String(err);

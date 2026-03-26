@@ -339,7 +339,7 @@ async function apiListPalettes(res: ServerResponse, assetDir: string): Promise<v
 // ── API: Generate ──
 
 async function apiGenerate(res: ServerResponse, assetDir: string, body: string): Promise<void> {
-	let params: { prompt: string; type?: string; palette?: string; model?: string };
+	let params: { prompt: string; type?: string; palette?: string; model?: string; detailLevel?: string | number };
 	try {
 		params = JSON.parse(body);
 	} catch {
@@ -400,9 +400,13 @@ async function apiGenerate(res: ServerResponse, assetDir: string, body: string):
 		timeout: 5 * 60 * 1000,
 	});
 
+	// Detail level: request body > default 'standard'
+	const detailLevel = params.detailLevel ?? 'standard';
+
 	const result: GeneratePixelResult = await generatePixelAsset(adapter, {
 		prompt: params.prompt,
 		type: assetType,
+		detailLevel: detailLevel as 'low' | 'standard' | 'high' | number,
 		assetDir,
 		palette: params.palette,
 		model,
@@ -423,5 +427,6 @@ async function apiGenerate(res: ServerResponse, assetDir: string, body: string):
 		changedFiles: result.changedFiles,
 		validation: result.validation,
 		assetPath: result.assetPath,
+		sizing: result.sizing,
 	});
 }
