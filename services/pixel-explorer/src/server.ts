@@ -12,8 +12,11 @@ import { CliProxyAdapter, type ProgressEvent } from '@loreweave/agents';
 import {
 	classifyFile,
 	findPixelFiles,
+	generatePixelAsset,
+	type GeneratePixelResult,
 	loadAllPixelFiles,
 	loadPixelFile,
+	type PixelAssetType,
 	type ValidationResult,
 	validateEmitter,
 	validatePalette,
@@ -357,74 +360,9 @@ async function apiGenerate(res: ServerResponse, assetDir: string, body: string):
 		});
 	}
 
-	const assetType = params.type ?? 'sprite';
-	const outputDirs: Record<string, string> = {
-		sprite: 'sprites',
-		tileset: 'tilesets',
-		tilemap: 'tilemaps',
-		scene: 'scenes',
-	};
-	const outputDir = resolve(assetDir, outputDirs[assetType] ?? 'sprites');
-
-	// Load context files
-	const cwd = resolve(assetDir, '..');
-	let llmGuide = '';
-	let llmdSchema = '';
-	let paletteContext = '';
-
-	try {
-		llmGuide = await readFile(resolve(cwd, 'pixel_format_llm_guide.md'), 'utf-8');
-	} catch {
-		/* optional */
-	}
-	try {
-		llmdSchema = await readFile(resolve(cwd, 'pixel-schema.llmd'), 'utf-8');
-	} catch {
-		/* optional */
-	}
-
-	if (params.palette) {
-		try {
-			const palData = await readFile(resolve(assetDir, params.palette), 'utf-8');
-			paletteContext = `\n\nUse this palette:\n\`\`\`json\n${palData}\n\`\`\``;
-		} catch {
-			/* optional */
-		}
-	} else {
-		try {
-			const palData = await readFile(
-				resolve(assetDir, 'palettes/fantasy32.palette.pixel.json'),
-				'utf-8',
-			);
-			paletteContext = `\n\nUse this palette (fantasy32):\n\`\`\`json\n${palData}\n\`\`\``;
-		} catch {
-			/* optional */
-		}
-	}
-
-	const formatSections: string[] = [];
-	if (llmdSchema) formatSections.push(`# Pixel Format Schema\n${llmdSchema}`);
-	if (llmGuide) formatSections.push(`# Pixel Format Generation Guide\n${llmGuide}`);
-
-	const systemPrompt = `You are a pixel art asset generator for the LoreWeave game engine.
-You generate .pixel.json assets that conform to the Pixel Format v1 spec.
-
-${formatSections.join('\n\n')}
-${paletteContext}
-
-## Instructions
-- Generate a ${assetType} asset based on the user's prompt
-- The output MUST be valid JSON conforming to the Pixel Format v1 spec
-- Write the final .pixel.json file to: ${outputDir}
-- Use the palette provided — reference keys from the palette entries
-- For sprites: each pixel row must be exactly \`width\` characters long, using single-character palette keys
-- The file must include the correct \`format\` field (e.g., "pixel-sprite-v1")
-- Name the file based on the asset name with the appropriate extension (e.g., warrior.sprite.pixel.json)
-- Do NOT include any explanation or commentary — just write the file
-- After writing the file, respond with the file path you created`;
-
 	// Model selection: request body > CLAUDE_MODEL env var > default
 	const model = params.model || process.env.CLAUDE_MODEL || undefined;
+	const assetType = (params.type ?? 'sprite') as PixelAssetType;
 
 	const prefix = '\x1b[36m[debug]\x1b[0m';
 
@@ -433,16 +371,9 @@ ${paletteContext}
 		console.log(`${prefix} Prompt: ${params.prompt}`);
 		console.log(`${prefix} Type: ${assetType}`);
 		console.log(`${prefix} Model: ${model ?? '(default)'}`);
-		console.log(`${prefix} Output dir: ${outputDir}`);
 	}
 
-	// Use CliProxyAdapter to spawn Claude CLI
-	const adapter = new CliProxyAdapter({
-		preset: 'claude',
-		model,
-		timeout: 5 * 60 * 1000, // 5 minutes
-	});
-
+	// Debug progress callback
 	const onProgress = debugMode
 		? (event: ProgressEvent) => {
 				switch (event.type) {
@@ -462,84 +393,35 @@ ${paletteContext}
 			}
 		: undefined;
 
-	try {
-		const result = await adapter.execute(params.prompt, {
-			systemPrompt,
-			model,
-			cwd,
-			env: { ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY },
-			onProgress,
-		});
+	// Create adapter and delegate to @loreweave/pixel generator
+	const adapter = new CliProxyAdapter({
+		preset: 'claude',
+		model,
+		timeout: 5 * 60 * 1000,
+	});
 
-		if (debugMode) {
-			const diag = result.diagnostics;
-			console.log(`${prefix} Exit code: ${diag?.exitCode}`);
-			if (diag?.stderr) {
-				console.log(`${prefix} Stderr: ${diag.stderr.slice(0, 500)}`);
-			}
-			console.log(`${prefix} Output length: ${result.output.length} chars`);
-			console.log(
-				`${prefix} Changed files: ${result.changedFiles.join(', ') || '(none detected)'}`,
-			);
-		}
+	const result: GeneratePixelResult = await generatePixelAsset(adapter, {
+		prompt: params.prompt,
+		type: assetType,
+		assetDir,
+		palette: params.palette,
+		model,
+		env: { ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY },
+		onProgress,
+	});
 
-		if (!result.success) {
-			return sendJson(res, 500, {
-				error: result.diagnostics?.timedOut
-					? 'Generation timed out after 5 minutes.'
-					: `Generation failed (exit code ${result.diagnostics?.exitCode})`,
-				details: result.diagnostics?.stderr || result.output || undefined,
-			});
-		}
-
-		// Server-side validation: find newly written file(s) and validate
-		let validationInfo: { valid: boolean; errors: string[]; warnings: string[] } | undefined;
-		try {
-			const files = await findPixelFiles(outputDir);
-			if (files.length > 0) {
-				const newest = files[files.length - 1];
-				const content = await readFile(newest.path, 'utf-8');
-				const data = JSON.parse(content);
-				let valResult: ValidationResult;
-				switch (newest.fileType) {
-					case 'sprite':
-						valResult = validateSprite(data as PixelSprite);
-						break;
-					case 'tileset':
-						valResult = validateTileset(data as PixelTileset);
-						break;
-					case 'tilemap':
-						valResult = validateTilemap(data as PixelTilemap);
-						break;
-					case 'scene':
-						valResult = validateScene(data as PixelScene);
-						break;
-					case 'palette':
-						valResult = validatePalette(data as PixelPalette);
-						break;
-					case 'emitter':
-						valResult = validateEmitter(data as PixelEmitter);
-						break;
-					default:
-						valResult = { valid: true, errors: [], warnings: [] };
-				}
-				validationInfo = valResult;
-			}
-		} catch {
-			/* validation is best-effort */
-		}
-
-		sendJson(res, 200, {
-			success: true,
-			result: result.output,
-			changedFiles: result.changedFiles,
-			validation: validationInfo,
-		});
-	} catch (err) {
-		const errMsg = err instanceof Error ? err.message : String(err);
-		console.error('[generate error]', errMsg);
-		sendJson(res, 500, {
-			error: `Generation failed: ${errMsg}`,
+	if (!result.success) {
+		return sendJson(res, 500, {
+			error: result.error ?? 'Generation failed',
+			details: result.errorDetails,
 		});
 	}
+
+	sendJson(res, 200, {
+		success: true,
+		result: result.output,
+		changedFiles: result.changedFiles,
+		validation: result.validation,
+		assetPath: result.assetPath,
+	});
 }

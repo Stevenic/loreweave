@@ -81,3 +81,6 @@ export {
 	validateTilemap,
 	validateTileset,
 } from './validator.js';
+// Generator
+export type { GeneratePixelOptions, GeneratePixelResult, PixelAssetType } from './generator.js';
+export { generatePixelAsset } from './generator.js';

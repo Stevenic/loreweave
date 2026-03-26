@@ -21,6 +21,7 @@
 		"clean": "rm -rf dist"
 	},
 	"dependencies": {
+		"@loreweave/agents": "*",
 		"@loreweave/types": "*"
 	},
 	"devDependencies": {

@@ -162,6 +162,17 @@ body{display:flex}
 .gen-output{margin-top:24px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px;font-size:13px;white-space:pre-wrap;font-family:monospace;max-height:400px;overflow:auto;display:none}
 .gen-output.visible{display:block}
 
+/* Animation controls */
+.anim-controls{display:flex;align-items:center;gap:10px;margin-top:12px;padding:8px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;flex-wrap:wrap}
+.anim-btn{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:4px 12px;color:var(--text);cursor:pointer;font-size:13px;transition:all .15s;display:inline-flex;align-items:center;gap:4px}
+.anim-btn:hover{border-color:var(--accent);color:var(--accent)}
+.anim-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.anim-btn .icon{font-size:16px}
+.anim-select{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:4px 8px;color:var(--text);font-size:13px}
+.anim-time{font-size:12px;color:var(--text2);font-family:monospace;min-width:80px}
+.anim-progress{flex:1;min-width:120px;height:4px;background:var(--bg);border-radius:2px;cursor:pointer;position:relative}
+.anim-progress-fill{height:100%;background:var(--accent);border-radius:2px;pointer-events:none;transition:none}
+
 /* Spinner */
 .spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -178,6 +189,16 @@ let totalAssets = 0;
 let currentFilter = 'all';
 let cachedAssetData = {};
 let paletteEntriesCache = {}; // palette name → entries object
+
+// ── Animation State ──
+let animPlaying = false;
+let animLoop = true;
+let animClipName = null;
+let animStartTime = 0;
+let animRafId = null;
+let animAssetData = null;
+let animAssetType = null;
+let animMaxSize = 320;
 
 // ── Palette Preloader ──
 
@@ -213,6 +234,7 @@ function onHashChange() {
 		navigate('detail');
 		loadDetail(decodeURIComponent(hash.slice(7)));
 	} else {
+		stopAnimation();
 		navigate(hash);
 		if (hash === 'gallery') loadGallery();
 		else if (hash === 'validate') loadValidation();
@@ -351,17 +373,41 @@ function renderDetail(el, asset) {
 			+ prop('Max Particles', d.maxParticles || 100);
 	}
 
+	// Stop any previous animation
+	stopAnimation();
+	animAssetData = null;
+	animClipName = null;
+
+	const clipNames = (type === 'sprite' && d.clips) ? Object.keys(d.clips) : [];
+	let animHtml = '';
+	if (clipNames.length > 0) {
+		animHtml = '<div class="anim-controls" id="anim-controls">'
+			+ '<button class="anim-btn" id="anim-play-btn" title="Play/Pause"><span class="icon">\\u25B6</span></button>'
+			+ '<button class="anim-btn' + (animLoop ? ' active' : '') + '" id="anim-loop-btn" title="Loop">Loop</button>';
+		if (clipNames.length > 1) {
+			animHtml += '<select class="anim-select" id="anim-clip-select">';
+			for (const cn of clipNames) animHtml += '<option value="' + esc(cn) + '">' + esc(cn) + '</option>';
+			animHtml += '</select>';
+		} else {
+			animHtml += '<span style="font-size:13px;color:var(--text2)">' + esc(clipNames[0]) + '</span>';
+		}
+		animHtml += '<div class="anim-progress" id="anim-progress"><div class="anim-progress-fill" id="anim-progress-fill" style="width:0"></div></div>'
+			+ '<span class="anim-time" id="anim-time">0.00s / 0.00s</span>'
+			+ '</div>';
+	}
+
 	el.innerHTML =
 		'<button class="detail-back" id="detail-back-btn">&#8592; Back to Gallery</button>'
 		+ '<div class="view-header"><h1>' + esc(d.name || asset.path) + '</h1>'
 		+ '<span class="badge badge-' + type + '">' + type + '</span></div>'
 		+ '<div class="detail-grid">'
-		+ '<div class="detail-preview" id="detail-canvas-box"></div>'
+		+ '<div><div class="detail-preview" id="detail-canvas-box"></div>' + animHtml + '</div>'
 		+ '<div class="detail-info"><h3>Properties</h3><dl class="detail-props">' + propsHtml + '</dl></div>'
 		+ '<div class="detail-json"><h3>JSON</h3><pre>' + esc(json) + '</pre></div>'
 		+ '</div>';
 
 	document.getElementById('detail-back-btn').addEventListener('click', () => {
+		stopAnimation();
 		location.hash = 'gallery';
 	});
 
@@ -371,8 +417,64 @@ function renderDetail(el, asset) {
 		renderPaletteSwatches(box, d);
 	} else {
 		const canvas = document.createElement('canvas');
+		canvas.id = 'anim-canvas';
 		drawAsset(canvas, d, type, 320);
 		box.appendChild(canvas);
+	}
+
+	// Wire up animation controls
+	if (clipNames.length > 0) {
+		animAssetData = d;
+		animClipName = clipNames[0];
+		const dur = d.clips[animClipName].duration;
+		const timeEl = document.getElementById('anim-time');
+		if (timeEl) timeEl.textContent = '0.00s / ' + (dur / 1000).toFixed(2) + 's';
+
+		document.getElementById('anim-play-btn').addEventListener('click', toggleAnimation);
+
+		document.getElementById('anim-loop-btn').addEventListener('click', function() {
+			animLoop = !animLoop;
+			this.classList.toggle('active', animLoop);
+		});
+
+		const clipSel = document.getElementById('anim-clip-select');
+		if (clipSel) {
+			clipSel.addEventListener('change', function() {
+				const wasPlaying = animPlaying;
+				stopAnimation();
+				animClipName = this.value;
+				const dur = d.clips[animClipName].duration;
+				const timeEl = document.getElementById('anim-time');
+				if (timeEl) timeEl.textContent = '0.00s / ' + (dur / 1000).toFixed(2) + 's';
+				const fill = document.getElementById('anim-progress-fill');
+				if (fill) fill.style.width = '0';
+				// Reset canvas to static
+				const canvas = document.getElementById('anim-canvas');
+				if (canvas) drawAsset(canvas, d, type, 320);
+				if (wasPlaying) startAnimation();
+			});
+		}
+
+		const progressBar = document.getElementById('anim-progress');
+		if (progressBar) {
+			progressBar.addEventListener('click', function(e) {
+				const rect = this.getBoundingClientRect();
+				const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+				const clip = d.clips[animClipName];
+				if (!clip) return;
+				const seekTime = pct * clip.duration;
+				// Render this frame statically
+				renderAnimFrame(clip, seekTime);
+				const fill = document.getElementById('anim-progress-fill');
+				if (fill) fill.style.width = (pct * 100) + '%';
+				const timeEl = document.getElementById('anim-time');
+				if (timeEl) timeEl.textContent = (seekTime / 1000).toFixed(2) + 's / ' + (clip.duration / 1000).toFixed(2) + 's';
+				// If playing, restart from this point
+				if (animPlaying) {
+					animStartTime = performance.now() - seekTime;
+				}
+			});
+		}
 	}
 }
 
@@ -595,6 +697,166 @@ async function runGenerate() {
 		btn.disabled = false;
 		btn.textContent = 'Generate';
 	}
+}
+
+// ── Animation Engine ──
+
+const easingFns = {
+	step: function(t) { return 0; },
+	linear: function(t) { return t; },
+	'ease-in': function(t) { return t * t; },
+	'ease-out': function(t) { return t * (2 - t); },
+	'ease-in-out': function(t) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
+};
+
+function interpolateTrack(track, time) {
+	const kfs = track.keyframes;
+	if (!kfs || !kfs.length) return 0;
+	const easing = track.easing || (track.property === 'frame' ? 'step' : 'linear');
+	// Find surrounding keyframes
+	if (kfs.length === 1 || time <= kfs[0].time) return typeof kfs[0].value === 'number' ? kfs[0].value : 0;
+	const last = kfs[kfs.length - 1];
+	if (time >= last.time) return typeof last.value === 'number' ? last.value : 0;
+	let prev = kfs[0], next = kfs[1];
+	for (let i = 0; i < kfs.length - 1; i++) {
+		if (time >= kfs[i].time && time <= kfs[i + 1].time) { prev = kfs[i]; next = kfs[i + 1]; break; }
+	}
+	if (prev === next || easing === 'step') return typeof prev.value === 'number' ? prev.value : 0;
+	const pv = typeof prev.value === 'number' ? prev.value : 0;
+	const nv = typeof next.value === 'number' ? next.value : 0;
+	const span = next.time - prev.time;
+	if (span === 0) return pv;
+	const t = (time - prev.time) / span;
+	const fn = easingFns[easing] || easingFns.linear;
+	return pv + (nv - pv) * fn(t);
+}
+
+function computeClipTime(elapsed, duration, playback) {
+	if (duration <= 0) return 0;
+	if (elapsed < 0) return 0;
+	if (playback === 'once') return elapsed >= duration ? null : elapsed;
+	if (playback === 'pingpong') {
+		const cycle = 2 * duration;
+		const pos = elapsed % cycle;
+		return pos <= duration ? pos : cycle - pos;
+	}
+	return elapsed % duration; // loop (default)
+}
+
+function sampleClip(clip, elapsed) {
+	const playback = clip.playback || 'loop';
+	const localTime = computeClipTime(elapsed, clip.duration, playback);
+	const props = { frame: 0, offsetX: 0, offsetY: 0, rotation: 0, scale: 1, opacity: 1 };
+	if (localTime === null) {
+		// Finished — use last keyframe values
+		for (const track of clip.tracks) {
+			if (track.property in props) {
+				const last = track.keyframes[track.keyframes.length - 1];
+				if (last) props[track.property] = typeof last.value === 'number' ? last.value : 0;
+			}
+		}
+		return props;
+	}
+	for (const track of clip.tracks) {
+		if (track.property in props) {
+			props[track.property] = interpolateTrack(track, localTime);
+		}
+	}
+	return props;
+}
+
+function stopAnimation() {
+	animPlaying = false;
+	if (animRafId) { cancelAnimationFrame(animRafId); animRafId = null; }
+	const btn = document.getElementById('anim-play-btn');
+	if (btn) { btn.querySelector('.icon').textContent = '\\u25B6'; }
+}
+
+function startAnimation() {
+	if (!animAssetData || !animClipName) return;
+	const clip = animAssetData.clips && animAssetData.clips[animClipName];
+	if (!clip) return;
+	animPlaying = true;
+	animStartTime = performance.now();
+	const btn = document.getElementById('anim-play-btn');
+	if (btn) { btn.querySelector('.icon').textContent = '\\u23F8'; }
+	animRafId = requestAnimationFrame(animTick);
+}
+
+function toggleAnimation() {
+	if (animPlaying) stopAnimation();
+	else startAnimation();
+}
+
+function animTick(now) {
+	if (!animPlaying || !animAssetData || !animClipName) return;
+	const clip = animAssetData.clips[animClipName];
+	if (!clip) { stopAnimation(); return; }
+	const elapsed = now - animStartTime;
+	const playback = clip.playback || 'loop';
+
+	// For non-looping, check if finished
+	if (!animLoop && playback === 'once' && elapsed >= clip.duration) {
+		renderAnimFrame(clip, clip.duration);
+		stopAnimation();
+		return;
+	}
+	// For looping override: force loop behavior regardless of clip playback setting
+	const effectiveElapsed = animLoop ? elapsed : Math.min(elapsed, clip.duration);
+
+	renderAnimFrame(clip, effectiveElapsed);
+
+	// Update progress bar
+	const dur = clip.duration;
+	const localTime = computeClipTime(effectiveElapsed, dur, animLoop ? 'loop' : playback);
+	const pct = localTime !== null ? (localTime / dur) * 100 : 100;
+	const fill = document.getElementById('anim-progress-fill');
+	if (fill) fill.style.width = pct + '%';
+	const timeEl = document.getElementById('anim-time');
+	if (timeEl) {
+		const lt = localTime !== null ? localTime : dur;
+		timeEl.textContent = (lt / 1000).toFixed(2) + 's / ' + (dur / 1000).toFixed(2) + 's';
+	}
+
+	if (animPlaying) animRafId = requestAnimationFrame(animTick);
+}
+
+function renderAnimFrame(clip, elapsed) {
+	const canvas = document.getElementById('anim-canvas');
+	if (!canvas) return;
+	const ctx = canvas.getContext('2d');
+	if (!ctx) return;
+	const d = animAssetData;
+	const entries = resolvePaletteEntries(d);
+	if (!entries) return;
+
+	const props = sampleClip(clip, elapsed);
+	const w = d.width, h = d.height;
+	const pixels = d.pixels || (d.layers && d.layers[0] && d.layers[0].pixels);
+	if (!pixels) return;
+
+	const scale = Math.max(1, Math.floor(animMaxSize / Math.max(w, h)));
+	const cw = w * scale, ch = h * scale;
+	canvas.width = cw;
+	canvas.height = ch;
+	ctx.imageSmoothingEnabled = false;
+
+	// Clear
+	ctx.clearRect(0, 0, cw, ch);
+
+	// Apply transforms
+	ctx.save();
+	ctx.globalAlpha = Math.max(0, Math.min(1, props.opacity));
+	const cx = cw / 2, cy = ch / 2;
+	ctx.translate(cx + props.offsetX * scale, cy + props.offsetY * scale);
+	if (props.rotation) ctx.rotate(props.rotation * Math.PI / 180);
+	ctx.scale(props.scale, props.scale);
+	ctx.translate(-cx, -cy);
+
+	// Draw pixels
+	const rows = getPixelRows(d.encoding, pixels, h);
+	drawPixelRows(ctx, rows, entries, w, h, scale, 0, 0);
+	ctx.restore();
 }
 
 // ── Pixel Renderer ──
