@@ -1,0 +1,29 @@
+{
+	"format": "pixel-sprite-v1",
+	"name": "campfire_small",
+	"width": 8,
+	"height": 8,
+	"palette": {
+		"entries": {
+			"0": "transparent",
+			"1": "#2b1d0e",
+			"3": "#8b5a2b",
+			"4": "#e2a13b",
+			"5": "#ffd46b",
+			"A": "#6d7a8a"
+		}
+	},
+	"encoding": "raw",
+	"pixels": [
+		"00044000",
+		"00045500",
+		"00044500",
+		"00035300",
+		"00313130",
+		"00111110",
+		"000AA000",
+		"00000000"
+	],
+	"origin": { "x": 4, "y": 7 },
+	"tags": ["prop", "light-source"]
+}

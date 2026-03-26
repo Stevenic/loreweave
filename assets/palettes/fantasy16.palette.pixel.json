@@ -1,0 +1,47 @@
+{
+	"format": "pixel-palette-v1",
+	"name": "fantasy16",
+	"entries": {
+		"0": "transparent",
+		"1": "#2b1d0e",
+		"2": "#5a3a22",
+		"3": "#8b5a2b",
+		"4": "#e2a13b",
+		"5": "#ffd46b",
+		"6": "#254d2a",
+		"7": "#3a6b3a",
+		"8": "#5b8f4c",
+		"9": "#91b86f",
+		"A": "#6d7a8a",
+		"B": "#a7b5c5",
+		"C": "#d8e2f1",
+		"D": "#7f2f35",
+		"E": "#bf5a5a",
+		"F": "#10151f"
+	},
+	"aliases": {
+		"0": "transparent",
+		"1": "bark-dark",
+		"2": "bark-mid",
+		"3": "bark-light",
+		"4": "gold-dark",
+		"5": "gold-light",
+		"6": "leaf-dark",
+		"7": "leaf-mid",
+		"8": "leaf-light",
+		"9": "leaf-bright",
+		"A": "stone-dark",
+		"B": "stone-mid",
+		"C": "stone-light",
+		"D": "red-dark",
+		"E": "red-light",
+		"F": "ink"
+	},
+	"ramps": {
+		"bark": ["1", "2", "3"],
+		"gold": ["4", "5"],
+		"leaf": ["6", "7", "8", "9"],
+		"stone": ["A", "B", "C"],
+		"red": ["D", "E"]
+	}
+}

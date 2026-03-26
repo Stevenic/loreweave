@@ -1,0 +1,37 @@
+{
+	"format": "pixel-scene-v1",
+	"name": "forest_clearing",
+	"canvas": {
+		"width": 64,
+		"height": 48,
+		"background": "#254d2a",
+		"scale": 4
+	},
+	"layers": [
+		{
+			"name": "ground",
+			"items": [
+				{ "asset": "forest_ground:grass", "x": 0, "y": 0 },
+				{ "asset": "forest_ground:grass", "x": 8, "y": 0 },
+				{ "asset": "forest_ground:dirt_path", "x": 16, "y": 0 },
+				{ "asset": "forest_ground:grass", "x": 24, "y": 0 }
+			]
+		},
+		{
+			"name": "props",
+			"items": [
+				{ "asset": "pine_tree", "x": 4, "y": 30 },
+				{ "asset": "pine_tree", "x": 50, "y": 28 },
+				{ "asset": "campfire_small", "x": 28, "y": 36 }
+			]
+		},
+		{
+			"name": "actors",
+			"items": []
+		}
+	],
+	"meta": {
+		"biome": "temperate_forest",
+		"lighting": "daylight"
+	}
+}

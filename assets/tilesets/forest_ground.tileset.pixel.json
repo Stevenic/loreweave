@@ -1,0 +1,77 @@
+{
+	"format": "pixel-tileset-v1",
+	"name": "forest_ground",
+	"tileWidth": 8,
+	"tileHeight": 8,
+	"palette": {
+		"entries": {
+			"0": "transparent",
+			"3": "#8b5a2b",
+			"4": "#e2a13b",
+			"6": "#254d2a",
+			"7": "#3a6b3a",
+			"8": "#5b8f4c",
+			"9": "#91b86f",
+			"A": "#6d7a8a",
+			"B": "#a7b5c5"
+		}
+	},
+	"tiles": {
+		"grass": {
+			"encoding": "raw",
+			"pixels": [
+				"77777777",
+				"78878787",
+				"77788777",
+				"78877787",
+				"77777777",
+				"78788787",
+				"77777777",
+				"77777777"
+			],
+			"tags": ["terrain", "walkable"]
+		},
+		"dirt_path": {
+			"encoding": "rle",
+			"pixels": [
+				"83",
+				"23 24 23 24",
+				"84",
+				"24 23 24 23",
+				"83",
+				"84",
+				"83",
+				"84"
+			],
+			"tags": ["terrain", "walkable", "path"]
+		},
+		"stone": {
+			"encoding": "raw",
+			"pixels": [
+				"AAAAAAAA",
+				"AAAAABAA",
+				"AAABAAAA",
+				"AAAAABAA",
+				"AAAAAABA",
+				"AAABAAAA",
+				"AAAAAAAA",
+				"AAAAAABA"
+			],
+			"tags": ["terrain", "walkable"]
+		},
+		"water": {
+			"encoding": "raw",
+			"pixels": [
+				"66666666",
+				"67676766",
+				"66676667",
+				"66666766",
+				"67666666",
+				"66676766",
+				"66666667",
+				"66667666"
+			],
+			"tags": ["terrain", "liquid", "blocking"]
+		}
+	}
+}

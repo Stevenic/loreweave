@@ -11,9 +11,8 @@
  * - Terminal renderer: ANSI true-color preview for CLI tools
  * - Loader: file scanning, classification, and loading
  */
+// Decoder
 
-// Animation
-export type { AnimatedProperties } from './animation.js';
 export {
 	computeClipTime,
 	DEFAULT_ANIMATED_PROPERTIES,
@@ -21,8 +20,6 @@ export {
 	interpolateTrack,
 	sampleClip,
 } from './animation.js';
-// Canvas Renderer
-export type { AssetRegistry, CanvasFactory, SceneState } from './canvas-renderer.js';
 export {
 	createSceneState,
 	drawImageData,
@@ -31,18 +28,7 @@ export {
 	renderScene,
 	renderSprite,
 } from './canvas-renderer.js';
-// Color
-export type { RGBA } from './color.js';
-export {
-	alphaBlend,
-	colorDistance,
-	parseColor,
-	pixelColorToCSS,
-	remapPalette,
-	remapPaletteEntries,
-	rgbaToCSS,
-} from './color.js';
-// Decoder
+export { alphaBlend, parseColor, pixelColorToCSS, rgbaToCSS } from './color.js';
 export {
 	compositeLayers,
 	decodeAllFrames,
@@ -51,18 +37,8 @@ export {
 	decodeRleRow,
 	extractFrame,
 } from './decoder.js';
-// Emitter
-export type { Particle } from './emitter.js';
 export { ParticleEmitter, SeededRNG } from './emitter.js';
-// Loader
-export type { LoadedResource, PixelFileType } from './loader.js';
-export {
-	classifyFile,
-	findPixelFiles,
-	loadAllPixelFiles,
-	loadPixelFile,
-} from './loader.js';
-
+export { classifyFile, findPixelFiles, loadAllPixelFiles, loadPixelFile } from './loader.js';
 // Terminal Renderer
 export {
 	renderSpriteTerminal,
@@ -70,8 +46,6 @@ export {
 	renderTileTerminal,
 	renderTileToTerminalString,
 } from './terminal-renderer.js';
-// Validator
-export type { ValidationResult } from './validator.js';
 export {
 	validateEmitter,
 	validateEmitterConfig,
@@ -81,3 +55,4 @@ export {
 	validateTilemap,
 	validateTileset,
 } from './validator.js';
+//# sourceMappingURL=index.js.map

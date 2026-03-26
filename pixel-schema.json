@@ -1,0 +1,604 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://loreweave.dev/schemas/pixel-format-v1.json",
+  "title": "Pixel Format v1",
+  "description": "The first pixel art format designed for LLM generation. JSON-based, palette-indexed, text-is-the-art.",
+
+  "oneOf": [
+    { "$ref": "#/$defs/PixelSprite" },
+    { "$ref": "#/$defs/PixelTileset" },
+    { "$ref": "#/$defs/PixelTilemap" },
+    { "$ref": "#/$defs/PixelScene" },
+    { "$ref": "#/$defs/PixelPalette" },
+    { "$ref": "#/$defs/PixelEmitter" }
+  ],
+
+  "$defs": {
+
+    "PixelColor": {
+      "description": "A color value: 'transparent', '#RRGGBB', or '#RRGGBBAA'.",
+      "type": "string",
+      "pattern": "^(transparent|#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?)$"
+    },
+
+    "PaletteKey": {
+      "description": "Single character: 0-9, A-Z, a-z, or one of ! @ # $ % & * + = ?",
+      "type": "string",
+      "pattern": "^[0-9A-Za-z!@#$%&*+=?]$"
+    },
+
+    "PaletteEntries": {
+      "description": "Map of single-char keys to colors. Max 72 entries.",
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/PaletteKey" },
+      "additionalProperties": { "$ref": "#/$defs/PixelColor" },
+      "maxProperties": 72
+    },
+
+    "PaletteInline": {
+      "description": "Inline palette object with entries and optional aliases/ramps.",
+      "type": "object",
+      "required": ["entries"],
+      "properties": {
+        "entries": { "$ref": "#/$defs/PaletteEntries" },
+        "aliases": {
+          "description": "Semantic names for palette keys (e.g. '1': 'bark-dark'). LLM guidance only.",
+          "type": "object",
+          "propertyNames": { "$ref": "#/$defs/PaletteKey" },
+          "additionalProperties": { "type": "string" }
+        },
+        "ramps": {
+          "description": "Named color gradients ordered dark→light (e.g. 'bark': ['1','2','3']).",
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/PaletteKey" },
+            "minItems": 2
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "PaletteRef": {
+      "description": "Palette: either an inline object or a string name resolved at runtime.",
+      "oneOf": [
+        { "$ref": "#/$defs/PaletteInline" },
+        { "type": "string", "description": "Named palette reference." }
+      ]
+    },
+
+    "Encoding": {
+      "description": "Pixel data encoding. 'raw' = one char per pixel. 'rle' = space-separated <count><symbol> tokens.",
+      "type": "string",
+      "enum": ["raw", "rle"]
+    },
+
+    "PixelRows": {
+      "description": "Array of pixel row strings. Raw: each char = one palette key. RLE: space-separated count+symbol tokens.",
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+
+    "SpriteLayer": {
+      "description": "A named pixel layer within a sprite. Composited bottom-up (first = back).",
+      "type": "object",
+      "required": ["name", "pixels"],
+      "properties": {
+        "name": { "type": "string" },
+        "pixels": { "$ref": "#/$defs/PixelRows" },
+        "opacity": {
+          "type": "number", "minimum": 0, "maximum": 1, "default": 1
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "Region": {
+      "description": "Named rectangular area within a sprite (for partial regen, hitboxes, composition).",
+      "type": "object",
+      "required": ["x", "y", "width", "height"],
+      "properties": {
+        "x": { "type": "integer", "minimum": 0 },
+        "y": { "type": "integer", "minimum": 0 },
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+
+    "Attachment": {
+      "description": "Named point where another sprite can connect. Optional per-frame overrides.",
+      "type": "object",
+      "required": ["x", "y"],
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "frames": {
+          "description": "Per-frame position overrides keyed by frame index string.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["x", "y"],
+            "properties": {
+              "x": { "type": "number" },
+              "y": { "type": "number" }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "Constraints": {
+      "description": "Advisory generation hints. Validators warn but never reject.",
+      "type": "object",
+      "properties": {
+        "maxColors": { "type": "integer", "minimum": 1, "description": "Max distinct palette keys (excl. transparent)." },
+        "outline": { "type": "boolean", "description": "1px dark outline around non-transparent regions." },
+        "noIslands": { "type": "boolean", "description": "No isolated single-pixel regions." },
+        "connectedPixels": { "type": "boolean", "description": "All non-transparent pixels form one connected region." }
+      },
+      "additionalProperties": false
+    },
+
+    "Variant": {
+      "description": "Derived version via palette swap and/or scale override. No pixel duplication.",
+      "type": "object",
+      "properties": {
+        "palette": {
+          "type": "object",
+          "propertyNames": { "$ref": "#/$defs/PaletteKey" },
+          "additionalProperties": { "$ref": "#/$defs/PixelColor" },
+          "description": "Partial palette overrides."
+        },
+        "scale": { "type": "number", "exclusiveMinimum": 0, "description": "Scale multiplier override." }
+      },
+      "additionalProperties": false
+    },
+
+    "GenerationMeta": {
+      "description": "Provenance tracking for LLM-generated assets. No effect on rendering.",
+      "type": "object",
+      "properties": {
+        "prompt": { "type": "string" },
+        "model": { "type": "string" },
+        "seed": { "type": "number" },
+        "parent": { "type": "string", "description": "Parent sprite name (variant lineage)." },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    },
+
+    "Easing": {
+      "description": "Interpolation function. 'step' for frame tracks, 'linear' default for continuous properties.",
+      "type": "string",
+      "enum": ["step", "linear", "ease-in", "ease-out", "ease-in-out"]
+    },
+
+    "Keyframe": {
+      "description": "Time-value pair. Time in ms from clip start.",
+      "type": "object",
+      "required": ["time", "value"],
+      "properties": {
+        "time": { "type": "number", "minimum": 0 },
+        "value": {
+          "oneOf": [
+            { "type": "number" },
+            { "type": "string" }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "Track": {
+      "description": "Animates one property over time. Properties: frame (step), offsetX, offsetY, rotation, scale, opacity (interpolated).",
+      "type": "object",
+      "required": ["property", "keyframes"],
+      "properties": {
+        "property": {
+          "type": "string",
+          "enum": ["frame", "offsetX", "offsetY", "rotation", "scale", "opacity"]
+        },
+        "keyframes": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Keyframe" },
+          "minItems": 1
+        },
+        "easing": { "$ref": "#/$defs/Easing" }
+      },
+      "additionalProperties": false
+    },
+
+    "Clip": {
+      "description": "Named animation sequence with keyframe tracks.",
+      "type": "object",
+      "required": ["duration", "tracks"],
+      "properties": {
+        "duration": { "type": "number", "exclusiveMinimum": 0, "description": "Total length in ms." },
+        "playback": {
+          "type": "string",
+          "enum": ["loop", "once", "pingpong"],
+          "default": "loop"
+        },
+        "tracks": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Track" },
+          "minItems": 1
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "Symmetry": {
+      "description": "Symmetry hint for generators. Full pixels always stored; hint is advisory.",
+      "type": "string",
+      "enum": ["none", "horizontal", "vertical", "both"],
+      "default": "none"
+    },
+
+    "PixelSprite": {
+      "description": "Atomic pixel art asset. Palette-indexed char grid — text IS the art.",
+      "type": "object",
+      "required": ["format", "name", "width", "height", "palette", "encoding"],
+      "properties": {
+        "format": { "const": "pixel-sprite-v1" },
+        "name": { "type": "string" },
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 },
+        "palette": { "$ref": "#/$defs/PaletteRef" },
+        "encoding": { "$ref": "#/$defs/Encoding" },
+        "pixels": { "$ref": "#/$defs/PixelRows" },
+        "layers": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/SpriteLayer" },
+          "minItems": 1,
+          "description": "Named pixel layers. When present, replaces top-level pixels."
+        },
+        "frameCount": { "type": "integer", "minimum": 1, "default": 1, "description": "Frames stacked vertically in pixels. Total rows = height × frameCount." },
+        "clips": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/Clip" },
+          "description": "Named animation clips with keyframe tracks."
+        },
+        "origin": {
+          "type": "object",
+          "required": ["x", "y"],
+          "properties": {
+            "x": { "type": "number" },
+            "y": { "type": "number" }
+          },
+          "additionalProperties": false,
+          "description": "Anchor point for scene placement."
+        },
+        "baseScale": { "type": "number", "exclusiveMinimum": 0, "default": 1, "description": "Reference scale for depth composition." },
+        "symmetry": { "$ref": "#/$defs/Symmetry" },
+        "regions": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/Region" }
+        },
+        "attachments": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/Attachment" }
+        },
+        "constraints": { "$ref": "#/$defs/Constraints" },
+        "variants": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/Variant" }
+        },
+        "generation": { "$ref": "#/$defs/GenerationMeta" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "collision": { "$ref": "#/$defs/Region" },
+        "meta": { "type": "object", "description": "Arbitrary metadata." }
+      },
+      "additionalProperties": false
+    },
+
+    "TileConnectivity": {
+      "description": "Wang tile edge labels for auto-tiling. Adjacent tiles must match on shared edges.",
+      "type": "object",
+      "properties": {
+        "north": { "type": "string" },
+        "east": { "type": "string" },
+        "south": { "type": "string" },
+        "west": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+
+    "PixelTile": {
+      "description": "A single tile within a tileset.",
+      "type": "object",
+      "required": ["encoding", "pixels"],
+      "properties": {
+        "encoding": { "$ref": "#/$defs/Encoding" },
+        "pixels": { "$ref": "#/$defs/PixelRows" },
+        "connectivity": { "$ref": "#/$defs/TileConnectivity" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "meta": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
+
+    "PixelTileset": {
+      "description": "Named collection of tile-sized assets sharing a palette.",
+      "type": "object",
+      "required": ["format", "name", "tileWidth", "tileHeight", "palette", "tiles"],
+      "properties": {
+        "format": { "const": "pixel-tileset-v1" },
+        "name": { "type": "string" },
+        "tileWidth": { "type": "integer", "minimum": 1 },
+        "tileHeight": { "type": "integer", "minimum": 1 },
+        "palette": { "$ref": "#/$defs/PaletteRef" },
+        "tiles": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/PixelTile" },
+          "minProperties": 1
+        },
+        "meta": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
+
+    "TileRef": {
+      "description": "Tile reference with optional flip/rotate transforms.",
+      "type": "object",
+      "required": ["tile"],
+      "properties": {
+        "tile": { "type": "string" },
+        "flipX": { "type": "boolean" },
+        "flipY": { "type": "boolean" },
+        "rotate": { "type": "integer", "enum": [0, 90, 180, 270] }
+      },
+      "additionalProperties": false
+    },
+
+    "LegendEntry": {
+      "description": "Legend value: tile name string or TileRef with transforms.",
+      "oneOf": [
+        { "type": "string" },
+        { "$ref": "#/$defs/TileRef" }
+      ]
+    },
+
+    "PixelTilemap": {
+      "description": "Grid-based tile placement. Text IS the map — each char maps through legend to a tile.",
+      "type": "object",
+      "required": ["format", "name", "tileset", "gridWidth", "gridHeight", "legend", "grid"],
+      "properties": {
+        "format": { "const": "pixel-tilemap-v1" },
+        "name": { "type": "string" },
+        "tileset": { "type": "string", "description": "Tileset name reference." },
+        "gridWidth": { "type": "integer", "minimum": 1 },
+        "gridHeight": { "type": "integer", "minimum": 1 },
+        "legend": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/LegendEntry" },
+          "description": "Maps single chars to tile names or TileRef objects."
+        },
+        "grid": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "description": "Character grid. Each char maps through legend. Row count = gridHeight, row length = gridWidth."
+        },
+        "meta": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
+
+    "NumberRange": {
+      "type": "object",
+      "required": ["min", "max"],
+      "properties": {
+        "min": { "type": "number" },
+        "max": { "type": "number" }
+      },
+      "additionalProperties": false
+    },
+
+    "EmitterConfig": {
+      "description": "Particle emitter configuration. Runtime handles physics simulation.",
+      "type": "object",
+      "required": ["rate", "lifetime", "velocity"],
+      "properties": {
+        "sprite": { "type": "string", "description": "Sprite asset for particles." },
+        "rate": { "type": "number", "exclusiveMinimum": 0, "description": "Particles per second." },
+        "lifetime": { "$ref": "#/$defs/NumberRange", "description": "Particle lifetime range in ms." },
+        "velocity": {
+          "type": "object",
+          "required": ["x", "y"],
+          "properties": {
+            "x": { "$ref": "#/$defs/NumberRange" },
+            "y": { "$ref": "#/$defs/NumberRange" }
+          },
+          "additionalProperties": false
+        },
+        "gravity": { "type": "number", "default": 0 },
+        "fadeOut": { "type": "boolean", "default": false },
+        "scaleRange": { "$ref": "#/$defs/NumberRange" },
+        "rotationSpeed": { "$ref": "#/$defs/NumberRange" },
+        "maxParticles": { "type": "integer", "minimum": 1 },
+        "burst": { "type": "integer", "minimum": 1, "description": "Emit this many at once, then stop." }
+      },
+      "additionalProperties": false
+    },
+
+    "PixelEmitter": {
+      "description": "Standalone particle emitter file.",
+      "type": "object",
+      "required": ["format", "name", "rate", "lifetime", "velocity"],
+      "properties": {
+        "format": { "const": "pixel-emitter-v1" },
+        "name": { "type": "string" },
+        "sprite": { "type": "string" },
+        "rate": { "type": "number", "exclusiveMinimum": 0 },
+        "lifetime": { "$ref": "#/$defs/NumberRange" },
+        "velocity": {
+          "type": "object",
+          "required": ["x", "y"],
+          "properties": {
+            "x": { "$ref": "#/$defs/NumberRange" },
+            "y": { "$ref": "#/$defs/NumberRange" }
+          },
+          "additionalProperties": false
+        },
+        "gravity": { "type": "number" },
+        "fadeOut": { "type": "boolean" },
+        "scaleRange": { "$ref": "#/$defs/NumberRange" },
+        "rotationSpeed": { "$ref": "#/$defs/NumberRange" },
+        "maxParticles": { "type": "integer", "minimum": 1 },
+        "burst": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+
+    "BlendMode": {
+      "description": "Canvas 2D compositing mode.",
+      "type": "string",
+      "enum": ["normal", "multiply", "screen", "overlay", "additive"]
+    },
+
+    "Camera": {
+      "description": "Viewport into the scene. x,y = center; zoom = additional multiplier.",
+      "type": "object",
+      "required": ["x", "y"],
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "zoom": { "type": "number", "exclusiveMinimum": 0, "default": 1 }
+      },
+      "additionalProperties": false
+    },
+
+    "AttachRef": {
+      "description": "Attach this item to a named point on a parent item.",
+      "type": "object",
+      "required": ["parent", "point"],
+      "properties": {
+        "parent": { "type": "string", "description": "ID of the parent scene item." },
+        "point": { "type": "string", "description": "Attachment point name on the parent sprite." }
+      },
+      "additionalProperties": false
+    },
+
+    "PixelSceneItem": {
+      "description": "A sprite or tileset member placed in a scene layer.",
+      "type": "object",
+      "required": ["asset"],
+      "properties": {
+        "asset": { "type": "string", "description": "Sprite or tile name." },
+        "x": { "type": "number", "default": 0 },
+        "y": { "type": "number", "default": 0 },
+        "id": { "type": "string", "description": "Unique ID for attachment targeting." },
+        "scale": { "type": "number", "exclusiveMinimum": 0, "default": 1 },
+        "opacity": { "type": "number", "minimum": 0, "maximum": 1, "default": 1 },
+        "flipX": { "type": "boolean", "default": false },
+        "flipY": { "type": "boolean", "default": false },
+        "rotation": { "type": "number", "default": 0, "description": "Degrees clockwise." },
+        "z": { "type": "number", "description": "Explicit depth sort within layer." },
+        "palette": { "$ref": "#/$defs/PaletteRef", "description": "Per-item palette override." },
+        "variant": { "type": "string", "description": "Variant name from sprite's variants." },
+        "clip": { "type": "string", "description": "Active animation clip name." },
+        "attach": { "$ref": "#/$defs/AttachRef" },
+        "emitter": { "$ref": "#/$defs/EmitterConfig", "description": "Inline particle emitter." },
+        "groundY": { "type": "number", "description": "Y offset for drop shadow anchor." },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "if": { "type": "string", "description": "Conditional expression for visibility." },
+        "meta": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
+
+    "PixelSceneLayer": {
+      "description": "A compositing layer in a scene. Renders in array order (first = back).",
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "type": {
+          "type": "string",
+          "enum": ["items", "tilemap"],
+          "default": "items"
+        },
+        "items": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/PixelSceneItem" },
+          "description": "Scene items (for 'items' type layers)."
+        },
+        "tilemap": { "type": "string", "description": "Tilemap reference (for 'tilemap' type layers)." },
+        "opacity": { "type": "number", "minimum": 0, "maximum": 1, "default": 1 },
+        "blend": { "$ref": "#/$defs/BlendMode", "default": "normal" },
+        "scrollFactor": { "type": "number", "default": 1, "description": "Parallax factor. 0 = fixed, 1 = normal, <1 = distant." },
+        "sort": {
+          "type": "string",
+          "enum": ["manual", "y"],
+          "default": "manual",
+          "description": "'y' = auto-sort by y position (lower = in front)."
+        },
+        "offsetX": { "type": "number", "default": 0 },
+        "offsetY": { "type": "number", "default": 0 },
+        "visible": { "type": "boolean", "default": true }
+      },
+      "additionalProperties": false
+    },
+
+    "PixelScene": {
+      "description": "Composes sprites, tilemaps, and effects onto a canvas with layers, camera, parallax, and blend modes.",
+      "type": "object",
+      "required": ["format", "name", "canvas", "layers"],
+      "properties": {
+        "format": { "const": "pixel-scene-v1" },
+        "name": { "type": "string" },
+        "canvas": {
+          "type": "object",
+          "required": ["width", "height"],
+          "properties": {
+            "width": { "type": "integer", "minimum": 1 },
+            "height": { "type": "integer", "minimum": 1 },
+            "background": { "$ref": "#/$defs/PixelColor", "default": "transparent" },
+            "scale": { "type": "number", "exclusiveMinimum": 0, "default": 1 },
+            "camera": { "$ref": "#/$defs/Camera" },
+            "meta": { "type": "object" }
+          },
+          "additionalProperties": false
+        },
+        "layers": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/PixelSceneLayer" },
+          "minItems": 1
+        },
+        "meta": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
+
+    "PixelPalette": {
+      "description": "Shared palette file. Sprites reference by name.",
+      "type": "object",
+      "required": ["format", "name", "entries"],
+      "properties": {
+        "format": { "const": "pixel-palette-v1" },
+        "name": { "type": "string" },
+        "entries": { "$ref": "#/$defs/PaletteEntries" },
+        "aliases": {
+          "type": "object",
+          "propertyNames": { "$ref": "#/$defs/PaletteKey" },
+          "additionalProperties": { "type": "string" }
+        },
+        "ramps": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/PaletteKey" },
+            "minItems": 2
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

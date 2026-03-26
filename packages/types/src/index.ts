@@ -5,4 +5,40 @@
  * and services in the LoreWeave monorepo.
  */
 
-export {};
+export type {
+	Attachment,
+	AttachRef,
+	BlendMode,
+	// Scenes
+	Camera,
+	Clip,
+	Constraints,
+	Easing,
+	EmitterConfig,
+	GenerationMeta,
+	Keyframe,
+	// Emitters
+	NumberRange,
+	// Colors & Palettes
+	PixelColor,
+	PixelEmitter,
+	// Encoding
+	PixelEncoding,
+	PixelPalette,
+	PixelScene,
+	PixelSceneItem,
+	PixelSceneLayer,
+	PixelSprite,
+	PixelTile,
+	PixelTilemap,
+	PixelTileset,
+	Region,
+	// Sprites
+	SpriteLayer,
+	// Tiles & Tilesets
+	TileConnectivity,
+	// Tilemaps
+	TileRef,
+	Track,
+	Variant,
+} from './pixel.js';

@@ -8,7 +8,7 @@
     "services/*"
   ],
   "scripts": {
-    "build": "npm run build --workspaces",
+    "build": "tsc --build packages/types packages/rules packages/pixel packages/world packages/narrative services/game services/resource-explorer",
     "dev": "npm run dev --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "lint": "biome check .",
@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.9",
+    "@types/node": "^25.5.0",
     "typescript": "^6.0.2"
   }
 }

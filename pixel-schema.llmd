@@ -1,0 +1,126 @@
+@Objects.Properties
+Required properties marked with `!`.
+:PaletteEntries.properties=
+:PaletteInline.properties=entries!, aliases, ramps
+:SpriteLayer.properties=name!, pixels!, opacity
+:Region.properties=x!, y!, width!, height!
+:Attachment.properties=x!, y!, frames
+:Constraints.properties=maxColors, outline, noIslands, connectedPixels
+:Variant.properties=palette, scale
+:GenerationMeta.properties=prompt, model, seed, parent, timestamp
+:Keyframe.properties=time!, value!
+:Track.properties=property!, keyframes!, easing
+:Clip.properties=duration!, playback, tracks!
+:PixelSprite.properties=format!, name!, width!, height!, palette!, encoding!, pixels, layers, frameCount, clips, origin, baseScale, symmetry, regions, attachments, constraints, variants, generation, tags, collision, meta
+:TileConnectivity.properties=north, east, south, west
+:PixelTile.properties=encoding!, pixels!, connectivity, tags, meta
+:PixelTileset.properties=format!, name!, tileWidth!, tileHeight!, palette!, tiles!, meta
+:TileRef.properties=tile!, flipX, flipY, rotate
+:PixelTilemap.properties=format!, name!, tileset!, gridWidth!, gridHeight!, legend!, grid!, meta
+:NumberRange.properties=min!, max!
+:EmitterConfig.properties=sprite, rate!, lifetime!, velocity!, gravity, fadeOut, scaleRange, rotationSpeed, maxParticles, burst
+:PixelEmitter.properties=format!, name!, sprite, rate!, lifetime!, velocity!, gravity, fadeOut, scaleRange, rotationSpeed, maxParticles, burst
+:Camera.properties=x!, y!, zoom
+:AttachRef.properties=parent!, point!
+:PixelSceneItem.properties=asset!, x, y, id, scale, opacity, flipX, flipY, rotation, z, palette, variant, clip, attach, emitter, groundY, tags, if, meta
+:PixelSceneLayer.properties=name!, type, items, tilemap, opacity, blend, scrollFactor, sort, offsetX, offsetY, visible
+:PixelScene.properties=format!, name!, canvas!, layers!, meta
+:PixelPalette.properties=format!, name!, entries!, aliases, ramps
+@Properties
+-entries (object): 
+-aliases (object): Semantic names for palette keys (e.g. '1': 'bark-dark'). LLM guidance only
+-ramps (object): Named color gradients ordered dark→light (e.g. 'bark': ['1','2','3'])
+-name (string): 
+-pixels (string): 
+-opacity (number): Default: 1
+-x (number): Default: 0
+-y (number): Default: 0
+-width (integer): 
+-height (integer): 
+-frames (object): Per-frame position overrides keyed by frame index string
+-maxColors (integer): Max distinct palette keys (excl. transparent)
+-outline (boolean): 1px dark outline around non-transparent regions
+-noIslands (boolean): N isolated single-pixel regions
+-connectedPixels (boolean): All non-transparent pixels form one connected region
+-palette (object): Partial palette overrides
+-scale (number): Scale multiplier override
+-prompt (string): 
+-model (string): 
+-seed (number): 
+-parent (string): Parent sprite name (variant lineage)
+-timestamp (string): 
+-time (number): 
+-value (number¦string): 
+-property (string): 
+-keyframes (array of Keyframe): 
+-easing (string): 
+-duration (number): Total length in ms
+-playback (string): Default: "loop"
+-tracks (array of Track): 
+-format (string): [pixel-tileset-v1]
+-encoding (string): 
+-layers (array of SpriteLayer): Named pixel layers. When present, replaces top-level pixels
+-frameCount (integer): Frames stacked vertically in pixels. Total rows = height × frameCount. Default: 1
+-clips (object): Named animation clips with keyframe tracks
+-origin (object): Anchor point for scene placement
+-baseScale (number): Reference scale for depth composition. Default: 1
+-symmetry (string): 
+-regions (object): 
+-attachments (object): 
+-constraints (object): 
+-variants (object): 
+-generation (object): 
+-tags (array of string): 
+-collision (object): 
+-meta (object): Arbitrary metadata
+-north (string): 
+-east (string): 
+-south (string): 
+-west (string): 
+-connectivity (object): 
+-tileWidth (integer): 
+-tileHeight (integer): 
+-tiles (object): 
+-tile (string): 
+-flipX (boolean): Default: false
+-flipY (boolean): Default: false
+-rotate (integer): 
+-tileset (string): Tileset name reference
+-gridWidth (integer): 
+-gridHeight (integer): 
+-legend (object): Maps single chars to tile names or TileRef objects
+-grid (array of string): Character grid. Each char maps through legend. Row count = gridHeight, row length = gridWidth
+-min (number): 
+-max (number): 
+-sprite (string): Sprite asset for particles
+-rate (number): Particles per second
+-lifetime (object): Particle lifetime range in ms
+-velocity (object): 
+-gravity (number): Default: 0
+-fadeOut (boolean): Default: false
+-scaleRange (object): 
+-rotationSpeed (object): 
+-maxParticles (integer): 
+-burst (integer): Emit this many at once, then stop
+-zoom (number): Default: 1
+-point (string): Attachment point name on the parent sprite
+-asset (string): Sprite or tile name
+-id (string): Unique ID for attachment targeting
+-rotation (number): Degrees clockwise. Default: 0
+-z (number): Explicit depth sort within layer
+-variant (string): Variant name from sprite's variants
+-clip (string): Active animation clip name
+-attach (object): 
+-emitter (object): Inline particle emitter
+-groundY (number): Y offset for drop shadow anchor
+-if (string): Conditional expression for visibility
+-type (string): Default: "items"
+-items (array of PixelSceneItem): Scene items (for 'items' type layers)
+-tilemap (string): Tilemap reference (for 'tilemap' type layers)
+-blend (string): Default: "normal"
+-scrollFactor (number): Parallax factor. 0 = fixed, 1 = normal, <1 = distant. Default: 1
+-sort (string): 'y' = auto-sort by y position (lower = in front). Default: "manual"
+-offsetX (number): Default: 0
+-offsetY (number): Default: 0
+-visible (boolean): Default: true
+-canvas (object): 

@@ -1,0 +1,26 @@
+{
+	"format": "pixel-sprite-v1",
+	"name": "torch",
+	"width": 4,
+	"height": 6,
+	"palette": {
+		"entries": {
+			"0": "transparent",
+			"1": "#2b1d0e",
+			"2": "#5a3a22",
+			"4": "#e2a13b",
+			"5": "#ffd46b"
+		}
+	},
+	"encoding": "rle",
+	"pixels": [
+		"10 25 10",
+		"10 14 15 10",
+		"10 22 10",
+		"10 22 10",
+		"10 22 10",
+		"10 22 10"
+	],
+	"origin": { "x": 2, "y": 5 },
+	"tags": ["prop", "light-source", "wall-mount"]
+}

@@ -1,33 +1,28 @@
 {
-	"name": "@loreweave/pixel",
+	"name": "@loreweave/resource-explorer",
 	"version": "0.1.0",
 	"private": true,
-	"description": "Pixel Format v1 — types, validator, decoder, renderer",
+	"description": "CLI tool to browse, validate, and preview Pixel Format v1 assets",
 	"type": "module",
 	"main": "./dist/index.js",
-	"types": "./dist/index.d.ts",
-	"exports": {
-		".": {
-			"types": "./dist/index.d.ts",
-			"import": "./dist/index.js"
-		}
+	"bin": {
+		"pixel-explorer": "./dist/index.js"
 	},
 	"scripts": {
 		"build": "tsc",
 		"dev": "tsc --watch",
+		"start": "node dist/index.js",
 		"test": "vitest run --passWithNoTests",
 		"test:watch": "vitest",
 		"typecheck": "tsc --noEmit",
 		"clean": "rm -rf dist"
 	},
 	"dependencies": {
+		"@loreweave/pixel": "*",
 		"@loreweave/types": "*"
 	},
 	"devDependencies": {
 		"@types/node": "^25.5.0",
 		"vitest": "^3.1.1"
-	},
-	"files": [
-		"dist"
-	]
+	}
 }
