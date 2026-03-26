@@ -68,6 +68,7 @@ function printHelp(): void {
 \x1b[1mOPTIONS\x1b[0m
   --port <number>    Port to listen on (default: 3000)
   --dir <path>       Asset directory to serve (default: ./assets)
+  --debug            Log all Agent SDK messages (tool calls, model usage, etc.)
 
 \x1b[1mENVIRONMENT\x1b[0m
   ANTHROPIC_API_KEY  Required for asset generation (via Agent SDK)
@@ -107,6 +108,7 @@ async function main(): Promise<void> {
 	// Parse flags
 	let port = 3000;
 	let assetDir = './assets';
+	let debug = false;
 
 	for (let i = 1; i < args.length; i++) {
 		if (args[i] === '--port' && args[i + 1]) {
@@ -115,6 +117,8 @@ async function main(): Promise<void> {
 		} else if (args[i] === '--dir' && args[i + 1]) {
 			assetDir = args[i + 1];
 			i++;
+		} else if (args[i] === '--debug') {
+			debug = true;
 		}
 	}
 
@@ -125,7 +129,7 @@ async function main(): Promise<void> {
 	await scaffoldDirectories(resolvedDir);
 
 	// Start the server
-	await startServer({ port, assetDir: resolvedDir });
+	await startServer({ port, assetDir: resolvedDir, debug });
 }
 
 main().catch((err: Error) => {

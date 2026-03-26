@@ -36,10 +36,14 @@ import { getAppJs, getPageHtml, getStyleCss } from './html.js';
 export interface ServerOptions {
 	port: number;
 	assetDir: string;
+	debug?: boolean;
 }
 
+let debugMode = false;
+
 export async function startServer(opts: ServerOptions): Promise<void> {
-	const { port, assetDir } = opts;
+	const { port, assetDir, debug } = opts;
+	debugMode = debug ?? false;
 
 	// ── HTTP Server ──
 
@@ -116,6 +120,9 @@ export async function startServer(opts: ServerOptions): Promise<void> {
 		console.log();
 		console.log(`  \x1b[2mLocal:\x1b[0m   http://localhost:${port}`);
 		console.log(`  \x1b[2mAssets:\x1b[0m  ${assetDir}`);
+		if (debugMode) {
+			console.log(`  \x1b[2mDebug:\x1b[0m   \x1b[33menabled\x1b[0m`);
+		}
 		console.log();
 	});
 }
@@ -324,6 +331,102 @@ async function apiListPalettes(res: ServerResponse, assetDir: string): Promise<v
 	}
 
 	sendJson(res, 200, { palettes });
+}
+
+// ── Debug Logging ──
+
+// biome-ignore lint/suspicious/noExplicitAny: debug logging casts through any for SDK message types
+function logDebugMessage(message: any): void {
+	const prefix = '\x1b[36m[debug]\x1b[0m';
+	const dim = '\x1b[2m';
+	const reset = '\x1b[0m';
+	const bold = '\x1b[1m';
+	const yellow = '\x1b[33m';
+	const green = '\x1b[32m';
+	const red = '\x1b[31m';
+
+	switch (message.type) {
+		case 'assistant': {
+			const msg = message as { type: string; message?: { model?: string; usage?: { input_tokens?: number; output_tokens?: number }; content?: Array<{ type: string; name?: string; input?: unknown; text?: string }> } };
+			const model = msg.message?.model ?? 'unknown';
+			const usage = msg.message?.usage;
+			const tokens = usage ? `${dim}(in: ${usage.input_tokens}, out: ${usage.output_tokens})${reset}` : '';
+			console.log(`${prefix} ${bold}assistant${reset} model=${yellow}${model}${reset} ${tokens}`);
+
+			// Log each content block
+			if (msg.message?.content) {
+				for (const block of msg.message.content) {
+					if (block.type === 'tool_use') {
+						const inputStr = JSON.stringify(block.input);
+						const truncated = inputStr.length > 200 ? `${inputStr.slice(0, 200)}...` : inputStr;
+						console.log(`${prefix}   ${yellow}tool_use${reset} ${bold}${block.name}${reset} ${dim}${truncated}${reset}`);
+					} else if (block.type === 'text' && block.text) {
+						const text = block.text.length > 300 ? `${block.text.slice(0, 300)}...` : block.text;
+						console.log(`${prefix}   ${dim}text: ${text}${reset}`);
+					}
+				}
+			}
+			break;
+		}
+		case 'tool_use_summary': {
+			const msg = message as { summary: string };
+			console.log(`${prefix} ${green}tool_result${reset} ${dim}${msg.summary}${reset}`);
+			break;
+		}
+		case 'tool_progress': {
+			const msg = message as { tool_name: string; elapsed_time_seconds: number };
+			console.log(`${prefix} ${dim}tool_progress${reset} ${msg.tool_name} ${dim}(${msg.elapsed_time_seconds.toFixed(1)}s)${reset}`);
+			break;
+		}
+		case 'result': {
+			const msg = message as {
+				subtype: string;
+				duration_ms: number;
+				duration_api_ms: number;
+				num_turns: number;
+				total_cost_usd: number;
+				usage?: { input_tokens?: number; output_tokens?: number };
+				modelUsage?: Record<string, { input_tokens?: number; output_tokens?: number }>;
+				errors?: string[];
+			};
+			const color = msg.subtype === 'success' ? green : red;
+			console.log(`${prefix} ${color}${bold}result: ${msg.subtype}${reset}`);
+			console.log(`${prefix}   turns: ${msg.num_turns}`);
+			console.log(`${prefix}   duration: ${(msg.duration_ms / 1000).toFixed(1)}s total, ${(msg.duration_api_ms / 1000).toFixed(1)}s API`);
+			console.log(`${prefix}   cost: $${msg.total_cost_usd.toFixed(4)}`);
+			if (msg.usage) {
+				console.log(`${prefix}   tokens: in=${msg.usage.input_tokens}, out=${msg.usage.output_tokens}`);
+			}
+			if (msg.modelUsage) {
+				for (const [modelName, usage] of Object.entries(msg.modelUsage) as [string, { input_tokens?: number; output_tokens?: number }][]) {
+					console.log(`${prefix}   ${dim}model ${modelName}: in=${usage.input_tokens}, out=${usage.output_tokens}${reset}`);
+				}
+			}
+			if (msg.errors && msg.errors.length > 0) {
+				console.log(`${prefix}   ${red}errors: ${msg.errors.join('; ')}${reset}`);
+			}
+			break;
+		}
+		case 'system': {
+			const msg = message as { subtype?: string };
+			if (msg.subtype === 'api_retry') {
+				const retry = message as { error_status?: number | null; retry_delay_ms?: number };
+				console.log(`${prefix} ${yellow}api_retry${reset} status=${retry.error_status} delay=${retry.retry_delay_ms}ms`);
+			} else if (msg.subtype === 'init') {
+				console.log(`${prefix} ${dim}system: init${reset}`);
+			} else {
+				console.log(`${prefix} ${dim}system: ${msg.subtype ?? 'unknown'}${reset}`);
+			}
+			break;
+		}
+		case 'auth_status': {
+			const msg = message as { isAuthenticating: boolean; error?: string };
+			console.log(`${prefix} ${dim}auth_status: authenticating=${msg.isAuthenticating}${msg.error ? ` error=${msg.error}` : ''}${reset}`);
+			break;
+		}
+		default:
+			console.log(`${prefix} ${dim}${message.type}${reset}`);
+	}
 }
 
 // ── API: Generate ──
@@ -550,6 +653,15 @@ ${paletteContext}
 	try {
 		let resultText = '';
 		let resultErrors: string[] = [];
+
+		if (debugMode) {
+			console.log('\x1b[36m[debug]\x1b[0m Starting generation...');
+			console.log('\x1b[36m[debug]\x1b[0m Prompt:', params.prompt);
+			console.log('\x1b[36m[debug]\x1b[0m Type:', assetType);
+			console.log('\x1b[36m[debug]\x1b[0m Model:', model ?? '(SDK default)');
+			console.log('\x1b[36m[debug]\x1b[0m Output dir:', outputDir);
+		}
+
 		for await (const message of agentSdk.query({
 			prompt: params.prompt,
 			options: {
@@ -570,10 +682,18 @@ ${paletteContext}
 				maxTurns: 20,
 				stderr: (data: string) => {
 					stderrChunks.push(data);
-					console.error('[agent-sdk stderr]', data);
+					if (debugMode) {
+						console.error('\x1b[33m[debug stderr]\x1b[0m', data.trimEnd());
+					} else {
+						console.error('[agent-sdk stderr]', data);
+					}
 				},
 			},
 		})) {
+			if (debugMode) {
+				logDebugMessage(message);
+			}
+
 			if (message.type === 'result') {
 				if (message.subtype === 'success') {
 					resultText = message.result;

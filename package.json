@@ -15,7 +15,8 @@
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "typecheck": "npm run typecheck --workspaces --if-present",
-    "clean": "npm run clean --workspaces --if-present"
+    "clean": "tsc --build --clean packages/types packages/rules packages/pixel packages/world packages/narrative services/game services/pixel-explorer",
+    "rebuild": "npm run clean && tsc --build --force packages/types packages/rules packages/pixel packages/world packages/narrative services/game services/pixel-explorer"
   },
   "engines": {
     "node": ">=20.0.0"
