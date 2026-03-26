@@ -342,7 +342,16 @@ export function renderScene(
 		if (layerType === 'tilemap' && layer.tilemap) {
 			renderTilemapLayer(ctx, layer.tilemap, registry, createCanvas, options?.targetPalette);
 		} else if (layerType === 'items' && layer.items) {
-			renderItemsLayer(ctx, layer, registry, createCanvas, time, state, options?.targetPalette, canvas.referencePpu);
+			renderItemsLayer(
+				ctx,
+				layer,
+				registry,
+				createCanvas,
+				time,
+				state,
+				options?.targetPalette,
+				canvas.referencePpu,
+			);
 		}
 
 		ctx.restore();
@@ -437,7 +446,17 @@ function renderItemsLayer(
 	}
 
 	for (const item of items) {
-		renderSceneItem(ctx, item, registry, createCanvas, time, state, itemById, targetPalette, referencePpu);
+		renderSceneItem(
+			ctx,
+			item,
+			registry,
+			createCanvas,
+			time,
+			state,
+			itemById,
+			targetPalette,
+			referencePpu,
+		);
 	}
 }
 
@@ -501,7 +520,11 @@ function renderSceneItem(
 
 	// Apply target palette remapping if requested
 	if (targetPalette) {
-		const sourceEntries = resolvePaletteEntries(sprite.palette, registry.palettes, paletteOverrides);
+		const sourceEntries = resolvePaletteEntries(
+			sprite.palette,
+			registry.palettes,
+			paletteOverrides,
+		);
 		paletteOverrides = remapPaletteEntries(sourceEntries, targetPalette.entries);
 	}
 

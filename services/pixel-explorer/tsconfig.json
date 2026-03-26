@@ -5,5 +5,9 @@
 		"rootDir": "./src"
 	},
 	"include": ["src"],
-	"references": [{ "path": "../../packages/types" }, { "path": "../../packages/pixel" }]
+	"references": [
+		{ "path": "../../packages/types" },
+		{ "path": "../../packages/agents" },
+		{ "path": "../../packages/pixel" }
+	]
 }

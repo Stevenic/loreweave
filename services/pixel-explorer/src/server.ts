@@ -8,12 +8,12 @@ import { watch } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
 import { relative, resolve } from 'node:path';
+import { CliProxyAdapter, type ProgressEvent } from '@loreweave/agents';
 import {
 	classifyFile,
 	findPixelFiles,
 	loadAllPixelFiles,
 	loadPixelFile,
-	renderSpriteToTerminalString,
 	type ValidationResult,
 	validateEmitter,
 	validatePalette,
@@ -333,102 +333,6 @@ async function apiListPalettes(res: ServerResponse, assetDir: string): Promise<v
 	sendJson(res, 200, { palettes });
 }
 
-// ── Debug Logging ──
-
-// biome-ignore lint/suspicious/noExplicitAny: debug logging casts through any for SDK message types
-function logDebugMessage(message: any): void {
-	const prefix = '\x1b[36m[debug]\x1b[0m';
-	const dim = '\x1b[2m';
-	const reset = '\x1b[0m';
-	const bold = '\x1b[1m';
-	const yellow = '\x1b[33m';
-	const green = '\x1b[32m';
-	const red = '\x1b[31m';
-
-	switch (message.type) {
-		case 'assistant': {
-			const msg = message as { type: string; message?: { model?: string; usage?: { input_tokens?: number; output_tokens?: number }; content?: Array<{ type: string; name?: string; input?: unknown; text?: string }> } };
-			const model = msg.message?.model ?? 'unknown';
-			const usage = msg.message?.usage;
-			const tokens = usage ? `${dim}(in: ${usage.input_tokens}, out: ${usage.output_tokens})${reset}` : '';
-			console.log(`${prefix} ${bold}assistant${reset} model=${yellow}${model}${reset} ${tokens}`);
-
-			// Log each content block
-			if (msg.message?.content) {
-				for (const block of msg.message.content) {
-					if (block.type === 'tool_use') {
-						const inputStr = JSON.stringify(block.input);
-						const truncated = inputStr.length > 200 ? `${inputStr.slice(0, 200)}...` : inputStr;
-						console.log(`${prefix}   ${yellow}tool_use${reset} ${bold}${block.name}${reset} ${dim}${truncated}${reset}`);
-					} else if (block.type === 'text' && block.text) {
-						const text = block.text.length > 300 ? `${block.text.slice(0, 300)}...` : block.text;
-						console.log(`${prefix}   ${dim}text: ${text}${reset}`);
-					}
-				}
-			}
-			break;
-		}
-		case 'tool_use_summary': {
-			const msg = message as { summary: string };
-			console.log(`${prefix} ${green}tool_result${reset} ${dim}${msg.summary}${reset}`);
-			break;
-		}
-		case 'tool_progress': {
-			const msg = message as { tool_name: string; elapsed_time_seconds: number };
-			console.log(`${prefix} ${dim}tool_progress${reset} ${msg.tool_name} ${dim}(${msg.elapsed_time_seconds.toFixed(1)}s)${reset}`);
-			break;
-		}
-		case 'result': {
-			const msg = message as {
-				subtype: string;
-				duration_ms: number;
-				duration_api_ms: number;
-				num_turns: number;
-				total_cost_usd: number;
-				usage?: { input_tokens?: number; output_tokens?: number };
-				modelUsage?: Record<string, { input_tokens?: number; output_tokens?: number }>;
-				errors?: string[];
-			};
-			const color = msg.subtype === 'success' ? green : red;
-			console.log(`${prefix} ${color}${bold}result: ${msg.subtype}${reset}`);
-			console.log(`${prefix}   turns: ${msg.num_turns}`);
-			console.log(`${prefix}   duration: ${(msg.duration_ms / 1000).toFixed(1)}s total, ${(msg.duration_api_ms / 1000).toFixed(1)}s API`);
-			console.log(`${prefix}   cost: $${msg.total_cost_usd.toFixed(4)}`);
-			if (msg.usage) {
-				console.log(`${prefix}   tokens: in=${msg.usage.input_tokens}, out=${msg.usage.output_tokens}`);
-			}
-			if (msg.modelUsage) {
-				for (const [modelName, usage] of Object.entries(msg.modelUsage) as [string, { input_tokens?: number; output_tokens?: number }][]) {
-					console.log(`${prefix}   ${dim}model ${modelName}: in=${usage.input_tokens}, out=${usage.output_tokens}${reset}`);
-				}
-			}
-			if (msg.errors && msg.errors.length > 0) {
-				console.log(`${prefix}   ${red}errors: ${msg.errors.join('; ')}${reset}`);
-			}
-			break;
-		}
-		case 'system': {
-			const msg = message as { subtype?: string };
-			if (msg.subtype === 'api_retry') {
-				const retry = message as { error_status?: number | null; retry_delay_ms?: number };
-				console.log(`${prefix} ${yellow}api_retry${reset} status=${retry.error_status} delay=${retry.retry_delay_ms}ms`);
-			} else if (msg.subtype === 'init') {
-				console.log(`${prefix} ${dim}system: init${reset}`);
-			} else {
-				console.log(`${prefix} ${dim}system: ${msg.subtype ?? 'unknown'}${reset}`);
-			}
-			break;
-		}
-		case 'auth_status': {
-			const msg = message as { isAuthenticating: boolean; error?: string };
-			console.log(`${prefix} ${dim}auth_status: authenticating=${msg.isAuthenticating}${msg.error ? ` error=${msg.error}` : ''}${reset}`);
-			break;
-		}
-		default:
-			console.log(`${prefix} ${dim}${message.type}${reset}`);
-	}
-}
-
 // ── API: Generate ──
 
 async function apiGenerate(res: ServerResponse, assetDir: string, body: string): Promise<void> {
@@ -443,9 +347,8 @@ async function apiGenerate(res: ServerResponse, assetDir: string, body: string):
 		return sendJson(res, 400, { error: 'Missing prompt' });
 	}
 
-	// The Agent SDK spawns Claude Code as a subprocess. On Windows, interactive
-	// credential prompts fail when running headless from a web server (exit code 11).
-	// ANTHROPIC_API_KEY bypasses the credential store and works headless.
+	// Claude CLI needs ANTHROPIC_API_KEY to avoid interactive credential prompts
+	// that fail when running headless from a web server (exit code 11 on Windows).
 	if (!process.env.ANTHROPIC_API_KEY) {
 		return sendJson(res, 500, {
 			error:
@@ -453,25 +356,6 @@ async function apiGenerate(res: ServerResponse, assetDir: string, body: string):
 				'Add it to a .env file in the working directory or set it as an environment variable.',
 		});
 	}
-
-	// Lazy-import Agent SDK
-	let agentSdk: typeof import('@anthropic-ai/claude-agent-sdk');
-	try {
-		agentSdk = await import('@anthropic-ai/claude-agent-sdk');
-	} catch {
-		return sendJson(res, 500, {
-			error:
-				'@anthropic-ai/claude-agent-sdk is not installed. Run: npm install @anthropic-ai/claude-agent-sdk',
-		});
-	}
-
-	let zod: typeof import('zod');
-	try {
-		zod = await import('zod');
-	} catch {
-		return sendJson(res, 500, { error: 'zod is not installed. Run: npm install zod' });
-	}
-	const z = zod.z;
 
 	const assetType = params.type ?? 'sprite';
 	const outputDirs: Record<string, string> = {
@@ -518,111 +402,6 @@ async function apiGenerate(res: ServerResponse, assetDir: string, body: string):
 		}
 	}
 
-	// Build MCP tools
-	const validateTool = agentSdk.tool(
-		'validate_pixel',
-		'Validate a pixel format JSON string against the spec.',
-		{
-			json: z.string().describe('The pixel format JSON string to validate'),
-			type: z
-				.enum(['sprite', 'tileset', 'tilemap', 'scene', 'palette', 'emitter'])
-				.describe('The asset type'),
-		},
-		async (args) => {
-			try {
-				const data = JSON.parse(args.json);
-				let result: ValidationResult;
-				switch (args.type) {
-					case 'sprite':
-						result = validateSprite(data as PixelSprite);
-						break;
-					case 'tileset':
-						result = validateTileset(data as PixelTileset);
-						break;
-					case 'tilemap':
-						result = validateTilemap(data as PixelTilemap);
-						break;
-					case 'scene':
-						result = validateScene(data as PixelScene);
-						break;
-					case 'palette':
-						result = validatePalette(data as PixelPalette);
-						break;
-					case 'emitter':
-						result = validateEmitter(data as PixelEmitter);
-						break;
-					default:
-						result = { valid: false, errors: [`Unknown type: ${args.type}`], warnings: [] };
-				}
-				return { content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }] };
-			} catch (err) {
-				return {
-					content: [
-						{
-							type: 'text' as const,
-							text: `JSON parse error: ${err instanceof Error ? err.message : String(err)}`,
-						},
-					],
-					isError: true,
-				};
-			}
-		},
-	);
-
-	const previewTool = agentSdk.tool(
-		'preview_pixel',
-		'Render a pixel sprite JSON to an ANSI terminal string for visual verification.',
-		{ json: z.string().describe('The pixel sprite JSON string to preview') },
-		async (args) => {
-			try {
-				const sprite = JSON.parse(args.json) as PixelSprite;
-				return { content: [{ type: 'text' as const, text: renderSpriteToTerminalString(sprite) }] };
-			} catch (err) {
-				return {
-					content: [
-						{
-							type: 'text' as const,
-							text: `Preview error: ${err instanceof Error ? err.message : String(err)}`,
-						},
-					],
-					isError: true,
-				};
-			}
-		},
-	);
-
-	const listAssetsTool = agentSdk.tool(
-		'list_assets',
-		'List all existing pixel assets in the assets directory.',
-		{ dir: z.string().default(assetDir).describe('Directory to scan') },
-		async (args) => {
-			try {
-				const files = await findPixelFiles(resolve(args.dir));
-				const summary = files
-					.map((f: { fileType: string; path: string }) => `[${f.fileType}] ${f.path}`)
-					.join('\n');
-				return { content: [{ type: 'text' as const, text: summary || 'No pixel assets found.' }] };
-			} catch (err) {
-				return {
-					content: [
-						{
-							type: 'text' as const,
-							text: `Scan error: ${err instanceof Error ? err.message : String(err)}`,
-						},
-					],
-					isError: true,
-				};
-			}
-		},
-	);
-
-	const pixelServer = agentSdk.createSdkMcpServer({
-		name: 'pixel',
-		version: '0.1.0',
-		tools: [validateTool, previewTool, listAssetsTool],
-	});
-
-	// Build system prompt
 	const formatSections: string[] = [];
 	if (llmdSchema) formatSections.push(`# Pixel Format Schema\n${llmdSchema}`);
 	if (llmGuide) formatSections.push(`# Pixel Format Generation Guide\n${llmGuide}`);
@@ -636,94 +415,131 @@ ${paletteContext}
 ## Instructions
 - Generate a ${assetType} asset based on the user's prompt
 - The output MUST be valid JSON conforming to the Pixel Format v1 spec
-- Use the validate_pixel tool to check your output before writing
-- Use the preview_pixel tool to visually verify sprites
 - Write the final .pixel.json file to: ${outputDir}
 - Use the palette provided — reference keys from the palette entries
-- For sprites: each pixel row must be exactly \`width\` characters long
+- For sprites: each pixel row must be exactly \`width\` characters long, using single-character palette keys
 - The file must include the correct \`format\` field (e.g., "pixel-sprite-v1")
-- Name the file based on the asset name with the appropriate extension`;
+- Name the file based on the asset name with the appropriate extension (e.g., warrior.sprite.pixel.json)
+- Do NOT include any explanation or commentary — just write the file
+- After writing the file, respond with the file path you created`;
 
-	// Model selection: request body > CLAUDE_MODEL env var > SDK default
+	// Model selection: request body > CLAUDE_MODEL env var > default
 	const model = params.model || process.env.CLAUDE_MODEL || undefined;
 
-	// Capture stderr from the Claude Code subprocess for diagnostics
-	const stderrChunks: string[] = [];
+	const prefix = '\x1b[36m[debug]\x1b[0m';
 
-	try {
-		let resultText = '';
-		let resultErrors: string[] = [];
+	if (debugMode) {
+		console.log(`${prefix} Starting generation...`);
+		console.log(`${prefix} Prompt: ${params.prompt}`);
+		console.log(`${prefix} Type: ${assetType}`);
+		console.log(`${prefix} Model: ${model ?? '(default)'}`);
+		console.log(`${prefix} Output dir: ${outputDir}`);
+	}
 
-		if (debugMode) {
-			console.log('\x1b[36m[debug]\x1b[0m Starting generation...');
-			console.log('\x1b[36m[debug]\x1b[0m Prompt:', params.prompt);
-			console.log('\x1b[36m[debug]\x1b[0m Type:', assetType);
-			console.log('\x1b[36m[debug]\x1b[0m Model:', model ?? '(SDK default)');
-			console.log('\x1b[36m[debug]\x1b[0m Output dir:', outputDir);
-		}
+	// Use CliProxyAdapter to spawn Claude CLI
+	const adapter = new CliProxyAdapter({
+		preset: 'claude',
+		model,
+		timeout: 5 * 60 * 1000, // 5 minutes
+	});
 
-		for await (const message of agentSdk.query({
-			prompt: params.prompt,
-			options: {
-				systemPrompt,
-				model,
-				env: process.env as Record<string, string>,
-				mcpServers: { pixel: pixelServer },
-				allowedTools: [
-					'mcp__pixel__validate_pixel',
-					'mcp__pixel__preview_pixel',
-					'mcp__pixel__list_assets',
-					'Write',
-					'Read',
-					'Glob',
-				],
-				cwd,
-				permissionMode: 'acceptEdits' as const,
-				maxTurns: 20,
-				stderr: (data: string) => {
-					stderrChunks.push(data);
-					if (debugMode) {
-						console.error('\x1b[33m[debug stderr]\x1b[0m', data.trimEnd());
-					} else {
-						console.error('[agent-sdk stderr]', data);
-					}
-				},
-			},
-		})) {
-			if (debugMode) {
-				logDebugMessage(message);
-			}
-
-			if (message.type === 'result') {
-				if (message.subtype === 'success') {
-					resultText = message.result;
-				} else {
-					// error_during_execution, error_max_turns, etc.
-					resultErrors = message.errors;
-					console.error('[agent-sdk result error]', message.subtype, message.errors);
+	const onProgress = debugMode
+		? (event: ProgressEvent) => {
+				switch (event.type) {
+					case 'start':
+						console.log(`${prefix} ${event.message}`);
+						break;
+					case 'text':
+						console.log(`${prefix} \x1b[2m${event.content.trimEnd()}\x1b[0m`);
+						break;
+					case 'error':
+						console.error(`${prefix} \x1b[31m${event.message}\x1b[0m`);
+						break;
+					case 'done':
+						console.log(`${prefix} \x1b[32m${event.message}\x1b[0m`);
+						break;
 				}
 			}
+		: undefined;
+
+	try {
+		const result = await adapter.execute(params.prompt, {
+			systemPrompt,
+			model,
+			cwd,
+			env: { ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY },
+			onProgress,
+		});
+
+		if (debugMode) {
+			const diag = result.diagnostics;
+			console.log(`${prefix} Exit code: ${diag?.exitCode}`);
+			if (diag?.stderr) {
+				console.log(`${prefix} Stderr: ${diag.stderr.slice(0, 500)}`);
+			}
+			console.log(`${prefix} Output length: ${result.output.length} chars`);
+			console.log(
+				`${prefix} Changed files: ${result.changedFiles.join(', ') || '(none detected)'}`,
+			);
 		}
 
-		if (resultErrors.length > 0) {
-			const stderrOutput = stderrChunks.join('');
+		if (!result.success) {
 			return sendJson(res, 500, {
-				error: `Generation failed: ${resultErrors.join('; ')}`,
-				details: stderrOutput || undefined,
+				error: result.diagnostics?.timedOut
+					? 'Generation timed out after 5 minutes.'
+					: `Generation failed (exit code ${result.diagnostics?.exitCode})`,
+				details: result.diagnostics?.stderr || result.output || undefined,
 			});
 		}
 
-		sendJson(res, 200, { success: true, result: resultText });
-	} catch (err) {
-		const stderrOutput = stderrChunks.join('');
-		const errMsg = err instanceof Error ? err.message : String(err);
-		console.error('[agent-sdk exception]', errMsg);
-		if (stderrOutput) {
-			console.error('[agent-sdk stderr output]', stderrOutput);
+		// Server-side validation: find newly written file(s) and validate
+		let validationInfo: { valid: boolean; errors: string[]; warnings: string[] } | undefined;
+		try {
+			const files = await findPixelFiles(outputDir);
+			if (files.length > 0) {
+				const newest = files[files.length - 1];
+				const content = await readFile(newest.path, 'utf-8');
+				const data = JSON.parse(content);
+				let valResult: ValidationResult;
+				switch (newest.fileType) {
+					case 'sprite':
+						valResult = validateSprite(data as PixelSprite);
+						break;
+					case 'tileset':
+						valResult = validateTileset(data as PixelTileset);
+						break;
+					case 'tilemap':
+						valResult = validateTilemap(data as PixelTilemap);
+						break;
+					case 'scene':
+						valResult = validateScene(data as PixelScene);
+						break;
+					case 'palette':
+						valResult = validatePalette(data as PixelPalette);
+						break;
+					case 'emitter':
+						valResult = validateEmitter(data as PixelEmitter);
+						break;
+					default:
+						valResult = { valid: true, errors: [], warnings: [] };
+				}
+				validationInfo = valResult;
+			}
+		} catch {
+			/* validation is best-effort */
 		}
+
+		sendJson(res, 200, {
+			success: true,
+			result: result.output,
+			changedFiles: result.changedFiles,
+			validation: validationInfo,
+		});
+	} catch (err) {
+		const errMsg = err instanceof Error ? err.message : String(err);
+		console.error('[generate error]', errMsg);
 		sendJson(res, 500, {
 			error: `Generation failed: ${errMsg}`,
-			details: stderrOutput || undefined,
 		});
 	}
 }

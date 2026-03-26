@@ -8,15 +8,15 @@
     "services/*"
   ],
   "scripts": {
-    "build": "tsc --build packages/types packages/rules packages/pixel packages/world packages/narrative services/game services/pixel-explorer",
+    "build": "tsc --build packages/types packages/rules packages/agents packages/pixel packages/world packages/narrative services/game services/pixel-explorer",
     "pixel-explorer": "node services/pixel-explorer/dist/index.js start",
     "dev": "npm run dev --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "typecheck": "npm run typecheck --workspaces --if-present",
-    "clean": "tsc --build --clean packages/types packages/rules packages/pixel packages/world packages/narrative services/game services/pixel-explorer",
-    "rebuild": "npm run clean && tsc --build --force packages/types packages/rules packages/pixel packages/world packages/narrative services/game services/pixel-explorer"
+    "clean": "tsc --build --clean packages/types packages/rules packages/agents packages/pixel packages/world packages/narrative services/game services/pixel-explorer",
+    "rebuild": "npm run clean && tsc --build --force packages/types packages/rules packages/agents packages/pixel packages/world packages/narrative services/game services/pixel-explorer"
   },
   "engines": {
     "node": ">=20.0.0"

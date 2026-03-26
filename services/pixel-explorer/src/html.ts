@@ -177,6 +177,24 @@ let allAssets = {};
 let totalAssets = 0;
 let currentFilter = 'all';
 let cachedAssetData = {};
+let paletteEntriesCache = {}; // palette name → entries object
+
+// ── Palette Preloader ──
+
+async function preloadPalettes() {
+	try {
+		const data = await api('/api/palettes');
+		const pals = data.palettes || [];
+		for (const p of pals) {
+			try {
+				const asset = await fetchAsset(p.path);
+				if (asset.data && asset.data.entries) {
+					paletteEntriesCache[asset.data.name || p.name] = asset.data.entries;
+				}
+			} catch { /* skip */ }
+		}
+	} catch { /* skip */ }
+}
 
 // ── Router ──
 
@@ -583,6 +601,7 @@ async function runGenerate() {
 
 function resolvePaletteEntries(data) {
 	if (typeof data.palette === 'object' && data.palette !== null && data.palette.entries) return data.palette.entries;
+	if (typeof data.palette === 'string' && paletteEntriesCache[data.palette]) return paletteEntriesCache[data.palette];
 	return null;
 }
 
@@ -604,17 +623,13 @@ function hexToRgba(hex) {
 }
 
 function decodeRleRow(row) {
+	const tokens = row.trim().split(/\\s+/);
 	let result = '';
-	let i = 0;
-	while (i < row.length) {
-		let numStr = '';
-		while (i < row.length && row[i] >= '0' && row[i] <= '9') { numStr += row[i]; i++; }
-		if (numStr && i < row.length) {
-			result += row[i].repeat(parseInt(numStr, 10));
-			i++;
-		} else if (!numStr && i < row.length) {
-			result += row[i];
-			i++;
+	for (const token of tokens) {
+		if (!token) continue;
+		const match = token.match(/^(\\d+)(.)$/);
+		if (match) {
+			result += match[2].repeat(parseInt(match[1], 10));
 		}
 	}
 	return result;
@@ -778,6 +793,6 @@ function esc(s) {
 // ── Init ──
 
 connectWs();
-onHashChange();
+preloadPalettes().then(() => onHashChange());
 `;
 }
