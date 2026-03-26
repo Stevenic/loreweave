@@ -2,7 +2,7 @@
 
 Distilled principles. Read this first every session (after SOUL.md).
 
-Last compacted: 2026-03-25
+Last compacted: 2026-03-26
 
 ---
 
@@ -38,3 +38,21 @@ AI automation must use a propose-then-approve model. Smart defaults are fine (su
 
 ### Save full data to memory, not just summaries
 Conversation history can be truncated or compressed mid-session. If you produce structured data (vote tallies, decision tables, consolidated lists), persist the full dataset to session or memory files immediately — not just a prose summary. Recovery from debug logs works but is fragile and slow.
+
+### Propose before editing specs
+Always present spec changes as a proposal with rationale before making edits. Gather explicit approval. This was the consistent pattern through the Pixel Format v1 revision — 6 rounds of proposal/analysis before a single line of spec was rewritten. The approval gate catches misalignment early.
+
+### Text is the feature for LLM-native formats
+The single-char grid model is the core LLM optimization for the Pixel Format. Every design decision must preserve it. Binary encoding, multi-char palette keys, and procedural rules were all rejected because they break this constraint. Symmetry hints, constraints, and templates all build on top of keeping the grid simple.
+
+### Competitive analysis: what to skip matters as much as what to steal
+Reviewing Aseprite and Pyxel Edit confirmed our design decisions (text-first, declarative, git-diffable) and surfaced 3 features worth adding (animation clips, named regions, tile transforms). But the features deliberately NOT taken (layer grouping, onion skinning, Lua scripting, binary serialization) were equally important — they would have pulled the format toward artist-tool complexity.
+
+### Multi-tier documentation from a single source of truth
+Full spec (~900 lines) → LLM guide (~200 lines) → LLMD schema (~130 lines, ~629 tokens). Different audiences need different levels of detail. The JSON Schema with descriptions is the machine-readable source that enables auto-generated compressed formats. Always keep the tiers in sync — the schema is downstream of the spec, and the LLMD is downstream of the schema.
+
+### Source-of-truth is .pixel.json, never .png
+No pre-rendered images on disk. Rasterize to offscreen `<canvas>` at load time, cache as `ImageBitmap`. Export `.png` only as a derived build artifact (thumbnails, marketplace, docs). This eliminates drift between source and rendered output and removes build step friction.
+
+### Advisory constraints, not hard rejections
+Generation constraints (`maxColors`, `outline`, `noIslands`) and symmetry hints are advisory — generators should respect them, validators warn, but nothing rejects. This keeps the format permissive while guiding LLMs toward quality output. Hard constraints would make the format fragile and hostile to creative exploration.

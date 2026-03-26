@@ -5,6 +5,5 @@
  * and pixel renderer into the main game loop.
  */
 console.log('LoreWeave game server starting...');
-
 export {};
 //# sourceMappingURL=index.js.map

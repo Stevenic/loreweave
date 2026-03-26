@@ -1,14 +1,16 @@
 #!/usr/bin/env node
 
 /**
- * @loreweave/resource-explorer — CLI tool for browsing Pixel Format v1 assets
+ * @loreweave/asset-explorer — CLI tool for browsing, validating, previewing,
+ * and generating Pixel Format v1 assets
  *
  * Commands:
- *   list [dir]          — List all pixel resources in a directory tree
- *   info <file>         — Show detailed info about a specific resource
- *   validate [dir]      — Validate all pixel resources
- *   preview <file>      — Render a sprite/tile preview in the terminal
- *   palette <file>      — Display palette colors
+ *   list [dir]                    — List all pixel assets in a directory tree
+ *   info <file>                   — Show detailed info about a specific asset
+ *   validate [dir]                — Validate all pixel assets
+ *   preview <file> [tile]         — Render a sprite/tile preview in the terminal
+ *   palette <file>                — Display palette colors
+ *   generate <prompt> [options]   — Generate a pixel asset using the Claude Agent SDK
  */
 
 import { readFile } from 'node:fs/promises';
@@ -385,14 +387,290 @@ function printPaletteSwatches(entries: Record<string, string>): void {
 	}
 }
 
+// ── Generate (Agent SDK) ────────────────────────────────────────────
+
+interface GenerateOptions {
+	prompt: string;
+	type: 'sprite' | 'tileset' | 'tilemap' | 'scene';
+	palette?: string;
+	output: string;
+}
+
+async function cmdGenerate(opts: GenerateOptions): Promise<void> {
+	heading(`Generating ${opts.type}: ${opts.prompt}`);
+
+	// Lazy-import Agent SDK so the CLI works without it installed for non-generate commands
+	let agentSdk: typeof import('@anthropic-ai/claude-agent-sdk');
+	try {
+		agentSdk = await import('@anthropic-ai/claude-agent-sdk');
+	} catch {
+		console.log(`${RED}Error: @anthropic-ai/claude-agent-sdk is not installed.${RESET}`);
+		console.log(`Run: npm install @anthropic-ai/claude-agent-sdk zod`);
+		process.exitCode = 1;
+		return;
+	}
+
+	let zod: typeof import('zod');
+	try {
+		zod = await import('zod');
+	} catch {
+		console.log(`${RED}Error: zod is not installed.${RESET}`);
+		console.log(`Run: npm install zod`);
+		process.exitCode = 1;
+		return;
+	}
+	const z = zod.z;
+
+	// Load the LLM guide and schema for context
+	let llmGuide = '';
+	let llmdSchema = '';
+	try {
+		llmGuide = await readFile(resolve(process.cwd(), 'pixel_format_llm_guide.md'), 'utf-8');
+	} catch {
+		console.log(
+			`${YELLOW}Warning: pixel_format_llm_guide.md not found, generation quality may be reduced${RESET}`,
+		);
+	}
+	try {
+		llmdSchema = await readFile(resolve(process.cwd(), 'pixel-schema.llmd'), 'utf-8');
+	} catch {
+		console.log(`${YELLOW}Warning: pixel-schema.llmd not found${RESET}`);
+	}
+
+	// Load palette if specified
+	let paletteContext = '';
+	if (opts.palette) {
+		try {
+			const palettePath = resolve(opts.palette);
+			paletteContext = await readFile(palettePath, 'utf-8');
+			paletteContext = `\n\nUse this palette:\n\`\`\`json\n${paletteContext}\n\`\`\``;
+		} catch {
+			console.log(`${YELLOW}Warning: Could not load palette file: ${opts.palette}${RESET}`);
+		}
+	} else {
+		// Default: load fantasy32 palette
+		try {
+			paletteContext = await readFile(
+				resolve(process.cwd(), 'assets/palettes/fantasy32.palette.pixel.json'),
+				'utf-8',
+			);
+			paletteContext = `\n\nUse this palette (fantasy32):\n\`\`\`json\n${paletteContext}\n\`\`\``;
+		} catch {
+			// No default palette available
+		}
+	}
+
+	// Build pixel MCP tools
+	const validateTool = agentSdk.tool(
+		'validate_pixel',
+		'Validate a pixel format JSON string against the spec. Returns validation result with errors and warnings.',
+		{
+			json: z.string().describe('The pixel format JSON string to validate'),
+			type: z
+				.enum(['sprite', 'tileset', 'tilemap', 'scene', 'palette', 'emitter'])
+				.describe('The asset type'),
+		},
+		async (args) => {
+			try {
+				const data = JSON.parse(args.json);
+				let result: { valid: boolean; errors: string[]; warnings: string[] };
+
+				switch (args.type) {
+					case 'sprite':
+						result = validateSprite(data as PixelSprite);
+						break;
+					case 'tileset':
+						result = validateTileset(data as PixelTileset);
+						break;
+					case 'tilemap':
+						result = validateTilemap(data as PixelTilemap);
+						break;
+					case 'scene':
+						result = validateScene(data as PixelScene);
+						break;
+					case 'palette':
+						result = validatePalette(data as PixelPalette);
+						break;
+					case 'emitter':
+						result = validateEmitter(data as PixelEmitter);
+						break;
+					default:
+						result = { valid: false, errors: [`Unknown type: ${args.type}`], warnings: [] };
+				}
+
+				return {
+					content: [
+						{
+							type: 'text' as const,
+							text: JSON.stringify(result, null, 2),
+						},
+					],
+				};
+			} catch (err) {
+				return {
+					content: [
+						{
+							type: 'text' as const,
+							text: `JSON parse error: ${err instanceof Error ? err.message : String(err)}`,
+						},
+					],
+					isError: true,
+				};
+			}
+		},
+	);
+
+	const previewTool = agentSdk.tool(
+		'preview_pixel',
+		'Render a pixel sprite JSON to an ANSI terminal string for visual verification. Only works for sprites.',
+		{
+			json: z.string().describe('The pixel sprite JSON string to preview'),
+		},
+		async (args) => {
+			try {
+				const sprite = JSON.parse(args.json) as PixelSprite;
+				const preview = renderSpriteToTerminalString(sprite);
+				return {
+					content: [{ type: 'text' as const, text: preview }],
+				};
+			} catch (err) {
+				return {
+					content: [
+						{
+							type: 'text' as const,
+							text: `Preview error: ${err instanceof Error ? err.message : String(err)}`,
+						},
+					],
+					isError: true,
+				};
+			}
+		},
+	);
+
+	const listAssetsTool = agentSdk.tool(
+		'list_assets',
+		'List all existing pixel assets in the assets directory. Returns file paths and types.',
+		{
+			dir: z.string().default('./assets').describe('Directory to scan for assets'),
+		},
+		async (args) => {
+			try {
+				const files = await findPixelFiles(resolve(args.dir));
+				const summary = files
+					.map((f: { fileType: string; path: string }) => `[${f.fileType}] ${f.path}`)
+					.join('\n');
+				return {
+					content: [{ type: 'text' as const, text: summary || 'No pixel assets found.' }],
+				};
+			} catch (err) {
+				return {
+					content: [
+						{
+							type: 'text' as const,
+							text: `Scan error: ${err instanceof Error ? err.message : String(err)}`,
+						},
+					],
+					isError: true,
+				};
+			}
+		},
+	);
+
+	const pixelServer = agentSdk.createSdkMcpServer({
+		name: 'pixel',
+		version: '0.1.0',
+		tools: [validateTool, previewTool, listAssetsTool],
+	});
+
+	// Build system prompt
+	const formatSections: string[] = [];
+	if (llmdSchema) {
+		formatSections.push(`# Pixel Format Schema\n${llmdSchema}`);
+	}
+	if (llmGuide) {
+		formatSections.push(`# Pixel Format Generation Guide\n${llmGuide}`);
+	}
+
+	const systemPrompt = `You are a pixel art asset generator for the LoreWeave game engine.
+You generate .pixel.json assets that conform to the Pixel Format v1 spec.
+
+${formatSections.join('\n\n')}
+${paletteContext}
+
+## Instructions
+- Generate a ${opts.type} asset based on the user's prompt
+- The output MUST be valid JSON conforming to the Pixel Format v1 spec
+- Use the validate_pixel tool to check your output before writing
+- Use the preview_pixel tool to visually verify sprites
+- Use the list_assets tool to see existing assets for reference
+- Write the final .pixel.json file to: ${resolve(opts.output)}
+- Use the palette provided — reference keys from the palette entries
+- For sprites: each pixel row must be exactly \`width\` characters long
+- The file must include the correct \`format\` field (e.g., "pixel-sprite-v1")
+- Name the file based on the asset name with the appropriate extension (.pixel.json, .tileset.pixel.json, etc.)`;
+
+	console.log(`  ${DIM}Type:    ${opts.type}${RESET}`);
+	console.log(`  ${DIM}Output:  ${resolve(opts.output)}${RESET}`);
+	console.log(`  ${DIM}Palette: ${opts.palette ?? 'fantasy32 (default)'}${RESET}`);
+	console.log();
+	console.log(`  ${CYAN}Generating with Claude Agent SDK...${RESET}`);
+	console.log();
+
+	try {
+		for await (const message of agentSdk.query({
+			prompt: opts.prompt,
+			options: {
+				systemPrompt,
+				mcpServers: { pixel: pixelServer },
+				allowedTools: [
+					'mcp__pixel__validate_pixel',
+					'mcp__pixel__preview_pixel',
+					'mcp__pixel__list_assets',
+					'Write',
+					'Read',
+					'Glob',
+				],
+				cwd: process.cwd(),
+				permissionMode: 'acceptEdits' as const,
+				maxTurns: 20,
+			},
+		})) {
+			// Log tool calls for visibility
+			if (message.type === 'assistant') {
+				for (const block of message.message.content) {
+					if (block.type === 'tool_use') {
+						const name = block.name.replace('mcp__pixel__', '');
+						console.log(`  ${DIM}[tool] ${name}${RESET}`);
+					}
+				}
+			}
+
+			// Print final result
+			if (message.type === 'result' && message.subtype === 'success') {
+				console.log();
+				console.log(`  ${GREEN}Generation complete!${RESET}`);
+				console.log();
+				console.log(message.result);
+			} else if (message.type === 'result' && message.subtype === 'error_during_execution') {
+				console.log();
+				console.log(`  ${RED}Generation failed during execution${RESET}`);
+				process.exitCode = 1;
+			}
+		}
+	} catch (err) {
+		console.log(`${RED}Error: ${err instanceof Error ? err.message : String(err)}${RESET}`);
+		process.exitCode = 1;
+	}
+}
+
 // ── Help ────────────────────────────────────────────────────────────
 
 function printHelp(): void {
 	console.log(`
-${BOLD}pixel-explorer${RESET} — Pixel Format v1 Resource Explorer
+${BOLD}asset-explorer${RESET} — Pixel Format v1 Asset Explorer & Generator
 
 ${BOLD}USAGE${RESET}
-  pixel-explorer <command> [options]
+  asset-explorer <command> [options]
 
 ${BOLD}COMMANDS${RESET}
   list [dir]               List all pixel resources (default: ./assets)
@@ -400,15 +678,21 @@ ${BOLD}COMMANDS${RESET}
   validate [dir]           Validate all resources (default: ./assets)
   preview <file> [tile]    Render a sprite/tile in the terminal
   palette <file>           Display palette color swatches
+  generate <prompt>        Generate a pixel asset using Claude Agent SDK
+    --type <type>          Asset type: sprite, tileset, tilemap, scene (default: sprite)
+    --palette <file>       Palette file to use (default: fantasy32)
+    --output <dir>         Output directory (default: ./assets/sprites)
 
 ${BOLD}EXAMPLES${RESET}
-  pixel-explorer list
-  pixel-explorer list ./assets/sprites
-  pixel-explorer info assets/sprites/campfire_small.pixel.json
-  pixel-explorer validate
-  pixel-explorer preview assets/sprites/torch.pixel.json
-  pixel-explorer preview assets/tilesets/forest_ground.tileset.pixel.json grass
-  pixel-explorer palette assets/palettes/fantasy16.palette.pixel.json
+  asset-explorer list
+  asset-explorer list ./assets/sprites
+  asset-explorer info assets/sprites/campfire_small.pixel.json
+  asset-explorer validate
+  asset-explorer preview assets/sprites/torch.pixel.json
+  asset-explorer preview assets/tilesets/forest_ground.tileset.pixel.json grass
+  asset-explorer palette assets/palettes/fantasy16.palette.pixel.json
+  asset-explorer generate "a 16x16 warrior sprite with sword and shield"
+  asset-explorer generate "a forest tileset with 6 ground tiles" --type tileset
 `);
 }
 
@@ -430,7 +714,7 @@ async function main(): Promise<void> {
 
 		case 'info':
 			if (!args[1]) {
-				console.log(`${RED}Usage: pixel-explorer info <file>${RESET}`);
+				console.log(`${RED}Usage: asset-explorer info <file>${RESET}`);
 				process.exitCode = 1;
 				return;
 			}
@@ -443,7 +727,7 @@ async function main(): Promise<void> {
 
 		case 'preview':
 			if (!args[1]) {
-				console.log(`${RED}Usage: pixel-explorer preview <file> [tileName]${RESET}`);
+				console.log(`${RED}Usage: asset-explorer preview <file> [tileName]${RESET}`);
 				process.exitCode = 1;
 				return;
 			}
@@ -452,12 +736,54 @@ async function main(): Promise<void> {
 
 		case 'palette':
 			if (!args[1]) {
-				console.log(`${RED}Usage: pixel-explorer palette <file>${RESET}`);
+				console.log(`${RED}Usage: asset-explorer palette <file>${RESET}`);
 				process.exitCode = 1;
 				return;
 			}
 			await cmdPalette(args[1]);
 			break;
+
+		case 'generate': {
+			if (!args[1]) {
+				console.log(
+					`${RED}Usage: asset-explorer generate <prompt> [--type sprite|tileset|tilemap|scene] [--palette <file>] [--output <dir>]${RESET}`,
+				);
+				process.exitCode = 1;
+				return;
+			}
+			// Parse flags from remaining args
+			const genOpts: GenerateOptions = { prompt: '', type: 'sprite', output: './assets/sprites' };
+			const promptParts: string[] = [];
+			let i = 1;
+			while (i < args.length) {
+				if (args[i] === '--type' && args[i + 1]) {
+					genOpts.type = args[i + 1] as GenerateOptions['type'];
+					i += 2;
+				} else if (args[i] === '--palette' && args[i + 1]) {
+					genOpts.palette = args[i + 1];
+					i += 2;
+				} else if (args[i] === '--output' && args[i + 1]) {
+					genOpts.output = args[i + 1];
+					i += 2;
+				} else {
+					promptParts.push(args[i]);
+					i++;
+				}
+			}
+			genOpts.prompt = promptParts.join(' ');
+			// Set default output dir based on type
+			if (!args.includes('--output')) {
+				const outputDirs: Record<string, string> = {
+					sprite: './assets/sprites',
+					tileset: './assets/tilesets',
+					tilemap: './assets/tilemaps',
+					scene: './assets/scenes',
+				};
+				genOpts.output = outputDirs[genOpts.type] ?? './assets';
+			}
+			await cmdGenerate(genOpts);
+			break;
+		}
 
 		default:
 			console.log(`${RED}Unknown command: ${command}${RESET}`);

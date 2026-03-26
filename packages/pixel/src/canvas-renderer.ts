@@ -342,7 +342,7 @@ export function renderScene(
 		if (layerType === 'tilemap' && layer.tilemap) {
 			renderTilemapLayer(ctx, layer.tilemap, registry, createCanvas, options?.targetPalette);
 		} else if (layerType === 'items' && layer.items) {
-			renderItemsLayer(ctx, layer, registry, createCanvas, time, state, options?.targetPalette);
+			renderItemsLayer(ctx, layer, registry, createCanvas, time, state, options?.targetPalette, canvas.referencePpu);
 		}
 
 		ctx.restore();
@@ -417,6 +417,7 @@ function renderItemsLayer(
 	time: number,
 	state?: SceneState,
 	targetPalette?: PixelPalette,
+	referencePpu?: number,
 ): void {
 	if (!layer.items) return;
 
@@ -436,7 +437,7 @@ function renderItemsLayer(
 	}
 
 	for (const item of items) {
-		renderSceneItem(ctx, item, registry, createCanvas, time, state, itemById, targetPalette);
+		renderSceneItem(ctx, item, registry, createCanvas, time, state, itemById, targetPalette, referencePpu);
 	}
 }
 
@@ -450,6 +451,7 @@ function renderSceneItem(
 	state?: SceneState,
 	itemById?: Map<string, PixelSceneItem>,
 	targetPalette?: PixelPalette,
+	referencePpu?: number,
 ): void {
 	const sprite = registry.sprites.get(item.asset);
 	if (!sprite) return;
@@ -507,11 +509,14 @@ function renderSceneItem(
 	const frameIndex = Math.floor(animProps.frame) % (sprite.frameCount ?? 1);
 	const imageData = rasterizeSpriteFrame(sprite, frameIndex, registry.palettes, paletteOverrides);
 
-	// Compute effective scale
+	// Compute PPU factor per spec §11.5
+	const ppuFactor = referencePpu ? (sprite.ppu ?? 32) / referencePpu : 1;
+
+	// Compute effective scale: canvas.scale × camera.zoom × ppuFactor × item.scale × sprite.baseScale
 	const baseScale = sprite.baseScale ?? 1;
 	const itemScale = item.scale ?? 1;
 	const animScale = animProps.scale;
-	const effectiveScale = itemScale * baseScale * animScale;
+	const effectiveScale = ppuFactor * itemScale * baseScale * animScale;
 
 	// Apply animation offsets
 	const drawX = x + animProps.offsetX;
@@ -550,6 +555,7 @@ function renderSceneItem(
 			registry,
 			createCanvas,
 			state,
+			referencePpu,
 		);
 	}
 }
@@ -584,6 +590,7 @@ function renderEmitterParticles(
 	registry: AssetRegistry,
 	createCanvas: CanvasFactory,
 	state: SceneState,
+	referencePpu?: number,
 ): void {
 	let emitter = state.emitters.get(emitterId);
 	if (!emitter) {
@@ -591,16 +598,26 @@ function renderEmitterParticles(
 		state.emitters.set(emitterId, emitter);
 	}
 
+	// Compute emitter ppuFactor per spec §11.6
+	const emitterPpuFactor = referencePpu ? (config.ppu ?? 32) / referencePpu : 1;
+
 	// Rasterize the particle sprite at frame 0
 	const particleSprite = config.sprite ? (registry.sprites.get(config.sprite) ?? sprite) : sprite;
 	const imageData = rasterizeSpriteFrame(particleSprite, 0, registry.palettes);
 
 	for (const particle of emitter.particles) {
-		drawImageData(ctx, imageData, originX + particle.x, originY + particle.y, createCanvas, {
-			scale: particle.scale,
-			rotation: particle.rotation,
-			opacity: particle.opacity,
-		});
+		drawImageData(
+			ctx,
+			imageData,
+			originX + particle.x * emitterPpuFactor,
+			originY + particle.y * emitterPpuFactor,
+			createCanvas,
+			{
+				scale: particle.scale * emitterPpuFactor,
+				rotation: particle.rotation,
+				opacity: particle.opacity,
+			},
+		);
 	}
 }
 

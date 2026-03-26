@@ -212,6 +212,7 @@ A sprite is the atomic unit of the format. Everything else references sprites. A
 | `frameCount` | `integer > 0` | `1` | Number of animation frames |
 | `clips` | `Record<string, Clip>` | — | Named animation clips |
 | `origin` | `{x, y}` | `{x: 0, y: 0}` | Anchor point for scene placement |
+| `ppu` | `integer > 0` | `32` | Pixels Per Unit — how many pixels represent one world tile |
 | `baseScale` | `number > 0` | `1.0` | Intended rendering scale for depth composition |
 | `symmetry` | `"none" \| "horizontal" \| "vertical" \| "both"` | `"none"` | Symmetry hint for generators |
 | `regions` | `Record<string, Region>` | — | Named rectangular regions |
@@ -571,7 +572,55 @@ Variants declare derived versions of a sprite without duplicating pixel data:
 
 Variants are resolved at load time. The renderer applies palette overrides before rendering, and scale overrides multiply with `baseScale`. This is the canonical mechanism for palette swaps (e.g., same potion in different colors).
 
-### 5.12 Base scale
+### 5.12 Pixels Per Unit (PPU)
+
+The `ppu` field declares how many pixels in the sprite represent one world tile (unit). This anchors pixel dimensions to world-space proportions — the "DPI for a tile-based world."
+
+**Formula:** `world size (tiles) = pixel dimensions ÷ ppu`
+
+```json
+"ppu": 32
+```
+
+| Asset Class | Pixel Size | PPU | World Size (tiles) |
+|-------------|-----------|-----|-------------------|
+| Icon / tiny object | 16×16 | 64 | 0.25 × 0.25 |
+| Potion bottle | 16×16 | 32 | 0.5 × 0.5 |
+| Person | 32×48 | 32 | 1 × 1.5 |
+| Lodge front | 64×64 | 16 | 4 × 4 |
+| Large tree | 32×64 | 32 | 1 × 2 |
+| Terrain tile | 32×32 | 8 | 4 × 4 |
+
+#### PPU reference values
+
+| PPU | Best For |
+|-----|----------|
+| 64 | Icons, tiny UI elements (sub-tile objects) |
+| **32** | **Characters, items, props (default)** |
+| 16 | Buildings, large structures |
+| 8 | Massive terrain, world map tiles |
+
+At 1× rendering, one world tile = `ppu` screen pixels. A person (32×48 at ppu 32) renders at 32×48 screen pixels — exactly 1 tile wide. A lodge (64×64 at ppu 16) renders at 64×64 screen pixels — but occupies 4×4 tiles in world space. The proportions are correct without manual scale math.
+
+#### Scene-level auto-scaling with `referencePpu`
+
+Scenes may declare a `referencePpu` on the canvas. When present, items whose sprites have a different `ppu` are automatically scaled so that world-space proportions are consistent:
+
+```
+auto-scale factor = sprite.ppu / canvas.referencePpu
+```
+
+For example, with `referencePpu: 32`:
+- A character sprite (ppu 32) renders at 1× — no adjustment
+- A lodge sprite (ppu 16) renders at 0.5× — its 64px width displays at 32px per tile, matching the character's scale
+
+This removes the need for manual `item.scale` adjustments when composing assets with different detail levels.
+
+#### LLM generation guidance
+
+Generation prompts should include `ppu` so the LLM knows the pixel budget: *"Generate a lodge front view at ppu 16, 64×64 pixels (4×4 tiles)"*. The LLM knows exactly how many pixels to use, how detailed each one should be, and how this asset relates to other assets in the world.
+
+### 5.13 Base scale
 
 The `baseScale` field declares a sprite's intended rendering size relative to other sprites:
 
@@ -583,7 +632,7 @@ If a house is drawn at 32×32 pixels and a potion at 8×8, they can both declare
 
 The effective rendering scale is: `canvas.scale × item.scale × sprite.baseScale`
 
-### 5.13 Generation metadata
+### 5.14 Generation metadata
 
 Provenance tracking for LLM-generated assets:
 
@@ -715,6 +764,13 @@ Tilesets organize multiple tile-sized assets under a common palette.
 | `tileHeight` | `integer > 0` | Height of each tile |
 | `palette` | `string \| object` | Shared palette |
 | `tiles` | `Record<string, Tile>` | Named tile entries |
+
+Optional tileset fields:
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `ppu` | `integer > 0` | `32` | Pixels Per Unit for all tiles in this tileset |
+| `meta` | `object` | — | Arbitrary metadata |
 
 Each tile provides:
 - `encoding` — `"raw"` or `"rle"`
@@ -921,6 +977,7 @@ Scenes compose sprites, tilesets, and tilemaps onto a canvas with layers, camera
 | `height` | `integer > 0` | required | Canvas height in pixels |
 | `background` | `PixelColor` | `"transparent"` | Background fill color |
 | `scale` | `number > 0` | `1` | Global scale multiplier |
+| `referencePpu` | `integer > 0` | — | Reference PPU for auto-scaling items (see §5.12) |
 | `camera` | `Camera` | — | Viewport position and zoom |
 
 #### Camera
@@ -1031,7 +1088,7 @@ Each item in an items-layer places a sprite at a position:
 
 #### Scale chain
 
-The effective scale for any item is: `canvas.scale × camera.zoom × item.scale × sprite.baseScale`
+The effective scale for any item is: `canvas.scale × camera.zoom × ppuFactor × item.scale × sprite.baseScale` (where `ppuFactor = sprite.ppu / canvas.referencePpu` if `referencePpu` is set, else `1.0`)
 
 This means:
 - A house (`baseScale: 1.0`) at `scale: 0.4` appears pushed into the distance
@@ -1139,6 +1196,7 @@ Emitters define particle effects. An emitter spawns sprite instances at a config
   "format": "pixel-emitter-v1",
   "name": "campfire_sparks",
   "sprite": "spark",
+  "ppu": 32,
   "rate": 5,
   "lifetime": { "min": 300, "max": 800 },
   "velocity": {
@@ -1180,13 +1238,28 @@ Emitter config can also be placed directly on a scene item:
 | `sprite` | `string` | — | Sprite to emit (required in standalone files; uses item's `asset` when inline) |
 | `rate` | `number` | required | Particles spawned per second |
 | `lifetime` | `{min, max}` | required | Particle lifetime range in ms |
-| `velocity` | `{x: {min, max}, y: {min, max}}` | required | Initial velocity range per axis |
-| `gravity` | `number` | `0` | Downward acceleration per frame |
+| `velocity` | `{x: {min, max}, y: {min, max}}` | required | Initial velocity range per axis (pixels/second at native ppu) |
+| `gravity` | `number` | `0` | Downward acceleration per frame (pixels/frame² at native ppu) |
 | `fadeOut` | `boolean` | `false` | Fade opacity to 0 over lifetime |
 | `scaleRange` | `{min, max}` | `{min: 1, max: 1}` | Random scale range per particle |
 | `rotationSpeed` | `{min, max}` | `{min: 0, max: 0}` | Rotation speed range (degrees/second) |
 | `maxParticles` | `integer` | `100` | Maximum simultaneous particles |
 | `burst` | `integer` | — | If set, emit this many instantly then stop |
+| `ppu` | `integer > 0` | `32` | Pixels Per Unit — anchors velocity and gravity to world space |
+
+### 10.4 Emitter PPU
+
+The `ppu` field on emitters serves the same purpose as on sprites and tilesets: it anchors spatial values (velocity, gravity) to world-space units.
+
+**Formula:** At `ppu` 32, a velocity of `y: -4.0` means the particle moves 4 pixels per second upward — or `4 / 32 = 0.125` tiles per second.
+
+When an emitter is placed in a scene with `canvas.referencePpu`, the renderer applies the same ppuFactor scaling:
+
+`ppuFactor = emitter.ppu / canvas.referencePpu`
+
+This ensures particle physics scale correctly when composed alongside sprites and tiles with different PPU values.
+
+**Inline emitters** on scene items inherit context from the scene but still use their own `ppu` for spatial values. If `ppu` is omitted, it defaults to 32.
 
 The renderer uses positional RNG seeded from scene state for deterministic particle output in multiplayer contexts.
 
@@ -1218,11 +1291,25 @@ Priority: item `palette` > item `variant` palette > sprite default palette.
 
 ### 11.5 Scale chain
 
-Effective pixel size = `canvas.scale × camera.zoom × item.scale × sprite.baseScale`
+Effective pixel size = `canvas.scale × camera.zoom × ppuFactor × item.scale × sprite.baseScale`
+
+Where `ppuFactor`:
+- If `canvas.referencePpu` is set: `ppuFactor = sprite.ppu / canvas.referencePpu`
+- Otherwise: `ppuFactor = 1.0`
+
+This ensures assets with different `ppu` values render at correct world-space proportions when composed in a scene.
 
 Integer scales produce perfect results. Fractional scales use nearest-neighbor sampling.
 
-### 11.6 Blend mode compositing
+### 11.6 Emitter spatial scaling
+
+When a scene has `canvas.referencePpu`, emitter spatial values (velocity, gravity) are scaled by the same ppuFactor:
+
+`ppuFactor = emitter.ppu / canvas.referencePpu`
+
+This ensures particle physics match the world scale regardless of the emitter's native PPU.
+
+### 11.7 Blend mode compositing
 
 Layer `blend` modes map to Canvas 2D `globalCompositeOperation`:
 
@@ -1290,6 +1377,7 @@ A v1 validator should check:
 - Every palette key used in pixel data exists in the active palette
 - `origin` coordinates are numeric if present
 - `frameCount` is positive integer if present
+- `ppu` is positive integer if present
 - `baseScale` is positive number if present
 - `regions` coordinates are within sprite bounds if present
 - `attachments` coordinates are within sprite bounds if present
@@ -1306,6 +1394,7 @@ A v1 validator should check:
 
 - `format` is `"pixel-tileset-v1"`
 - `tileWidth`, `tileHeight` are positive integers
+- `ppu` is positive integer if present
 - Every tile decodes to exactly tile size
 - All palette keys exist in the tileset's palette
 
@@ -1321,6 +1410,7 @@ A v1 validator should check:
 
 - `format` is `"pixel-scene-v1"`
 - Canvas `width`, `height` are positive integers
+- Canvas `referencePpu` is positive integer if present
 - Layers array exists and is non-empty
 - Every item has `asset` and either (`x`, `y`) or `attach`
 - Palette overrides are valid if inline
@@ -1335,6 +1425,7 @@ A v1 validator should check:
 - `lifetime.min` ≤ `lifetime.max`
 - `velocity` ranges are valid numbers
 - `maxParticles` is positive integer if present
+- `ppu` is positive integer if present
 
 ---
 
@@ -1429,6 +1520,7 @@ export type PixelSprite = {
   frameCount?: number;
   clips?: Record<string, Clip>;
   origin?: { x: number; y: number };
+  ppu?: number;
   baseScale?: number;
   symmetry?: 'none' | 'horizontal' | 'vertical' | 'both';
   regions?: Record<string, Region>;
@@ -1465,6 +1557,7 @@ export type PixelTileset = {
   tileHeight: number;
   palette: string | PixelPalette;
   tiles: Record<string, PixelTile>;
+  ppu?: number;
   meta?: Record<string, unknown>;
 };
 
@@ -1509,6 +1602,7 @@ export type EmitterConfig = {
   rotationSpeed?: NumberRange;
   maxParticles?: number;
   burst?: number;
+  ppu?: number;
 };
 
 export type PixelEmitter = {
@@ -1575,6 +1669,7 @@ export type PixelScene = {
     height: number;
     background?: PixelColor;
     scale?: number;
+    referencePpu?: number;
     camera?: Camera;
     meta?: Record<string, unknown>;
   };

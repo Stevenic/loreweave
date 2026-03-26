@@ -16,43 +16,22 @@ export declare function decodeRleRow(row: string): string;
  * Decode an array of pixel rows (raw or RLE) into canonical raw strings.
  * Validates row count matches expectedRows and each decoded row matches width.
  */
-export declare function decodePixelRows(
-	encoding: PixelEncoding,
-	rows: string[],
-	width: number,
-	expectedRows: number,
-): string[];
+export declare function decodePixelRows(encoding: PixelEncoding, rows: string[], width: number, expectedRows: number): string[];
 /**
  * Extract a single animation frame from decoded pixel rows.
  * Frames are vertically stacked: rows [frame * height .. (frame+1) * height - 1].
  */
-export declare function extractFrame(
-	decodedRows: string[],
-	height: number,
-	frameIndex: number,
-): string[];
+export declare function extractFrame(decodedRows: string[], height: number, frameIndex: number): string[];
 /**
  * Decode all frames from a sprite's pixel data.
  * Returns an array of frames, each frame being an array of decoded row strings.
  */
-export declare function decodeAllFrames(
-	encoding: PixelEncoding,
-	pixels: string[],
-	width: number,
-	height: number,
-	frameCount: number,
-): string[][];
+export declare function decodeAllFrames(encoding: PixelEncoding, pixels: string[], width: number, height: number, frameCount: number): string[][];
 /**
  * Decode a sprite layer's pixel data, accounting for animation frames.
  * Returns an array of frames for this layer.
  */
-export declare function decodeLayerFrames(
-	encoding: PixelEncoding,
-	layer: SpriteLayer,
-	width: number,
-	height: number,
-	frameCount: number,
-): string[][];
+export declare function decodeLayerFrames(encoding: PixelEncoding, layer: SpriteLayer, width: number, height: number, frameCount: number): string[][];
 /**
  * Composite multiple decoded layers into a single frame.
  * Layers are composited in array order (first = back, last = front).

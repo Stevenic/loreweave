@@ -102,6 +102,7 @@ export type PixelSprite = {
 	generation?: GenerationMeta;
 	tags?: string[];
 	collision?: Region;
+	ppu?: number;
 	meta?: Record<string, unknown>;
 };
 
@@ -129,6 +130,7 @@ export type PixelTileset = {
 	tileHeight: number;
 	palette: string | PixelPalette;
 	tiles: Record<string, PixelTile>;
+	ppu?: number;
 	meta?: Record<string, unknown>;
 };
 
@@ -173,6 +175,7 @@ export type EmitterConfig = {
 	rotationSpeed?: NumberRange;
 	maxParticles?: number;
 	burst?: number;
+	ppu?: number;
 };
 
 export type PixelEmitter = {
@@ -239,6 +242,7 @@ export type PixelScene = {
 		height: number;
 		background?: PixelColor;
 		scale?: number;
+		referencePpu?: number;
 		camera?: Camera;
 		meta?: Record<string, unknown>;
 	};

@@ -222,6 +222,10 @@ export function validateSprite(
 		errors.push(`baseScale must be a positive number, got ${sprite.baseScale}`);
 	}
 
+	if (sprite.ppu !== undefined && (!Number.isInteger(sprite.ppu) || sprite.ppu <= 0)) {
+		errors.push(`ppu must be a positive integer, got ${sprite.ppu}`);
+	}
+
 	if (sprite.origin) {
 		if (typeof sprite.origin.x !== 'number' || typeof sprite.origin.y !== 'number') {
 			errors.push('origin must have numeric x and y');
@@ -271,6 +275,10 @@ export function validateTileset(
 	}
 	if (!Number.isInteger(tileset.tileHeight) || tileset.tileHeight <= 0) {
 		errors.push(`tileHeight must be a positive integer, got ${tileset.tileHeight}`);
+	}
+
+	if (tileset.ppu !== undefined && (!Number.isInteger(tileset.ppu) || tileset.ppu <= 0)) {
+		errors.push(`ppu must be a positive integer, got ${tileset.ppu}`);
 	}
 
 	if (errors.length > 0) return fail(...errors);
@@ -395,6 +403,12 @@ export function validateScene(scene: PixelScene): ValidationResult {
 	if (!Array.isArray(scene.layers) || scene.layers.length === 0) {
 		errors.push('layers must be a non-empty array');
 	}
+	if (
+		scene.canvas?.referencePpu !== undefined &&
+		(!Number.isInteger(scene.canvas.referencePpu) || scene.canvas.referencePpu <= 0)
+	) {
+		errors.push(`canvas.referencePpu must be a positive integer, got ${scene.canvas.referencePpu}`);
+	}
 
 	if (errors.length > 0) return fail(...errors);
 
@@ -510,6 +524,9 @@ export function validateEmitterConfig(config: EmitterConfig): ValidationResult {
 		(!Number.isInteger(config.maxParticles) || config.maxParticles <= 0)
 	) {
 		errors.push(`maxParticles must be a positive integer, got ${config.maxParticles}`);
+	}
+	if (config.ppu !== undefined && (!Number.isInteger(config.ppu) || config.ppu <= 0)) {
+		errors.push(`ppu must be a positive integer, got ${config.ppu}`);
 	}
 
 	return errors.length > 0 ? fail(...errors) : ok();

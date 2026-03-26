@@ -124,6 +124,7 @@ Playback: `"loop"`, `"once"`, `"pingpong"`. Easing: `"step"`, `"linear"`, `"ease
 
 ```json
 {
+  "ppu": 32,
   "symmetry": "horizontal",
   "origin": { "x": 4, "y": 8 },
   "baseScale": 1.0,
@@ -148,6 +149,7 @@ Playback: `"loop"`, `"once"`, `"pingpong"`. Easing: `"step"`, `"linear"`, `"ease
 
 | Field | Purpose |
 |-------|---------|
+| `ppu` | Pixels Per Unit — how many pixels = 1 world tile. Default 32. Use 16 for buildings, 64 for icons |
 | `symmetry` | `"horizontal"` / `"vertical"` / `"both"` — generate half, mirror the rest |
 | `origin` | Anchor point for scene placement |
 | `baseScale` | Reference size for depth composition |
@@ -290,10 +292,11 @@ Text IS the map. Legend maps chars to tile names (or tile + transform).
 ## Common generation tasks
 
 ### Create a sprite
-1. Define a palette (inline or reference a shared one)
-2. Pick encoding (`raw` for ≤16×16, `rle` for larger)
-3. Draw the pixel grid — each char = one palette key, `0` = transparent
-4. Add `constraints` to self-check: `maxColors`, `outline`, `noIslands`
+1. Choose dimensions based on `ppu`: characters at ppu 32 (32×48), buildings at ppu 16 (64×64), items at ppu 32 (16×16), icons at ppu 64 (16×16)
+2. Define a palette (inline or reference a shared one)
+3. Pick encoding (`raw` for ≤16×16, `rle` for larger)
+4. Draw the pixel grid — each char = one palette key, `0` = transparent
+5. Add `constraints` to self-check: `maxColors`, `outline`, `noIslands`
 
 ### Palette swap a sprite
 Add a `variants` entry with only the changed palette keys:

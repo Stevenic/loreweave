@@ -11,20 +11,20 @@ Required properties marked with `!`.
 :Keyframe.properties=time!, value!
 :Track.properties=property!, keyframes!, easing
 :Clip.properties=duration!, playback, tracks!
-:PixelSprite.properties=format!, name!, width!, height!, palette!, encoding!, pixels, layers, frameCount, clips, origin, baseScale, symmetry, regions, attachments, constraints, variants, generation, tags, collision, meta
+:PixelSprite.properties=format!, name!, width!, height!, palette!, encoding!, pixels, layers, frameCount, clips, origin, baseScale, symmetry, regions, attachments, constraints, variants, generation, tags, collision, ppu, meta
 :TileConnectivity.properties=north, east, south, west
 :PixelTile.properties=encoding!, pixels!, connectivity, tags, meta
-:PixelTileset.properties=format!, name!, tileWidth!, tileHeight!, palette!, tiles!, meta
+:PixelTileset.properties=format!, name!, tileWidth!, tileHeight!, palette!, tiles!, ppu, meta
 :TileRef.properties=tile!, flipX, flipY, rotate
 :PixelTilemap.properties=format!, name!, tileset!, gridWidth!, gridHeight!, legend!, grid!, meta
 :NumberRange.properties=min!, max!
-:EmitterConfig.properties=sprite, rate!, lifetime!, velocity!, gravity, fadeOut, scaleRange, rotationSpeed, maxParticles, burst
-:PixelEmitter.properties=format!, name!, sprite, rate!, lifetime!, velocity!, gravity, fadeOut, scaleRange, rotationSpeed, maxParticles, burst
+:EmitterConfig.properties=sprite, rate!, lifetime!, velocity!, gravity, fadeOut, scaleRange, rotationSpeed, maxParticles, burst, ppu
+:PixelEmitter.properties=format!, name!, sprite, rate!, lifetime!, velocity!, gravity, fadeOut, scaleRange, rotationSpeed, maxParticles, burst, ppu
 :Camera.properties=x!, y!, zoom
 :AttachRef.properties=parent!, point!
 :PixelSceneItem.properties=asset!, x, y, id, scale, opacity, flipX, flipY, rotation, z, palette, variant, clip, attach, emitter, groundY, tags, if, meta
 :PixelSceneLayer.properties=name!, type, items, tilemap, opacity, blend, scrollFactor, sort, offsetX, offsetY, visible
-:PixelScene.properties=format!, name!, canvas!, layers!, meta
+:PixelScene.properties=format!, name!, canvas{width!, height!, background, scale, referencePpu, camera, meta}!, layers!, meta
 :PixelPalette.properties=format!, name!, entries!, aliases, ramps
 @Properties
 -entries (object): 
@@ -123,4 +123,6 @@ Required properties marked with `!`.
 -offsetX (number): Default: 0
 -offsetY (number): Default: 0
 -visible (boolean): Default: true
--canvas (object): 
+-ppu (integer): Pixels Per Unit — how many pixels represent one world tile. Default: 32
+-referencePpu (integer): Reference PPU for auto-scaling items with different ppu values
+-canvas (object):

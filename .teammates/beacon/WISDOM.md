@@ -2,7 +2,7 @@
 
 Distilled principles. Read this first every session (after SOUL.md).
 
-Last compacted: 2026-03-25
+Last compacted: 2026-03-26
 
 ---
 
@@ -32,3 +32,18 @@ Validate external input (player actions, asset files, network messages) rigorous
 
 ### Specs gate implementation, not the reverse
 Both loreweave_spec.md and pixel_v_1_spec.md are mature enough to code against directly. Implementation should conform to specs — if a spec is unclear or wrong, escalate to Scribe rather than coding around it. Never let implementation decisions quietly diverge from the spec.
+
+### Use tsc --build for monorepo build ordering
+`npm run build --workspaces` runs in parallel/arbitrary order, breaking packages that depend on other packages. `tsc --build` respects project references and builds in dependency order. Always add new workspaces to the root build script in dependency-first position.
+
+### TypeScript 6 strict Object.entries returns unknown
+`Object.entries()` returns `[string, unknown][]` in TS6 strict mode, even on typed Records. Always cast: `Object.entries(obj) as [string, MyType][]`. This affects every `for...of` destructuring over Record entries.
+
+### Inject factories, don't assume globals
+The canvas renderer accepts a `CanvasFactory` injection rather than importing browser globals. This makes renderers testable and portable (Node, browser, headless). Apply this pattern to any subsystem that depends on environment-specific APIs.
+
+### Lazy-import optional heavy dependencies
+The asset-explorer dynamically imports Agent SDK and Zod so that non-generate commands work without them installed. Use this pattern for any CLI command that depends on large or optional packages — keeps the core fast and the install footprint small.
+
+### Seeded PRNG for deterministic particle effects
+The emitter uses xorshift32 with a configurable seed so identical input produces identical particle output. Any system that introduces randomness (dice, particles, procedural generation) must accept a seed parameter to preserve determinism.

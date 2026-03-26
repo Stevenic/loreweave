@@ -292,6 +292,7 @@
         "generation": { "$ref": "#/$defs/GenerationMeta" },
         "tags": { "type": "array", "items": { "type": "string" } },
         "collision": { "$ref": "#/$defs/Region" },
+        "ppu": { "type": "integer", "minimum": 1, "default": 32, "description": "Pixels Per Unit — how many pixels represent one world tile." },
         "meta": { "type": "object", "description": "Arbitrary metadata." }
       },
       "additionalProperties": false
@@ -338,6 +339,7 @@
           "additionalProperties": { "$ref": "#/$defs/PixelTile" },
           "minProperties": 1
         },
+        "ppu": { "type": "integer", "minimum": 1, "default": 32, "description": "Pixels Per Unit for all tiles in this tileset." },
         "meta": { "type": "object" }
       },
       "additionalProperties": false
@@ -422,7 +424,8 @@
         "scaleRange": { "$ref": "#/$defs/NumberRange" },
         "rotationSpeed": { "$ref": "#/$defs/NumberRange" },
         "maxParticles": { "type": "integer", "minimum": 1 },
-        "burst": { "type": "integer", "minimum": 1, "description": "Emit this many at once, then stop." }
+        "burst": { "type": "integer", "minimum": 1, "description": "Emit this many at once, then stop." },
+        "ppu": { "type": "integer", "minimum": 1, "default": 32, "description": "Pixels Per Unit — anchors velocity and gravity to world space." }
       },
       "additionalProperties": false
     },
@@ -451,7 +454,8 @@
         "scaleRange": { "$ref": "#/$defs/NumberRange" },
         "rotationSpeed": { "$ref": "#/$defs/NumberRange" },
         "maxParticles": { "type": "integer", "minimum": 1 },
-        "burst": { "type": "integer", "minimum": 1 }
+        "burst": { "type": "integer", "minimum": 1 },
+        "ppu": { "type": "integer", "minimum": 1, "default": 32 }
       },
       "additionalProperties": false
     },
@@ -561,6 +565,7 @@
             "height": { "type": "integer", "minimum": 1 },
             "background": { "$ref": "#/$defs/PixelColor", "default": "transparent" },
             "scale": { "type": "number", "exclusiveMinimum": 0, "default": 1 },
+            "referencePpu": { "type": "integer", "minimum": 1, "description": "Reference PPU for auto-scaling items with different ppu values." },
             "camera": { "$ref": "#/$defs/Camera" },
             "meta": { "type": "object" }
           },
