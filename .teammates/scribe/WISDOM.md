@@ -80,3 +80,6 @@ No cached descriptions. LocationRecords + event logs + vocabulary tables persist
 
 ### Consolidation scales — persist the full dataset
 When consolidating ideas, votes, or proposals from multiple sources (teammates, brainstorms), the full numbered list is the artifact. 97 ideas across 10 categories from 6 teammates was the UX brainstorm output. Always persist the complete dataset to a file, not just a summary — it becomes the reference for voting, prioritization, and decision-making.
+
+### Tier entities by persistence and authoring cost
+Ephemeral entities (creatures) cost nothing — generated per-encounter, no state. Persistent entities (residents) cost an archetype lookup — generated once from templates, maintain state. Authored entities (named characters) cost hand-writing time — unique identity, full backstory. This three-tier model (ephemeral → persistent → authored) applies to NPCs, items, and locations alike. Match entity investment to narrative importance.

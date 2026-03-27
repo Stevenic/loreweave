@@ -45,8 +45,8 @@ The canvas renderer accepts a `CanvasFactory` injection rather than importing br
 ### Lazy-import optional heavy dependencies
 The pixel-explorer dynamically imports heavy dependencies so core commands work without them installed. Use this pattern for any CLI command that depends on large or optional packages — keeps the core fast and the install footprint small.
 
-### Seeded PRNG for deterministic particle effects
-The emitter uses xorshift32 with a configurable seed so identical input produces identical particle output. Any system that introduces randomness (dice, particles, procedural generation) must accept a seed parameter to preserve determinism.
+### Seeded PRNG for deterministic randomness
+Any system that introduces randomness (dice, particles, procedural generation, weather, name generation) must accept a seed parameter to preserve determinism. The emitter uses xorshift32; the world uses a seeded RNG class. Identical seed = identical output, always.
 
 ### CLI spawn over Agent SDK on Windows
 The Agent SDK (`@anthropic-ai/claude-agent-sdk`) deadlocks on Windows due to stdio pipe contention with in-process MCP tools. Use `@loreweave/agents` CliProxyAdapter instead — spawns `claude` CLI directly, proven pattern from @teammates. The `AgentAdapter` interface abstracts over CLI spawn vs future API adapters.
@@ -68,3 +68,21 @@ The pixel-explorer uses HTTP 202 for generation requests, runs work in backgroun
 
 ### Root tsconfig needs outDir and empty files array
 Without `"outDir": "./dist"` and `"files": []`, an accidental `tsc` invocation against the root config compiles all `.ts` files in the tree and drops `.js` next to them — polluting `src/` dirs and causing `tsc --build` to no-op on subsequent builds. Both guards are essential.
+
+### Managed assets: folder-per-asset with metadata
+Assets are stored as `assets/<name>/asset.json` (metadata, tags, custom colors, references) + `<viewname>.pixel.json` view files. This enables multi-view assets (front/back/attack), asset-level custom colors, and composition via references. Migration module auto-converts legacy flat files on startup.
+
+### Auto-sizing via archetype inference
+Users never specify pixel dimensions directly. The sizing system infers a sprite archetype from keywords in the prompt (12 archetypes), then applies dimensions based on the selected detail level (PPU 16/32/64). This keeps the generation interface simple while producing correctly-sized assets.
+
+### Progressive palette supersets for render-time remapping
+Palettes form a strict superset chain (fantasy16 → 32 → 64 → 72). Any asset authored at a lower palette depth can be rendered with a higher palette unchanged. Render-time remapping via `targetPalette` option maps colors to the nearest match in the target palette using color distance.
+
+### WorldConfig: per-world JSON data files
+Each world has a `worlds/<name>/config/` directory with JSON files (world, persona, encounters, creatures, stat-tiers, etc.) loaded by `loadWorldConfig()`. This separates world-specific data from engine code, making worlds swappable without code changes.
+
+### Noise-based overlay layers for semantic terrain state
+The Weave overlay demonstrates adding a semantic state layer (stable/thin/frayed/unraveled) on top of terrain using noise thresholds. Structures can force-override values (villages → stable). This pattern generalizes to any per-tile state that varies spatially — corruption, temperature, political control.
+
+### Loader functions merge multiple config sources
+The creature loader merges `creatures.json` + `high_cr_creatures.json`; the vocab loader reads subdirectories with wrapper object handling. When config grows beyond a single file, split by domain and merge in the loader — keeps individual files manageable and domain-focused.
