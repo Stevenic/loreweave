@@ -1,0 +1,39 @@
+{
+  "id": "dungeon_abandoned_mine",
+  "type": "location",
+  "category": "dungeon",
+  "name": "Abandoned Mine",
+  "description": "Timber-shored tunnels and rusted cart tracks. The vein ran out, or the miners found something they shouldn't have.",
+  "tier": ["hamlet", "village", "town"],
+  "biomes": ["hills", "mountain", "forest"],
+  "features": {
+    "required": ["mine_cart_tracks", "timber_shoring", "pick_marks_on_walls"],
+    "common": ["flooded_lower_shaft", "collapsed_tunnel", "ventilation_shaft", "ore_sorting_area"],
+    "rare": ["underground_lake", "trapped_section", "breached_natural_cavern", "forgotten_shrine"]
+  },
+  "objects": {
+    "required": ["rusted_tools", "rotting_timbers"],
+    "common": ["mine_cart", "broken_lanterns", "old_rope", "surveyor_marks"],
+    "rare": ["unfinished_letter_from_miner", "raw_ore_samples", "explosive_charges", "foreman_logbook"]
+  },
+  "npcs": {
+    "required": [],
+    "common": ["rat_swarm", "cave_spider"],
+    "rare": ["kobold_squatters", "ghost_of_miner", "trapped_prospector", "ooze"]
+  },
+  "exits": {
+    "required": ["mine_entrance"],
+    "common": ["side_shaft", "vertical_shaft_with_ladder"],
+    "rare": ["breached_wall_to_cavern", "flooded_passage", "secret_smuggler_tunnel"]
+  },
+  "atmosphere": {
+    "sounds": ["groaning_timbers", "dripping_water", "distant_rockfall", "wind_through_shafts"],
+    "smells": ["stale_air", "rust", "damp_earth", "old_black_powder"],
+    "lighting": ["pitch_dark", "dusty_shaft_of_light", "eerie_mineral_glow"]
+  },
+  "layout": {
+    "footprint": "large",
+    "floors": [-1, -2, -3],
+    "shape": ["branching_tunnels", "spiral_descent", "grid_shafts"]
+  }
+}

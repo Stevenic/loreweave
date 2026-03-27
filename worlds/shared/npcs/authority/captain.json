@@ -1,0 +1,42 @@
+{
+  "id": "guard_captain",
+  "type": "npc",
+  "category": "authority",
+  "name": "Guard Captain",
+  "description": "Commands the local watch. The weight of every crime, threat, and staffing decision sits on their shoulders.",
+  "stats_tier": "expert",
+  "traits": {
+    "common": ["authoritative", "strategic", "loyal", "overburdened"],
+    "rare": ["corrupt", "haunted_by_past_failure", "secretly_soft", "political_pawn"]
+  },
+  "skills": ["athletics", "perception", "intimidation", "insight"],
+  "inventory": {
+    "required": ["weapon", "armor", "badge_of_rank"],
+    "common": ["patrol_schedule", "signal_horn", "key_ring"],
+    "rare": ["blackmail_evidence", "secret_orders", "personal_flask"]
+  },
+  "knowledge": {
+    "always": ["security_threats", "guard_roster", "settlement_defenses"],
+    "sometimes": ["criminal_networks", "political_tensions", "military_intelligence"],
+    "rarely": ["assassination_plots", "treasonous_officials", "impending_attack_details"]
+  },
+  "dialogue_hooks": [
+    "asking pointed questions about your business in town",
+    "recruiting help for a problem that's beyond the watch's ability",
+    "sharing concern about rising crime or border tensions",
+    "disagreeing with a lord's priorities for defense spending",
+    "requesting discretion about a sensitive matter"
+  ],
+  "voice_patterns": [
+    "clipped and commanding — expects to be obeyed",
+    "tired authority — the job has worn them down",
+    "carefully political — watches every word",
+    "old soldier — treats you with respect if you've earned it"
+  ],
+  "schedule": {
+    "morning": "morning briefing, reviewing reports",
+    "afternoon": "inspection rounds, meetings with officials",
+    "evening": "patrol or at the watch house",
+    "night": "on call — sleeps light at the barracks"
+  }
+}

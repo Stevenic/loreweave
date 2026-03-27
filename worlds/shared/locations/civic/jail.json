@@ -1,0 +1,39 @@
+{
+  "id": "civic_jail",
+  "type": "location",
+  "category": "civic",
+  "name": "Jail / Stockade",
+  "description": "Where the law keeps what it catches. Could be an iron-barred room behind the guard post or a proper stone cellblock. Depends on how much trouble the town expects.",
+  "tier": ["village", "town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["cells", "guard_desk", "heavy_door"],
+    "common": ["weapon_confiscation_shelf", "key_rack", "interrogation_area", "privy_bucket"],
+    "rare": ["oubliette", "execution_yard", "evidence_room", "secret_tunnel_from_old_regime"]
+  },
+  "objects": {
+    "required": ["iron_bars", "manacles", "keys"],
+    "common": ["prisoner_log", "confiscated_weapons", "stool_for_guard", "water_pitcher"],
+    "rare": ["hidden_lockpick_in_wall", "confession_letter", "smuggled_note", "escape_map_scratched_in_stone"]
+  },
+  "npcs": {
+    "required": ["jailer"],
+    "common": ["guard", "prisoner"],
+    "rare": ["wrongly_accused", "dangerous_prisoner", "corrupt_guard", "visiting_magistrate"]
+  },
+  "exits": {
+    "required": ["main_door"],
+    "common": ["guard_room", "yard"],
+    "rare": ["sewer_grate_in_cell", "secret_passage", "roof_hatch"]
+  },
+  "atmosphere": {
+    "sounds": ["keys_jangling", "distant_moaning", "iron_on_stone", "dripping"],
+    "smells": ["unwashed_bodies", "damp_stone", "rust", "despair"],
+    "lighting": ["dim", "barred_window_shaft", "torchlit_corridor"]
+  },
+  "layout": {
+    "footprint": "medium",
+    "floors": [-1, 1],
+    "shape": ["rectangular", "basement_cells"]
+  }
+}

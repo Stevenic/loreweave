@@ -1,0 +1,39 @@
+{
+  "id": "tavern_brewhouse",
+  "type": "location",
+  "category": "tavern",
+  "name": "Specialty Brewhouse",
+  "description": "Part brewery, part taproom. The owner is as proud of their craft as any swordsmith. The air is thick with malt and experimentation.",
+  "tier": ["village", "town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["bar_counter", "brewing_vats_visible", "tasting_board"],
+    "common": ["grain_stores", "fermentation_room", "chalkboard_menu", "seating"],
+    "rare": ["experimental_lab", "barrel_aging_cellar", "herb_garden", "competition_trophies"]
+  },
+  "objects": {
+    "required": ["sample_glasses", "brew_log", "barrels_on_tap"],
+    "common": ["grain_sacks", "hops_bundles", "measuring_tools", "tasting_notes"],
+    "rare": ["secret_recipe_book", "enchanted_yeast_culture", "patron_mug_wall"]
+  },
+  "npcs": {
+    "required": ["brewmaster"],
+    "common": ["apprentice_brewer", "tasting_patron", "delivery_driver"],
+    "rare": ["rival_brewer", "ingredient_supplier", "drunk_critic"]
+  },
+  "exits": {
+    "required": ["front_door"],
+    "common": ["brewery_floor", "back_loading_door"],
+    "rare": ["cellar_stairs", "roof_garden"]
+  },
+  "atmosphere": {
+    "sounds": ["bubbling_fermentation", "clinking_glasses", "barrel_rolling", "laughter"],
+    "smells": ["malt", "yeast", "hops", "caramel_sweetness"],
+    "lighting": ["warm_amber", "steam_diffused", "copper_gleam"]
+  },
+  "layout": {
+    "footprint": "large",
+    "floors": [1, 2],
+    "shape": ["rectangular", "open_plan"]
+  }
+}

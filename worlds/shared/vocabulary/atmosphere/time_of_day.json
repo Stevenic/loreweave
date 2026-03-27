@@ -1,0 +1,55 @@
+{
+  "id": "time_of_day_descriptors",
+  "type": "vocabulary",
+  "description": "Sensory descriptors by time of day. Layered with biome descriptors for rich LLM context.",
+  "times": {
+    "dawn": {
+      "sky": ["pale grey", "pink at the horizon", "first light", "stars fading"],
+      "light": ["grey half-light", "long shadows", "cold clarity"],
+      "sounds": ["first birdsong", "roosters", "dew dripping"],
+      "atmosphere": ["still", "fresh", "expectant", "quiet"]
+    },
+    "morning": {
+      "sky": ["brightening", "scattered clouds", "clear blue"],
+      "light": ["warm and angled", "golden", "casting long shadows"],
+      "sounds": ["birds active", "people starting work", "animals stirring"],
+      "atmosphere": ["energetic", "crisp", "busy", "hopeful"]
+    },
+    "midday": {
+      "sky": ["bright overhead", "sun at zenith", "glare"],
+      "light": ["harsh", "flat", "no shadows", "bleaching"],
+      "sounds": ["insects buzzing", "heat haze humming", "activity at peak"],
+      "atmosphere": ["hot", "bright", "exposed", "productive"]
+    },
+    "afternoon": {
+      "sky": ["sun descending", "clouds building", "golden"],
+      "light": ["warm and softening", "amber", "lengthening shadows"],
+      "sounds": ["quieter", "wind picking up", "work winding down"],
+      "atmosphere": ["mellowing", "warm", "tired", "settled"]
+    },
+    "dusk": {
+      "sky": ["orange and purple", "sun on horizon", "first stars"],
+      "light": ["fading fast", "red-gold", "long dramatic shadows"],
+      "sounds": ["evening birds", "bats emerging", "fires being lit"],
+      "atmosphere": ["transitional", "beautiful", "melancholy", "watchful"]
+    },
+    "evening": {
+      "sky": ["dark blue", "stars visible", "moon rising"],
+      "light": ["firelight", "lamp-lit", "warm interiors against dark outside"],
+      "sounds": ["conversation", "music from tavern", "night insects beginning"],
+      "atmosphere": ["social", "cozy_indoors", "dangerous_outdoors", "winding down"]
+    },
+    "midnight": {
+      "sky": ["full dark", "stars bright", "moon at height or absent"],
+      "light": ["moonlight only", "pitch dark", "starlight on water"],
+      "sounds": ["owls", "distant wolves", "creaking", "silence"],
+      "atmosphere": ["quiet", "eerie", "still", "anything could happen"]
+    },
+    "small_hours": {
+      "sky": ["darkest before dawn", "no moon", "constellations shifted"],
+      "light": ["almost none", "eyes adjusted", "shapes not colors"],
+      "sounds": ["deep silence", "occasional animal", "your own breathing"],
+      "atmosphere": ["lonely", "liminal", "haunted", "exhausting"]
+    }
+  }
+}

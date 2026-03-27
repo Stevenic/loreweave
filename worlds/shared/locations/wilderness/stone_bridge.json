@@ -1,0 +1,39 @@
+{
+  "id": "wilderness_bridge",
+  "type": "location",
+  "category": "wilderness",
+  "name": "Stone Bridge",
+  "description": "A single-arch bridge over a ravine or river. Someone built this a long time ago, and traffic has worn the stones smooth.",
+  "tier": ["hamlet", "village", "town"],
+  "biomes": ["forest", "plains", "hills", "mountains"],
+  "features": {
+    "required": ["stone_arch", "road_surface", "low_walls"],
+    "common": ["waymarker", "carved_keystone", "mossy_railings", "water_below"],
+    "rare": ["toll_booth_remains", "troll_scratches", "shrine_niche", "hidden_passage_under"]
+  },
+  "objects": {
+    "required": ["worn_flagstones"],
+    "common": ["carved_milestone", "prayer_ribbons_on_rail", "discarded_apple_core"],
+    "rare": ["tossed_coin_in_water", "blood_stain", "scratched_warning"]
+  },
+  "npcs": {
+    "required": [],
+    "common": ["traveler", "merchant_with_cart"],
+    "rare": ["troll", "toll_collector", "bridge_ghost", "ambush_party"]
+  },
+  "exits": {
+    "required": ["road_north", "road_south"],
+    "common": ["path_down_to_water"],
+    "rare": ["under_bridge", "hidden_stairs"]
+  },
+  "atmosphere": {
+    "sounds": ["water_below", "wind_over_stone", "cart_wheels", "boots_on_stone"],
+    "smells": ["river_air", "moss", "road_dust"],
+    "lighting": ["open_sky", "shadow_under_arch", "mist_rising"]
+  },
+  "layout": {
+    "footprint": "small",
+    "floors": [0],
+    "shape": ["linear"]
+  }
+}

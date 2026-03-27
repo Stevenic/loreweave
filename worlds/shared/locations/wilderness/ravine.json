@@ -1,0 +1,39 @@
+{
+  "id": "wilderness_ravine",
+  "type": "location",
+  "category": "wilderness",
+  "name": "Ravine",
+  "description": "The earth split open here. The bottom is further down than it looks, and the only way across is older than it should be.",
+  "tier": ["hamlet", "village", "town"],
+  "biomes": ["hills", "mountain", "forest", "plains"],
+  "features": {
+    "required": ["sheer_walls", "narrow_gap", "bottom_far_below"],
+    "common": ["rope_bridge", "stream_at_bottom", "ledge_path", "nesting_birds_on_walls"],
+    "rare": ["ancient_stone_bridge", "cave_in_wall", "something_glinting_at_bottom", "echo_that_answers_differently"]
+  },
+  "objects": {
+    "required": ["loose_scree", "exposed_rock_layers"],
+    "common": ["old_pitons", "frayed_rope", "animal_bones_at_bottom"],
+    "rare": ["fossil_in_wall", "abandoned_climbing_gear", "hidden_cache_on_ledge"]
+  },
+  "npcs": {
+    "required": [],
+    "common": ["eagle_or_hawk"],
+    "rare": ["troll_under_bridge", "hermit_in_wall_cave", "bandits_controlling_crossing", "something_climbing_up"]
+  },
+  "exits": {
+    "required": ["path_along_edge"],
+    "common": ["crossing_bridge", "scramble_down"],
+    "rare": ["cave_entrance_in_wall", "leap_across_narrow_point"]
+  },
+  "atmosphere": {
+    "sounds": ["wind_howling_through_gap", "loose_stones_falling", "distant_water", "echo"],
+    "smells": ["cold_air_from_below", "mineral_dust", "damp_stone"],
+    "lighting": ["bright_above_shadow_below", "slanting_light_on_one_wall", "deep_shadow_at_bottom"]
+  },
+  "layout": {
+    "footprint": "large",
+    "floors": [1, -1],
+    "shape": ["linear_crack", "winding_gorge"]
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "id": "shop_tanner",
+  "type": "location",
+  "category": "shop",
+  "name": "Tanner & Leatherworker",
+  "description": "Kept downwind for good reason. The tanner turns raw hides into saddles, armor, boots, and belts — essential work that nobody wants next door.",
+  "tier": ["village", "town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["tanning_vats", "workbench", "hide_stretching_frames"],
+    "common": ["drying_racks", "tool_wall", "finished_goods_display", "storage_shed"],
+    "rare": ["exotic_hide_collection", "secret_tanning_recipe", "underground_spring"]
+  },
+  "objects": {
+    "required": ["hides", "tanning_solution", "leather_tools"],
+    "common": ["boots_in_progress", "saddle_form", "scraping_knife", "wax_pot"],
+    "rare": ["dragon_scale_sample", "enchanted_leather_piece", "guild_certification"]
+  },
+  "npcs": {
+    "required": ["tanner"],
+    "common": ["apprentice", "hunter_selling_hides"],
+    "rare": ["exotic_hide_trader", "armorer_placing_order", "desperate_cobbler"]
+  },
+  "exits": {
+    "required": ["front_door"],
+    "common": ["yard_with_vats", "storage_shed"],
+    "rare": ["cellar", "path_to_stream"]
+  },
+  "atmosphere": {
+    "sounds": ["scraping_hide", "splashing_vats", "hammering", "dogs_nearby"],
+    "smells": ["acrid_tannin", "wet_leather", "lime", "animal_musk"],
+    "lighting": ["open_air", "natural_light", "shaded_yard"]
+  },
+  "layout": {
+    "footprint": "medium",
+    "floors": [1],
+    "shape": ["L-shaped", "compound"]
+  }
+}

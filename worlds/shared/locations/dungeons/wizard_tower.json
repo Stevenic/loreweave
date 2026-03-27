@@ -1,0 +1,39 @@
+{
+  "id": "dungeon_wizard_tower",
+  "type": "location",
+  "category": "dungeon",
+  "name": "Wizard's Tower",
+  "description": "A vertical dungeon. Each floor was a different obsession of its builder. The wards are failing, but some enchantments linger.",
+  "tier": ["village", "town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["spiral_staircase", "arcane_laboratory", "library_floor"],
+    "common": ["scrying_chamber", "summoning_circle", "enchanted_door", "observatory"],
+    "rare": ["pocket_dimension_room", "time_dilated_chamber", "elemental_containment", "the_thing_in_the_basement"]
+  },
+  "objects": {
+    "required": ["spell_components", "books_everywhere"],
+    "common": ["crystal_ball", "alchemist_apparatus", "star_charts", "half_finished_scroll"],
+    "rare": ["spellbook", "sentient_artifact", "trapped_elemental", "notes_on_forbidden_ritual"]
+  },
+  "npcs": {
+    "required": [],
+    "common": ["animated_object", "familiar_left_behind"],
+    "rare": ["wizard_ghost", "apprentice_trapped_in_loop", "summoned_creature_unbound", "golem"]
+  },
+  "exits": {
+    "required": ["front_door"],
+    "common": ["stairs_up", "stairs_down"],
+    "rare": ["teleportation_circle", "window_to_wrong_landscape", "roof_hatch"]
+  },
+  "atmosphere": {
+    "sounds": ["humming_energy", "pages_turning_on_their_own", "crystalline_chime", "something_breathing_in_the_walls"],
+    "smells": ["ozone", "old_parchment", "exotic_reagents", "burned_copper"],
+    "lighting": ["floating_motes_of_light", "pulsing_runes", "unnatural_colors"]
+  },
+  "layout": {
+    "footprint": "small",
+    "floors": [-1, 1, 2, 3, 4, 5],
+    "shape": ["cylindrical", "square_tower"]
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "id": "shop_weaponsmith",
+  "type": "location",
+  "category": "shop",
+  "name": "Weaponsmith",
+  "description": "Heavier than a blacksmith's — this forge shapes killing steel. The walls are lined with things designed to end arguments permanently.",
+  "tier": ["town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["forge", "weapon_display_wall", "grinding_wheel"],
+    "common": ["testing_dummy", "repair_bench", "blade_oil_station", "quenching_trough"],
+    "rare": ["enchanting_workbench", "trophy_wall_of_masterworks", "armory_vault", "private_commission_room"]
+  },
+  "objects": {
+    "required": ["swords", "hammers", "tongs"],
+    "common": ["whetstones", "leather_grips", "blade_blanks", "shield_rack"],
+    "rare": ["masterwork_in_progress", "exotic_metal_ingot", "commission_ledger", "ancient_pattern_blade"]
+  },
+  "npcs": {
+    "required": ["weaponsmith"],
+    "common": ["apprentice", "customer_browsing"],
+    "rare": ["military_quartermaster", "assassin_shopping_discreetly", "collector"]
+  },
+  "exits": {
+    "required": ["front_door"],
+    "common": ["back_yard_to_forge"],
+    "rare": ["basement_stockroom", "passage_to_barracks"]
+  },
+  "atmosphere": {
+    "sounds": ["hammer_on_steel", "hissing_quench", "grinding_metal", "conversation_about_balance"],
+    "smells": ["hot_metal", "coal_smoke", "oil", "leather"],
+    "lighting": ["forge_glow", "bright_daylight_from_open_front", "sparks"]
+  },
+  "layout": {
+    "footprint": "medium",
+    "floors": [1],
+    "shape": ["rectangular", "open_front_workshop"]
+  }
+}

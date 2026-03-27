@@ -1,0 +1,39 @@
+{
+  "id": "residence_manor",
+  "type": "location",
+  "category": "residence",
+  "name": "Manor House",
+  "description": "The local lord's seat. Stone walls, a proper hall, servants, and the subtle weight of authority.",
+  "tier": ["village", "town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["great_hall", "private_chambers", "servants_wing"],
+    "common": ["library", "kitchen_complex", "stable", "courtyard", "chapel"],
+    "rare": ["dungeon", "secret_passage", "tower", "treasury", "armory"]
+  },
+  "objects": {
+    "required": ["family_crest", "long_table", "fireplace"],
+    "common": ["tapestries", "candlesticks", "wine_cabinet", "ledger_books"],
+    "rare": ["hidden_journal", "forbidden_artifact", "ancestral_weapon", "map_of_holdings"]
+  },
+  "npcs": {
+    "required": ["lord_or_lady"],
+    "common": ["steward", "servant", "guard"],
+    "rare": ["visiting_noble", "spy_in_household", "imprisoned_guest", "family_ghost"]
+  },
+  "exits": {
+    "required": ["main_gate"],
+    "common": ["servants_entrance", "garden_door", "stable_yard"],
+    "rare": ["secret_tunnel", "tower_stairs", "dungeon_stairs"]
+  },
+  "atmosphere": {
+    "sounds": ["echoing_footsteps", "fire_in_hall", "distant_servants", "hounds_in_yard"],
+    "smells": ["wood_polish", "cold_stone", "roasting_meat", "old_tapestry"],
+    "lighting": ["high_window_shafts", "chandelier", "torch_sconces", "firelight"]
+  },
+  "layout": {
+    "footprint": "very_large",
+    "floors": [1, 2, 3],
+    "shape": ["U-shaped", "compound", "rectangular"]
+  }
+}

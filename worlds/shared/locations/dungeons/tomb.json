@@ -1,0 +1,39 @@
+{
+  "id": "dungeon_tomb",
+  "type": "location",
+  "category": "dungeon",
+  "name": "Ancient Tomb",
+  "description": "Built to honor a ruler or hero, sealed to keep something in — or everyone else out. The traps still work.",
+  "tier": ["village", "town", "city"],
+  "biomes": ["desert", "hills", "mountain", "plains"],
+  "features": {
+    "required": ["sealed_entrance", "carved_reliefs", "burial_chamber"],
+    "common": ["antechamber", "trapped_corridor", "false_door", "offering_room"],
+    "rare": ["treasure_vault", "puzzle_lock", "guardian_construct", "throne_of_the_interred"]
+  },
+  "objects": {
+    "required": ["stone_sarcophagus", "carved_warnings"],
+    "common": ["clay_pots", "funerary_masks", "wall_murals", "ceremonial_weapons"],
+    "rare": ["enchanted_crown", "map_fragment", "soul_gem", "cursed_gold"]
+  },
+  "npcs": {
+    "required": [],
+    "common": ["skeleton_guardian", "tomb_scarab_swarm"],
+    "rare": ["mummy", "wraith", "tomb_robber_in_trouble", "ancient_construct"]
+  },
+  "exits": {
+    "required": ["tomb_entrance"],
+    "common": ["inner_chamber_door", "side_passage"],
+    "rare": ["hidden_escape_tunnel", "portal_to_deeper_level", "collapsed_wall"]
+  },
+  "atmosphere": {
+    "sounds": ["absolute_silence", "grinding_stone", "sand_trickling", "distant_chanting"],
+    "smells": ["dry_dust", "ancient_incense", "sealed_air", "embalming_spice"],
+    "lighting": ["total_darkness", "reflected_gold_gleam", "eerie_blue_torch"]
+  },
+  "layout": {
+    "footprint": "medium",
+    "floors": [-1, -2],
+    "shape": ["linear_progression", "concentric_rings", "labyrinthine"]
+  }
+}

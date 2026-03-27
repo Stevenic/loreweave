@@ -1,0 +1,81 @@
+{
+  "id": "magistrate",
+  "type": "npc",
+  "category": "authority",
+  "name": "Magistrate",
+  "description": "Interprets the law, settles disputes, and passes judgment. Their word shapes lives — and they know it.",
+  "stats_tier": "skilled",
+  "traits": {
+    "common": [
+      "methodical",
+      "educated",
+      "stern",
+      "formal"
+    ],
+    "rare": [
+      "secretly_merciful",
+      "bribable",
+      "haunted_by_a_wrong_verdict",
+      "reformist"
+    ]
+  },
+  "skills": [
+    "insight",
+    "persuasion",
+    "history",
+    "investigation"
+  ],
+  "inventory": {
+    "required": [
+      "law_tome",
+      "seal_of_office",
+      "gavel"
+    ],
+    "common": [
+      "reading_spectacles",
+      "case_files",
+      "fine_clothing"
+    ],
+    "rare": [
+      "forged_verdict",
+      "hidden_bribe",
+      "personal_journal_of_doubts"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "local_laws",
+      "recent_cases",
+      "settlement_power_structure"
+    ],
+    "sometimes": [
+      "noble_family_disputes",
+      "land_ownership_conflicts",
+      "smuggling_evidence"
+    ],
+    "rarely": [
+      "conspiracy_at_high_levels",
+      "evidence_of_own_corruption",
+      "royal_decrees_not_yet_public"
+    ]
+  },
+  "dialogue_hooks": [
+    "hearing your case with visible impatience",
+    "asking for evidence rather than testimony",
+    "reflecting on the difficulty of a recent judgment",
+    "warning you about operating outside the law",
+    "privately seeking help investigating a case they can't touch officially"
+  ],
+  "voice_patterns": [
+    "measured and formal — every word weighed",
+    "imperious — accustomed to deference",
+    "quietly conflicted — the law isn't always just",
+    "grandfatherly but sharp — don't mistake warmth for softness"
+  ],
+  "schedule": {
+    "morning": "reviewing cases, reading petitions",
+    "afternoon": "court in session, hearings",
+    "evening": "private consultations, dinner with officials",
+    "night": "reading law, preparing judgments"
+  }
+}

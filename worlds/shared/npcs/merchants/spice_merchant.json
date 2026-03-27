@@ -1,0 +1,82 @@
+{
+  "id": "spice_merchant",
+  "type": "npc",
+  "category": "merchant",
+  "name": "Spice Merchant",
+  "description": "Traveled further than most people in this town can imagine. Every pouch and jar comes with a story about the land it came from — some of them even true.",
+  "stats_tier": "skilled",
+  "traits": {
+    "common": [
+      "worldly",
+      "eloquent",
+      "shrewd",
+      "aromatic"
+    ],
+    "rare": [
+      "spy_network_via_trade_routes",
+      "alchemist_sideline",
+      "exiled_from_homeland",
+      "collector_of_secrets"
+    ]
+  },
+  "skills": [
+    "persuasion",
+    "nature",
+    "survival",
+    "history"
+  ],
+  "inventory": {
+    "required": [
+      "spice_pouches",
+      "scales",
+      "trade_ledger"
+    ],
+    "common": [
+      "exotic_teas",
+      "dried_herbs",
+      "scented_oils",
+      "sample_jars"
+    ],
+    "rare": [
+      "poison_disguised_as_spice",
+      "map_of_trade_routes",
+      "coded_correspondence",
+      "rare_reagent"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "foreign_cultures",
+      "trade_route_conditions",
+      "herb_and_spice_properties"
+    ],
+    "sometimes": [
+      "political_situations_abroad",
+      "plague_news",
+      "foreign_military_movements"
+    ],
+    "rarely": [
+      "assassination_plots_overheard",
+      "ancient_trade_secrets",
+      "locations_of_lost_cities"
+    ]
+  },
+  "dialogue_hooks": [
+    "offering a free sample of something you've never smelled before",
+    "telling a story about the land where this spice grows",
+    "asking if you've traveled to a specific distant region",
+    "warning about troubles along a particular trade route"
+  ],
+  "voice_patterns": [
+    "exotic storyteller — every spice has a legend attached",
+    "precise merchant — knows weights, grades, and fair prices to the grain",
+    "weary traveler — the romance of the road has worn thin",
+    "enthusiastic educator — genuinely wants you to appreciate the difference between varieties"
+  ],
+  "schedule": {
+    "morning": "unpacking and arranging display at market",
+    "afternoon": "selling, sampling, negotiating bulk deals",
+    "evening": "packing up, counting coin, writing letters home",
+    "night": "at the inn, trading stories with other travelers"
+  }
+}

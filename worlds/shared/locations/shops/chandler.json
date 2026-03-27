@@ -1,0 +1,39 @@
+{
+  "id": "shop_chandler",
+  "type": "location",
+  "category": "shop",
+  "name": "Chandler",
+  "description": "Candles, soap, rope, and a hundred other things you don't think about until you need them. The whole place smells like warm tallow.",
+  "tier": ["village", "town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["candle_display", "rope_coils", "drying_racks"],
+    "common": ["melting_vats", "soap_molds", "wick_spinning_wheel", "supply_shelves"],
+    "rare": ["specialty_candle_workshop", "perfumed_soap_section", "ship_chandlery_supplies"]
+  },
+  "objects": {
+    "required": ["candles", "soap_bars", "rope"],
+    "common": ["tallow_blocks", "beeswax", "wicks", "lantern_oil"],
+    "rare": ["scented_candle_that_repels_insects", "everburning_candle_prototype", "encoded_message_in_candle"]
+  },
+  "npcs": {
+    "required": ["chandler"],
+    "common": ["customer"],
+    "rare": ["ship_captain_buying_in_bulk", "alchemist_buying_tallow", "spy_using_candle_dead_drop"]
+  },
+  "exits": {
+    "required": ["front_door"],
+    "common": ["back_workshop"],
+    "rare": ["cellar_storage"]
+  },
+  "atmosphere": {
+    "sounds": ["bubbling_wax", "cutting_wick", "quiet_commerce"],
+    "smells": ["warm_tallow", "beeswax", "lavender_soap", "lantern_oil"],
+    "lighting": ["warm_candlelight_everywhere", "bright_from_all_the_stock"]
+  },
+  "layout": {
+    "footprint": "small",
+    "floors": [1],
+    "shape": ["rectangular"]
+  }
+}

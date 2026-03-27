@@ -1,0 +1,77 @@
+{
+  "id": "stable_hand",
+  "type": "npc",
+  "category": "service",
+  "name": "Stable Hand",
+  "description": "Young, overworked, underpaid, and the first person travelers talk to when they arrive. Knows who comes and goes before anyone else in town.",
+  "stats_tier": "commoner",
+  "traits": {
+    "common": [
+      "hardworking",
+      "observant",
+      "gossip",
+      "good_with_animals"
+    ],
+    "rare": [
+      "runaway_noble",
+      "spy_in_disguise",
+      "horse_thief_reformed",
+      "destined_for_more"
+    ]
+  },
+  "skills": [
+    "animal_handling",
+    "perception",
+    "stealth"
+  ],
+  "inventory": {
+    "required": [
+      "pitchfork",
+      "brush",
+      "bucket"
+    ],
+    "common": [
+      "apple_for_horses",
+      "rag",
+      "whistle"
+    ],
+    "rare": [
+      "key_to_back_gate",
+      "overheard_letter",
+      "hidden_coin_stash"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "who_arrived_recently",
+      "which_horses_belong_to_whom",
+      "road_conditions"
+    ],
+    "sometimes": [
+      "what_travelers_discuss_when_they_think_servants_arent_listening",
+      "guard_schedules"
+    ],
+    "rarely": [
+      "secret_arrivals_at_night",
+      "smuggled_cargo_in_saddlebags"
+    ]
+  },
+  "dialogue_hooks": [
+    "offering to take your horse and asking how far you've ridden",
+    "mentioning an unusual visitor who arrived last night",
+    "warning that the road north is washed out",
+    "asking for a coin in exchange for 'good information'"
+  ],
+  "voice_patterns": [
+    "eager youngster — wants to hear adventure stories",
+    "surly teen — just doing the job, barely",
+    "sharp-eyed gossip — knows everything, trades in information",
+    "quiet caretaker — more comfortable with horses than people"
+  ],
+  "schedule": {
+    "morning": "mucking stalls, feeding, watering",
+    "afternoon": "grooming, exercising horses, tending arrivals",
+    "evening": "settling horses for night, final feeding",
+    "night": "sleeping in hayloft, light watch"
+  }
+}

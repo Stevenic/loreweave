@@ -1,0 +1,79 @@
+{
+  "id": "town_crier",
+  "type": "npc",
+  "category": "authority",
+  "name": "Town Crier",
+  "description": "The settlement's official voice. Stands at the crossroads and shouts the news, decrees, and warnings. In a world without newspapers, this is the media.",
+  "stats_tier": "commoner",
+  "traits": {
+    "common": [
+      "loud",
+      "theatrical",
+      "well_informed",
+      "respected"
+    ],
+    "rare": [
+      "propagandist_for_noble",
+      "secretly_literate_rebel",
+      "memory_palace_master",
+      "hears_more_than_they_announce"
+    ]
+  },
+  "skills": [
+    "performance",
+    "persuasion",
+    "perception",
+    "history"
+  ],
+  "inventory": {
+    "required": [
+      "bell",
+      "scroll_of_announcements"
+    ],
+    "common": [
+      "official_tabard",
+      "coin_purse_for_tips",
+      "hand_drum"
+    ],
+    "rare": [
+      "coded_message_in_announcements",
+      "banned_broadsheet",
+      "personal_notebook_of_secrets"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "official_news_and_decrees",
+      "market_prices",
+      "public_events"
+    ],
+    "sometimes": [
+      "political_mood",
+      "which_announcements_were_edited",
+      "who_pays_for_favorable_coverage"
+    ],
+    "rarely": [
+      "censored_news",
+      "incoming_threats_suppressed_by_authorities",
+      "propaganda_campaigns"
+    ]
+  },
+  "dialogue_hooks": [
+    "bellowing the day's news as you arrive in town",
+    "offering to announce your arrival — for a small fee",
+    "whispering something different from what they just shouted",
+    "asking if you have news from the road worth announcing"
+  ],
+  "voice_patterns": [
+    "booming orator — projects from the diaphragm",
+    "dramatic performer — every announcement is theater",
+    "dry wit — delivers absurd news with a straight face",
+    "nervous official — reads what they're told, questions nothing aloud"
+  ],
+  "schedule": {
+    "morning": "receiving the day's announcements from authorities",
+    "afternoon": "crying the news at designated spots",
+    "evening": "final announcements, collecting tips",
+    "night": "at the tavern, hearing tomorrow's gossip"
+  }
+}

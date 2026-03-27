@@ -1,0 +1,39 @@
+{
+  "id": "tavern_tea_house",
+  "type": "location",
+  "category": "tavern",
+  "name": "Tea House",
+  "description": "Quiet as a library but with better refreshments. Deals are made here that would be unseemly to discuss over ale. The teacups are worth more than you'd think.",
+  "tier": ["town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["tea_service_counter", "private_booths", "garden_view"],
+    "common": ["calligraphy_display", "incense_burner", "meditation_corner", "herb_cabinet"],
+    "rare": ["secret_message_service", "poison_cabinet", "divination_room", "rooftop_garden"]
+  },
+  "objects": {
+    "required": ["tea_sets", "hot_water_urn"],
+    "common": ["incense_sticks", "poetry_scrolls", "board_game_sets", "flower_arrangement"],
+    "rare": ["rare_tea_leaves", "coded_menu_for_regulars", "listening_device_in_wall"]
+  },
+  "npcs": {
+    "required": ["tea_master"],
+    "common": ["merchant_in_meeting", "scholar_reading", "server"],
+    "rare": ["spy_handler", "poison_master", "monk_on_pilgrimage", "noble_incognito"]
+  },
+  "exits": {
+    "required": ["front_door"],
+    "common": ["garden_door", "upstairs_private_rooms"],
+    "rare": ["hidden_exit_through_garden", "passage_behind_cabinet"]
+  },
+  "atmosphere": {
+    "sounds": ["water_pouring", "gentle_conversation", "wind_chime", "birdsong_from_garden"],
+    "smells": ["jasmine_tea", "incense", "fresh_flowers", "cedar"],
+    "lighting": ["soft_natural_light", "paper_lanterns", "filtered_through_screens"]
+  },
+  "layout": {
+    "footprint": "medium",
+    "floors": [1, 2],
+    "shape": ["rectangular", "courtyard"]
+  }
+}

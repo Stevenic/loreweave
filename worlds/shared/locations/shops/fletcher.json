@@ -1,0 +1,39 @@
+{
+  "id": "shop_fletcher",
+  "type": "location",
+  "category": "shop",
+  "name": "Fletcher & Bowyer",
+  "description": "Smells of glue and shaved wood. Bundles of arrow shafts lean against every surface, and finished bows hang from ceiling hooks like sleeping snakes.",
+  "tier": ["village", "town", "city"],
+  "biomes": ["forest", "plains", "hills"],
+  "features": {
+    "required": ["workbench", "arrow_bundling_station", "bow_display"],
+    "common": ["feather_sorting_bins", "string_winding_rack", "target_butt_out_back"],
+    "rare": ["exotic_wood_storage", "enchantment_station", "competition_trophy_shelf"]
+  },
+  "objects": {
+    "required": ["arrows", "bow_staves", "fletching_tools"],
+    "common": ["feathers", "bowstrings", "glue_pots", "wood_shavings"],
+    "rare": ["crossbow_parts", "silvered_arrowheads", "ranger_commission_orders"]
+  },
+  "npcs": {
+    "required": ["fletcher"],
+    "common": ["hunter_customer"],
+    "rare": ["ranger", "military_scout", "competition_archer"]
+  },
+  "exits": {
+    "required": ["front_door"],
+    "common": ["back_door_to_yard"],
+    "rare": ["path_to_practice_range"]
+  },
+  "atmosphere": {
+    "sounds": ["scraping_shave", "string_twang_testing", "glue_bubbling", "quiet_focus"],
+    "smells": ["fresh_shaved_wood", "hide_glue", "feathers", "beeswax"],
+    "lighting": ["bright_natural_light", "work_focused"]
+  },
+  "layout": {
+    "footprint": "small",
+    "floors": [1],
+    "shape": ["rectangular", "long_narrow"]
+  }
+}

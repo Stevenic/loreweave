@@ -1,0 +1,81 @@
+{
+  "id": "shopkeeper",
+  "type": "npc",
+  "category": "merchant",
+  "name": "Shopkeeper",
+  "description": "Runs a general store. Sells provisions, tools, and everyday supplies.",
+  "stats_tier": "commoner",
+  "traits": {
+    "common": [
+      "shrewd",
+      "organized",
+      "talkative",
+      "fair_dealing"
+    ],
+    "rare": [
+      "paranoid_about_theft",
+      "hoarding",
+      "generous_to_regulars",
+      "smuggler_on_the_side"
+    ]
+  },
+  "skills": [
+    "persuasion",
+    "insight",
+    "investigation"
+  ],
+  "inventory": {
+    "required": [
+      "coin_purse",
+      "keys",
+      "scale"
+    ],
+    "common": [
+      "abacus",
+      "receipt_book",
+      "measuring_tape"
+    ],
+    "rare": [
+      "concealed_weapon",
+      "hidden_lockbox",
+      "rare_item_under_counter"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "supply_prices",
+      "what_sells",
+      "regular_customers",
+      "delivery_schedules"
+    ],
+    "sometimes": [
+      "trade_route_conditions",
+      "regional_shortages",
+      "who_owes_debts"
+    ],
+    "rarely": [
+      "black_market_contacts",
+      "smuggling_routes",
+      "hidden_caches"
+    ]
+  },
+  "dialogue_hooks": [
+    "new stock just arrived",
+    "complaints about taxes or tariffs",
+    "price negotiations and haggling",
+    "requests to source rare items",
+    "gossip learned from customers"
+  ],
+  "voice_patterns": [
+    "friendly salesperson",
+    "no-nonsense haggler",
+    "chatty and easily distracted",
+    "quiet and watchful"
+  ],
+  "schedule": {
+    "morning": "opening shop, arranging displays, receiving deliveries",
+    "afternoon": "peak business hours, helping customers",
+    "evening": "closing up, inventory count",
+    "night": "home or back room, bookkeeping"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "id": "dungeon_haunted_manor",
+  "type": "location",
+  "category": "dungeon",
+  "name": "Haunted Manor",
+  "description": "A once-grand estate where the family line ended badly. The house remembers. Doors open on their own. Portraits follow you with their eyes.",
+  "tier": ["village", "town", "city"],
+  "biomes": ["forest", "plains", "hills", "swamp"],
+  "features": {
+    "required": ["grand_foyer", "sweeping_staircase", "portrait_gallery"],
+    "common": ["dining_hall", "library", "master_bedroom", "servants_quarters"],
+    "rare": ["hidden_room_behind_bookcase", "attic_with_locked_trunk", "wine_cellar", "ritual_chamber"]
+  },
+  "objects": {
+    "required": ["dust_covered_furniture", "faded_portraits"],
+    "common": ["broken_chandelier", "moth_eaten_curtains", "stopped_clock", "scattered_letters"],
+    "rare": ["diary_of_the_last_heir", "cursed_mirror", "music_box_that_plays_alone", "family_seal"]
+  },
+  "npcs": {
+    "required": [],
+    "common": ["ghost", "rat_swarm"],
+    "rare": ["poltergeist", "shadow", "possessed_servant", "specter_of_family_member", "squatter_cultist"]
+  },
+  "exits": {
+    "required": ["front_door"],
+    "common": ["back_door", "stairs_up", "stairs_to_cellar"],
+    "rare": ["secret_passage", "attic_ladder", "collapsed_wall_to_grounds"]
+  },
+  "atmosphere": {
+    "sounds": ["creaking_floorboards", "doors_slamming", "distant_weeping", "music_from_nowhere"],
+    "smells": ["mildew", "old_perfume", "rot_beneath_roses", "cold_ash"],
+    "lighting": ["moonlight_through_broken_windows", "candles_that_light_themselves", "deep_shadows"]
+  },
+  "layout": {
+    "footprint": "large",
+    "floors": [-1, 1, 2, 3],
+    "shape": ["rectangular", "U-shaped", "sprawling"]
+  }
+}

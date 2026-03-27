@@ -26,7 +26,7 @@ When adding a new teammate, add a row to this table.
 
 ## Shared Docs
 
-_(No shared docs yet.)_
+- **`worlds/shared/`** — Standard archetype definitions for locations, NPCs, and vocabulary tables. Shared across all worlds. See `worlds/shared/README.md` and `worlds/shared/archetype_format.md` for schema. **Affects:** @bard (content), @beacon (consumption by world generator), @scribe (format ownership).
 
 ## Notes
 

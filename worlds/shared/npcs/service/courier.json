@@ -1,0 +1,82 @@
+{
+  "id": "courier",
+  "type": "npc",
+  "category": "service",
+  "name": "Courier / Messenger",
+  "description": "Fast, discrete, and carries more secrets in their satchel than most spymasters. The envelope is sealed — that's all they need to know.",
+  "stats_tier": "skilled",
+  "traits": {
+    "common": [
+      "fast",
+      "reliable",
+      "discreet",
+      "road_savvy"
+    ],
+    "rare": [
+      "reads_every_message",
+      "works_for_two_sides",
+      "former_thief",
+      "carries_message_that_could_start_war"
+    ]
+  },
+  "skills": [
+    "athletics",
+    "stealth",
+    "perception",
+    "survival"
+  ],
+  "inventory": {
+    "required": [
+      "satchel",
+      "sealed_letters",
+      "road_boots"
+    ],
+    "common": [
+      "travel_rations",
+      "signal_whistle",
+      "route_map",
+      "wax_seal_kit"
+    ],
+    "rare": [
+      "coded_message",
+      "forged_seal",
+      "poison_letter",
+      "letter_of_safe_passage"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "road_conditions",
+      "settlement_locations",
+      "who_receives_regular_correspondence"
+    ],
+    "sometimes": [
+      "political_tensions",
+      "military_movements",
+      "outbreak_news"
+    ],
+    "rarely": [
+      "contents_of_messages_they_carry",
+      "network_of_safe_houses",
+      "dead_drop_locations"
+    ]
+  },
+  "dialogue_hooks": [
+    "asking for directions or road conditions ahead",
+    "looking for a specific person to deliver to",
+    "resting at the tavern and willing to carry a message for a fee",
+    "nervously clutching their satchel and wanting to leave quickly"
+  ],
+  "voice_patterns": [
+    "breathless professional — always between deliveries",
+    "casual road companion — happy to walk with you for safety",
+    "tight-lipped — the job is silence, pays well for it",
+    "chatty gossip — knows news from everywhere, can't help sharing"
+  ],
+  "schedule": {
+    "morning": "departing at first light",
+    "afternoon": "traveling between settlements",
+    "evening": "arriving, making deliveries",
+    "night": "resting at inn, sorting next day's route"
+  }
+}

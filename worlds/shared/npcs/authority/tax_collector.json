@@ -1,0 +1,82 @@
+{
+  "id": "tax_collector",
+  "type": "npc",
+  "category": "authority",
+  "name": "Tax Collector",
+  "description": "The most hated person in any settlement who isn't actively committing crimes. Armed with a ledger, a guard escort, and the law.",
+  "stats_tier": "skilled",
+  "traits": {
+    "common": [
+      "meticulous",
+      "humorless",
+      "persistent",
+      "thick_skinned"
+    ],
+    "rare": [
+      "secretly_sympathetic",
+      "corrupt_skimmer",
+      "blackmail_target",
+      "actually_fair"
+    ]
+  },
+  "skills": [
+    "investigation",
+    "insight",
+    "intimidation",
+    "persuasion"
+  ],
+  "inventory": {
+    "required": [
+      "tax_ledger",
+      "seal_of_office",
+      "coin_box"
+    ],
+    "common": [
+      "quill_and_ink",
+      "assessment_forms",
+      "guard_whistle",
+      "receipt_book"
+    ],
+    "rare": [
+      "bribe_record",
+      "forged_assessment",
+      "hidden_personal_wealth",
+      "blackmail_letters"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "who_owes_what",
+      "property_values",
+      "who_is_prospering_or_struggling"
+    ],
+    "sometimes": [
+      "hidden_income_sources",
+      "smuggling_operations",
+      "noble_financial_troubles"
+    ],
+    "rarely": [
+      "treasury_vulnerabilities",
+      "embezzlement_schemes",
+      "political_favors_for_tax_relief"
+    ]
+  },
+  "dialogue_hooks": [
+    "informing you that adventuring income is taxable",
+    "asking pointed questions about recent treasure acquisition",
+    "complaining that nobody appreciates the roads and walls taxes pay for",
+    "offering a 'reduced assessment' in exchange for a favor"
+  ],
+  "voice_patterns": [
+    "bureaucratic drone — every sentence cites a regulation",
+    "apologetic but firm — doesn't enjoy this, but the law is the law",
+    "aggressive enforcer — takes pleasure in finding discrepancies",
+    "weary civil servant — just trying to do the job and go home"
+  ],
+  "schedule": {
+    "morning": "reviewing ledgers, preparing assessments",
+    "afternoon": "collecting door to door with guard escort",
+    "evening": "reconciling accounts, filing reports",
+    "night": "at home behind a locked door"
+  }
+}

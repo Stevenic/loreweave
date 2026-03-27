@@ -1,0 +1,81 @@
+{
+  "id": "ferryman",
+  "type": "npc",
+  "category": "service",
+  "name": "Ferryman",
+  "description": "Controls the only crossing for miles. Patient as the river. Charges what the market will bear and doesn't hurry for anyone.",
+  "stats_tier": "commoner",
+  "traits": {
+    "common": [
+      "patient",
+      "taciturn",
+      "weather_wise",
+      "strong"
+    ],
+    "rare": [
+      "river_spirit_bargain",
+      "former_sailor",
+      "smuggles_at_night",
+      "knows_what_sleeps_beneath"
+    ]
+  },
+  "skills": [
+    "athletics",
+    "nature",
+    "perception",
+    "survival"
+  ],
+  "inventory": {
+    "required": [
+      "pole",
+      "rope",
+      "coin_purse"
+    ],
+    "common": [
+      "lantern",
+      "fishing_line",
+      "waterproof_bag",
+      "flask"
+    ],
+    "rare": [
+      "river_map_with_hidden_channels",
+      "something_pulled_from_the_water",
+      "offering_for_the_river"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "river_conditions",
+      "who_crosses_regularly",
+      "weather_patterns"
+    ],
+    "sometimes": [
+      "what_washes_downstream",
+      "troop_movements",
+      "smuggling_activity"
+    ],
+    "rarely": [
+      "river_spirits",
+      "what_the_flood_uncovered",
+      "body_in_the_water_last_month"
+    ]
+  },
+  "dialogue_hooks": [
+    "quoting the crossing price and not negotiating",
+    "warning about the current being strong today",
+    "mentioning something unusual that floated past",
+    "asking if you're the ones the other group was asking about"
+  ],
+  "voice_patterns": [
+    "man of few words — speaks in short declaratives",
+    "old river sage — the river teaches patience",
+    "grumpy toll-taker — doesn't want conversation, wants coin",
+    "superstitious waterman — respects the river and expects you to"
+  ],
+  "schedule": {
+    "morning": "first crossings at dawn, checking boat",
+    "afternoon": "steady crossings, fishing between trips",
+    "evening": "last crossings, tying up boat",
+    "night": "home on shore, listening to the river"
+  }
+}

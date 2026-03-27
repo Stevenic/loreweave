@@ -1,0 +1,80 @@
+{
+  "id": "weaver",
+  "type": "npc",
+  "category": "craft",
+  "name": "Weaver",
+  "description": "Works a loom from dawn to dusk making cloth that holds communities together. In settlements where the weave is more than metaphor, this trade carries weight.",
+  "stats_tier": "commoner",
+  "traits": {
+    "common": [
+      "patient",
+      "detail_oriented",
+      "rhythmic",
+      "proud_of_craft"
+    ],
+    "rare": [
+      "sees_patterns_others_miss",
+      "hereditary_knowledge",
+      "threadcraft_sensitive",
+      "guild_dissident"
+    ]
+  },
+  "skills": [
+    "perception",
+    "history",
+    "insight"
+  ],
+  "inventory": {
+    "required": [
+      "shuttle",
+      "thread_spools",
+      "measuring_cord"
+    ],
+    "common": [
+      "fabric_samples",
+      "dye_pouches",
+      "shears",
+      "pattern_book"
+    ],
+    "rare": [
+      "thread_from_unusual_source",
+      "enchanted_loom_tool",
+      "ancient_pattern"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "fabric_quality",
+      "dye_sources",
+      "local_fashion"
+    ],
+    "sometimes": [
+      "trade_route_disruptions",
+      "who_commissions_expensive_cloth",
+      "historical_textile_patterns"
+    ],
+    "rarely": [
+      "patterns_that_carry_meaning",
+      "cloth_as_code",
+      "ancient_weaving_traditions"
+    ]
+  },
+  "dialogue_hooks": [
+    "commenting on the quality of your clothing",
+    "complaining about the price of good thread",
+    "describing the pattern they're working on and what it means",
+    "offering to repair a torn cloak in exchange for news"
+  ],
+  "voice_patterns": [
+    "rhythmic speaker — sentences have the cadence of a loom",
+    "quiet perfectionist — few words, all precise",
+    "gossip who talks while working — the loom never stops",
+    "philosophical — sees life's patterns reflected in cloth"
+  ],
+  "schedule": {
+    "morning": "warping the loom, preparing thread",
+    "afternoon": "weaving, filling orders",
+    "evening": "dyeing, finishing, taking commissions",
+    "night": "mending by candlelight, planning tomorrow's work"
+  }
+}

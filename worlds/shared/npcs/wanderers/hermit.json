@@ -1,0 +1,83 @@
+{
+  "id": "hermit",
+  "type": "npc",
+  "category": "wanderer",
+  "name": "Hermit",
+  "description": "A solitary figure living in the wilderness. May hold rare knowledge or be deeply eccentric.",
+  "stats_tier": "expert",
+  "traits": {
+    "common": [
+      "reclusive",
+      "self_sufficient",
+      "observant",
+      "eccentric"
+    ],
+    "rare": [
+      "prophetic",
+      "cursed",
+      "exiled_noble",
+      "guardian_of_secret"
+    ]
+  },
+  "skills": [
+    "survival",
+    "nature",
+    "perception"
+  ],
+  "inventory": {
+    "required": [
+      "worn_clothing",
+      "gathering_tools"
+    ],
+    "common": [
+      "herb_collection",
+      "crude_map",
+      "talisman"
+    ],
+    "rare": [
+      "ancient_artifact",
+      "coded_journal",
+      "rare_ingredient",
+      "enchanted_trinket"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "local_wildlife",
+      "safe_water_sources",
+      "weather_patterns",
+      "edible_plants"
+    ],
+    "sometimes": [
+      "hidden_paths",
+      "ruins_locations",
+      "creature_behaviors",
+      "seasonal_cycles"
+    ],
+    "rarely": [
+      "ancient_history",
+      "magical_phenomena",
+      "prophecies",
+      "secret_identities"
+    ]
+  },
+  "dialogue_hooks": [
+    "cryptic warnings about the wilderness",
+    "bartering knowledge for supplies",
+    "rambling about something they've observed",
+    "reluctant to talk, must be drawn out",
+    "quests to find specific rare plants or animals"
+  ],
+  "voice_patterns": [
+    "talks to themselves, startled by visitors",
+    "cryptic and riddle-like",
+    "surprisingly eloquent once engaged",
+    "gruff monosyllables"
+  ],
+  "schedule": {
+    "morning": "foraging, checking traps",
+    "afternoon": "crafting, tending camp",
+    "evening": "fire-tending, stargazing",
+    "night": "light sleeping, alert to forest sounds"
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "id": "tanner_npc",
+  "type": "npc",
+  "category": "craft",
+  "name": "Tanner",
+  "description": "Works hides into leather using methods that smell terrible and take patience. Lives on the edge of town by necessity, not choice.",
+  "stats_tier": "commoner",
+  "traits": {
+    "common": [
+      "stoic",
+      "hardworking",
+      "solitary",
+      "thick_skinned"
+    ],
+    "rare": [
+      "secretly_wealthy",
+      "naturalist",
+      "former_hunter",
+      "politically_ignored"
+    ]
+  },
+  "skills": [
+    "nature",
+    "survival",
+    "medicine"
+  ],
+  "inventory": {
+    "required": [
+      "tanning_knife",
+      "leather_apron",
+      "work_gloves"
+    ],
+    "common": [
+      "hides_in_progress",
+      "tanning_chemicals",
+      "finished_leather_samples"
+    ],
+    "rare": [
+      "exotic_hide",
+      "recipe_for_waterproofing",
+      "old_hunting_trophy"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "animal_populations",
+      "hide_quality_by_season",
+      "leather_prices"
+    ],
+    "sometimes": [
+      "hunter_gossip",
+      "creature_sightings",
+      "wilderness_conditions"
+    ],
+    "rarely": [
+      "poaching_operations",
+      "monster_tracks",
+      "where_bodies_are_buried"
+    ]
+  },
+  "dialogue_hooks": [
+    "apologizing for the smell before you even mention it",
+    "judging the quality of your leather armor or boots",
+    "mentioning unusual animals seen near the tanning stream",
+    "needing specific hides and willing to pay a premium",
+    "complaints about being excluded from town events"
+  ],
+  "voice_patterns": [
+    "matter-of-fact, unbothered by awkwardness",
+    "quietly resentful of social stigma",
+    "warm once trust is earned — loyal to those who visit",
+    "technical — talks about leather like a sommelier talks about wine"
+  ],
+  "schedule": {
+    "morning": "checking vats, stretching hides",
+    "afternoon": "scraping, treating, working leather",
+    "evening": "cleaning up, sometimes trading at the edge of market",
+    "night": "alone at home on settlement outskirts"
+  }
+}

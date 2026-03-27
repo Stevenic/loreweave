@@ -1,0 +1,39 @@
+{
+  "id": "tavern_wine_house",
+  "type": "location",
+  "category": "tavern",
+  "name": "Upscale Wine House",
+  "description": "A refined establishment serving imported wines and delicate fare to merchants, nobles, and those who wish to appear as such.",
+  "tier": ["town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["polished_bar", "curtained_booths", "wine_rack_wall"],
+    "common": ["chandelier", "private_dining_room", "garden_courtyard", "minstrel_alcove"],
+    "rare": ["vault_cellar", "rooftop_terrace", "hidden_meeting_room", "rare_vintage_display"]
+  },
+  "objects": {
+    "required": ["crystal_goblets", "wine_menu", "decanter"],
+    "common": ["tablecloths", "candlesticks", "ornate_corkscrew", "guest_book"],
+    "rare": ["poisoned_bottle", "forged_invitation", "love_letters_in_booth"]
+  },
+  "npcs": {
+    "required": ["sommelier"],
+    "common": ["wealthy_patron", "merchant", "server"],
+    "rare": ["spy", "noble_in_disguise", "loan_shark", "art_dealer"]
+  },
+  "exits": {
+    "required": ["front_entrance"],
+    "common": ["kitchen_door", "stairs_to_private_rooms"],
+    "rare": ["cellar_stairs", "servants_passage", "garden_gate"]
+  },
+  "atmosphere": {
+    "sounds": ["quiet_conversation", "soft_lute", "clinking_crystal", "pouring_wine"],
+    "smells": ["aged_oak", "roses", "spiced_wine", "beeswax_candles"],
+    "lighting": ["warm_candlelight", "soft_lanterns", "intimate"]
+  },
+  "layout": {
+    "footprint": "medium",
+    "floors": [1, 2, 3],
+    "shape": ["rectangular", "L-shaped"]
+  }
+}

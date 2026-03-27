@@ -1,0 +1,39 @@
+{
+  "id": "shop_jeweler",
+  "type": "location",
+  "category": "shop",
+  "name": "Jeweler",
+  "description": "A small, secure shop where gemstones are cut, set, and appraised. The jeweler sees wealth from every stratum of society.",
+  "tier": ["town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["display_cases", "workbench_with_loupe", "strongbox"],
+    "common": ["gem_sorting_table", "shuttered_windows", "locked_cabinet", "polishing_station"],
+    "rare": ["hidden_vault", "gem_cutting_workshop", "appraisal_room", "rooftop_skylight"]
+  },
+  "objects": {
+    "required": ["gemstones", "jewelers_loupe", "small_hammer_and_chisel"],
+    "common": ["rings_on_velvet", "necklace_forms", "scales", "wax_molds"],
+    "rare": ["cursed_gem", "royal_commission", "forged_certificate_of_authenticity"]
+  },
+  "npcs": {
+    "required": ["jeweler"],
+    "common": ["wealthy_customer", "apprentice_polisher"],
+    "rare": ["fence", "gem_smuggler", "noble_commissioning_gift", "insurance_assessor"]
+  },
+  "exits": {
+    "required": ["reinforced_front_door"],
+    "common": ["back_workshop"],
+    "rare": ["vault_door", "hidden_exit"]
+  },
+  "atmosphere": {
+    "sounds": ["tiny_hammer_taps", "quiet_concentration", "lock_clicking", "velvet_rustling"],
+    "smells": ["metal_polish", "beeswax", "clean_air"],
+    "lighting": ["focused_lamplight", "gem_refracted_colors", "dim_secure"]
+  },
+  "layout": {
+    "footprint": "small",
+    "floors": [1],
+    "shape": ["rectangular", "narrow"]
+  }
+}

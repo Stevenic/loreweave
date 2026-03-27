@@ -1,0 +1,39 @@
+{
+  "id": "temple_mausoleum",
+  "type": "location",
+  "category": "temple",
+  "name": "Mausoleum",
+  "description": "An above-ground burial monument for someone important enough to be remembered in stone. The door is heavy for a reason.",
+  "tier": ["town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["heavy_stone_door", "carved_facade", "burial_chamber"],
+    "common": ["memorial_plaques", "eternal_flame_bracket", "iron_gate", "weeping_statue"],
+    "rare": ["hidden_lower_level", "intact_death_mask", "warded_threshold", "family_crypt_extension"]
+  },
+  "objects": {
+    "required": ["sarcophagus", "memorial_inscription"],
+    "common": ["dried_funeral_wreaths", "offerings", "coat_of_arms", "stone_urns"],
+    "rare": ["hidden_compartment", "death_journal", "enchanted_guardian_stone", "treasure_among_bones"]
+  },
+  "npcs": {
+    "required": [],
+    "common": ["mourner"],
+    "rare": ["ghost_of_interred", "grave_robber_caught", "undead_guardian", "descendant_seeking_heirloom"]
+  },
+  "exits": {
+    "required": ["entrance"],
+    "common": ["side_chamber"],
+    "rare": ["stairs_to_lower_crypt", "secret_passage_to_estate", "collapsed_wall"]
+  },
+  "atmosphere": {
+    "sounds": ["absolute_silence", "stone_settling", "dripping_condensation"],
+    "smells": ["cold_stone", "dried_flowers", "dust", "faint_embalming"],
+    "lighting": ["shaft_of_light_through_oculus", "total_darkness", "eternal_flame_glow"]
+  },
+  "layout": {
+    "footprint": "small",
+    "floors": [-1, 1],
+    "shape": ["rectangular", "domed", "cruciform"]
+  }
+}

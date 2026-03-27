@@ -1,0 +1,80 @@
+{
+  "id": "brewer",
+  "type": "npc",
+  "category": "craft",
+  "name": "Brewer",
+  "description": "Turns grain and water into the thing that makes every other job bearable. The brewer's opinion on the harvest matters more than the mayor's.",
+  "stats_tier": "commoner",
+  "traits": {
+    "common": [
+      "jovial",
+      "meticulous",
+      "strong_from_lifting_barrels",
+      "opinionated_about_ingredients"
+    ],
+    "rare": [
+      "alchemist_background",
+      "secret_recipe_worth_killing_for",
+      "temperance_advocate_ironically",
+      "poisoner"
+    ]
+  },
+  "skills": [
+    "nature",
+    "persuasion",
+    "medicine"
+  ],
+  "inventory": {
+    "required": [
+      "brewing_tools",
+      "ingredient_ledger",
+      "tasting_cup"
+    ],
+    "common": [
+      "grain_samples",
+      "hop_bundles",
+      "yeast_culture",
+      "barrel_tap"
+    ],
+    "rare": [
+      "exotic_ingredient",
+      "secret_recipe_book",
+      "enchanted_fermentation_stone"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "grain_harvest_quality",
+      "water_source_purity",
+      "who_drinks_what"
+    ],
+    "sometimes": [
+      "crop_blight_early_warning",
+      "trade_caravan_schedules",
+      "tavern_politics"
+    ],
+    "rarely": [
+      "poisoning_methods",
+      "alchemical_properties_of_fermentation",
+      "ancient_brewing_traditions"
+    ]
+  },
+  "dialogue_hooks": [
+    "insisting you try the new batch and give an honest opinion",
+    "complaining about this year's grain quality",
+    "gossiping about what happened at the tavern last night",
+    "asking if you've tasted anything good on your travels"
+  ],
+  "voice_patterns": [
+    "boisterous craftsman — proud of every barrel",
+    "quiet perfectionist — the beer speaks for itself",
+    "worried businessman — one bad batch could ruin everything",
+    "philosopher of fermentation — sees life lessons in every brew"
+  ],
+  "schedule": {
+    "morning": "checking fermentation, mashing new batches",
+    "afternoon": "brewing, transferring, cleaning equipment",
+    "evening": "delivering barrels, tasting with regulars",
+    "night": "recording notes, planning next batch"
+  }
+}

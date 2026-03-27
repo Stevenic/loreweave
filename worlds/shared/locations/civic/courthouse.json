@@ -1,0 +1,39 @@
+{
+  "id": "civic_courthouse",
+  "type": "location",
+  "category": "civic",
+  "name": "Courthouse",
+  "description": "Where disputes are settled, crimes are judged, and records are kept. The magistrate's word is law — or close enough.",
+  "tier": ["town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["courtroom", "magistrates_bench", "public_gallery"],
+    "common": ["records_room", "holding_cell", "clerks_desk", "witness_stand"],
+    "rare": ["torture_chamber", "execution_yard", "secret_evidence_vault", "judge_quarters"]
+  },
+  "objects": {
+    "required": ["gavel", "law_books", "ledger_of_judgments"],
+    "common": ["manacles", "witness_oath_stone", "quill_and_ink", "seal_of_office"],
+    "rare": ["forged_document", "bribe_hidden_in_drawer", "evidence_of_wrongful_conviction"]
+  },
+  "npcs": {
+    "required": ["magistrate"],
+    "common": ["clerk", "guard", "petitioner"],
+    "rare": ["defense_advocate", "corrupt_official", "wrongly_accused", "executioner"]
+  },
+  "exits": {
+    "required": ["front_steps"],
+    "common": ["side_door_to_cells", "records_room_door"],
+    "rare": ["private_chambers", "underground_passage"]
+  },
+  "atmosphere": {
+    "sounds": ["echoing_voices", "gavel_strike", "chains_rattling", "quill_scratching"],
+    "smells": ["old_wood", "parchment", "nervous_sweat", "stone_dust"],
+    "lighting": ["formal_bright", "high_windows", "dim_in_cells"]
+  },
+  "layout": {
+    "footprint": "medium",
+    "floors": [1, 2],
+    "shape": ["rectangular"]
+  }
+}

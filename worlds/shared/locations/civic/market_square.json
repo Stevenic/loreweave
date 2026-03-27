@@ -1,0 +1,39 @@
+{
+  "id": "civic_market_square",
+  "type": "location",
+  "category": "civic",
+  "name": "Market Square",
+  "description": "The beating heart of any settlement with trade. Stalls, shouting, haggling, and the smell of everything at once.",
+  "tier": ["town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["open_square", "market_stalls", "central_well_or_fountain"],
+    "common": ["notice_board", "platform_or_stage", "hitching_posts", "awnings"],
+    "rare": ["clock_tower", "stocks", "permanent_auction_block", "guild_hall_facade"]
+  },
+  "objects": {
+    "required": ["goods_on_display", "coin_changing"],
+    "common": ["fruit_crates", "fabric_bolts", "livestock_pen", "signage"],
+    "rare": ["pickpocket_evidence", "illegal_goods_under_cloth", "lost_purse"]
+  },
+  "npcs": {
+    "required": ["stall_vendor"],
+    "common": ["shopper", "town_crier", "guard", "child_running"],
+    "rare": ["pickpocket", "street_performer", "foreign_merchant", "spy"]
+  },
+  "exits": {
+    "required": ["main_street", "side_street"],
+    "common": ["alley", "shop_door"],
+    "rare": ["sewer_grate", "rooftop_access"]
+  },
+  "atmosphere": {
+    "sounds": ["haggling", "cart_wheels", "livestock_bleating", "hammer_on_anvil_nearby", "crowd_murmur"],
+    "smells": ["spices", "fresh_produce", "animal_dung", "baking_bread", "fish"],
+    "lighting": ["full_daylight", "awning_shade", "torch_lit_evening"]
+  },
+  "layout": {
+    "footprint": "large",
+    "floors": [0],
+    "shape": ["square", "rectangular", "irregular"]
+  }
+}

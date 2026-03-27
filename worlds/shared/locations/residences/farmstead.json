@@ -1,0 +1,39 @@
+{
+  "id": "residence_farmstead",
+  "type": "location",
+  "category": "residence",
+  "name": "Farmstead",
+  "description": "A working farm — house, barn, and fields. The family rises with the sun and sleeps when the animals do.",
+  "tier": ["hamlet", "village"],
+  "biomes": ["plains", "forest", "hills"],
+  "features": {
+    "required": ["farmhouse", "barn", "cultivated_fields"],
+    "common": ["chicken_coop", "well", "vegetable_garden", "tool_shed"],
+    "rare": ["windmill", "orchard", "root_cellar", "bee_hives"]
+  },
+  "objects": {
+    "required": ["farming_tools", "grain_stores", "water_bucket"],
+    "common": ["plow", "cart", "milk_pail", "hay_bales"],
+    "rare": ["family_heirloom", "buried_savings", "old_sword_above_mantle"]
+  },
+  "npcs": {
+    "required": ["farmer"],
+    "common": ["farmwife", "farm_child", "farmhand"],
+    "rare": ["deserter_hiding_in_barn", "traveling_buyer", "tax_collector"]
+  },
+  "exits": {
+    "required": ["front_door", "path_to_road"],
+    "common": ["barn_door", "back_garden"],
+    "rare": ["root_cellar_hatch", "field_path_to_woods"]
+  },
+  "atmosphere": {
+    "sounds": ["rooster_crow", "cattle_lowing", "wind_in_grain", "creaking_gate"],
+    "smells": ["hay", "manure", "cooking_stew", "turned_earth"],
+    "lighting": ["bright_open_sky", "warm_hearth_inside", "lantern_at_dusk"]
+  },
+  "layout": {
+    "footprint": "large",
+    "floors": [1, 2],
+    "shape": ["compound", "scattered"]
+  }
+}

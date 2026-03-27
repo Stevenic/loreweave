@@ -1,0 +1,39 @@
+{
+  "id": "shop_cobbler",
+  "type": "location",
+  "category": "shop",
+  "name": "Cobbler",
+  "description": "Every pair of boots in town passed through these hands at least once. The cobbler knows who walks where, and whose shoes are wearing thin.",
+  "tier": ["village", "town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["workbench", "last_rack", "leather_stock"],
+    "common": ["display_shelf", "repair_pile", "fitting_stool"],
+    "rare": ["exotic_leather_collection", "custom_commission_board", "hidden_compartment_in_boot"]
+  },
+  "objects": {
+    "required": ["shoes_in_various_states", "cobbler_tools", "leather_scraps"],
+    "common": ["boot_polish", "wooden_lasts", "thread_spools", "order_tags"],
+    "rare": ["pair_with_hidden_blade_slot", "noble_commission_waiting", "boots_of_elven_make"]
+  },
+  "npcs": {
+    "required": ["cobbler"],
+    "common": ["customer_waiting"],
+    "rare": ["spy_picking_up_hidden_message_in_boot", "adventurer_needing_custom_fit"]
+  },
+  "exits": {
+    "required": ["front_door"],
+    "common": ["back_room"],
+    "rare": ["cellar"]
+  },
+  "atmosphere": {
+    "sounds": ["tapping_hammer", "leather_creaking", "thread_pulling", "quiet_humming"],
+    "smells": ["leather", "boot_polish", "glue", "sawdust"],
+    "lighting": ["good_work_light", "window_light"]
+  },
+  "layout": {
+    "footprint": "small",
+    "floors": [1],
+    "shape": ["rectangular"]
+  }
+}

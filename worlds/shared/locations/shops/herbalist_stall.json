@@ -1,0 +1,39 @@
+{
+  "id": "shop_herbalist_stall",
+  "type": "location",
+  "category": "shop",
+  "name": "Herbalist Stall",
+  "description": "A market stall draped with drying herbs and cluttered with small bottles. The herbalist knows which root stops a cough and which stops a heart.",
+  "tier": ["hamlet", "village", "town"],
+  "biomes": ["forest", "plains", "swamp"],
+  "features": {
+    "required": ["stall_counter", "herb_bundles_hanging", "mortar_and_pestle"],
+    "common": ["drying_rack", "potion_shelf", "herb_garden_behind", "labeled_jars"],
+    "rare": ["locked_ingredient_box", "ritual_circle_hidden", "mushroom_growing_closet"]
+  },
+  "objects": {
+    "required": ["dried_herbs", "small_bottles", "pouch_collection"],
+    "common": ["grinding_tools", "recipe_book", "scales", "wax_paper"],
+    "rare": ["rare_root", "poison_ingredients", "antidote_stock", "old_druid_text"]
+  },
+  "npcs": {
+    "required": ["herbalist"],
+    "common": ["sick_villager", "forager_selling_finds"],
+    "rare": ["witch_hunter_snooping", "druid_passing_through", "poisoner_shopping"]
+  },
+  "exits": {
+    "required": ["market_street"],
+    "common": ["herb_garden"],
+    "rare": ["hidden_root_cellar"]
+  },
+  "atmosphere": {
+    "sounds": ["grinding_pestle", "market_chatter_beyond", "wind_through_herbs"],
+    "smells": ["lavender", "mint", "bitter_root", "dry_grass", "something_acrid"],
+    "lighting": ["open_air_dappled", "canvas_shade"]
+  },
+  "layout": {
+    "footprint": "small",
+    "floors": [0],
+    "shape": ["stall", "booth"]
+  }
+}

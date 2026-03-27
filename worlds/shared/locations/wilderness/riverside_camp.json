@@ -1,0 +1,39 @@
+{
+  "id": "wilderness_riverside_camp",
+  "type": "location",
+  "category": "wilderness",
+  "name": "Riverside Camp",
+  "description": "A flat stretch of bank where travelers rest, refill waterskins, and watch the current for signs of what's upstream.",
+  "tier": ["hamlet", "village"],
+  "biomes": ["forest", "plains", "hills"],
+  "features": {
+    "required": ["riverbank", "campfire_ring", "shallow_ford_or_deep_pool"],
+    "common": ["driftwood_pile", "fishing_spot", "flat_rocks", "game_trail_to_water"],
+    "rare": ["old_boat", "stepping_stones", "carved_waymarker", "flotsam_cache"]
+  },
+  "objects": {
+    "required": ["fire_ring_stones", "water_access"],
+    "common": ["discarded_fishing_line", "old_camp_debris", "animal_prints"],
+    "rare": ["message_in_cairn", "lost_ring_in_shallows", "strange_tracks"]
+  },
+  "npcs": {
+    "required": [],
+    "common": ["fisher", "fellow_traveler"],
+    "rare": ["river_spirit", "drowned_ghost", "smuggler_loading_boat", "hermit"]
+  },
+  "exits": {
+    "required": ["upstream", "downstream", "away_from_river"],
+    "common": ["ford_across"],
+    "rare": ["underwater_cave", "hidden_trail"]
+  },
+  "atmosphere": {
+    "sounds": ["flowing_water", "birdsong", "fish_jumping", "wind_in_reeds"],
+    "smells": ["clean_water", "river_mud", "wildflowers", "wet_stone"],
+    "lighting": ["reflected_sunlight", "dappled_shade", "moonlight_on_water"]
+  },
+  "layout": {
+    "footprint": "medium",
+    "floors": [0],
+    "shape": ["organic", "crescent"]
+  }
+}

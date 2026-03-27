@@ -1,0 +1,39 @@
+{
+  "id": "wilderness_forest_clearing",
+  "type": "location",
+  "category": "wilderness",
+  "name": "Forest Clearing",
+  "description": "An open space in the forest canopy, often a natural resting point or encounter site",
+  "tier": ["hamlet", "village", "town", "city"],
+  "biomes": ["forest", "taiga"],
+  "features": {
+    "required": ["open_sky", "tree_line"],
+    "common": ["wildflowers", "fallen_log", "animal_trail"],
+    "rare": ["standing_stone", "old_campfire_ring", "spring", "ancient_stump"]
+  },
+  "objects": {
+    "required": [],
+    "common": ["mushrooms", "berries", "fallen_branches"],
+    "rare": ["abandoned_pack", "carved_marker", "herb_patch", "animal_bones"]
+  },
+  "npcs": {
+    "required": [],
+    "common": [],
+    "rare": ["hermit", "ranger", "lost_traveler", "poacher"]
+  },
+  "exits": {
+    "required": ["forest_path"],
+    "common": ["deer_trail", "second_path"],
+    "rare": ["hidden_cave_mouth", "overgrown_stairs"]
+  },
+  "atmosphere": {
+    "sounds": ["birdsong", "rustling_leaves", "distant_woodpecker", "wind_in_canopy"],
+    "smells": ["pine", "damp_earth", "wildflowers", "moss"],
+    "lighting": ["dappled_sunlight", "bright_overhead", "grey_overcast"]
+  },
+  "layout": {
+    "footprint": "large",
+    "floors": [1],
+    "shape": ["irregular_open"]
+  }
+}

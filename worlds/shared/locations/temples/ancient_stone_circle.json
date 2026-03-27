@@ -1,0 +1,39 @@
+{
+  "id": "temple_stone_circle",
+  "type": "location",
+  "category": "temple",
+  "name": "Ancient Stone Circle",
+  "description": "Weathered standing stones in a deliberate pattern. Nobody remembers who raised them, but the ground hums on certain nights.",
+  "tier": ["hamlet", "village"],
+  "biomes": ["plains", "hills", "forest", "tundra"],
+  "features": {
+    "required": ["standing_stones", "central_altar_stone", "ritual_ground"],
+    "common": ["worn_path_between_stones", "lichen_covered_carvings", "fire_pit_in_center"],
+    "rare": ["ley_line_intersection", "moonlight_alignment", "underground_chamber_beneath_altar", "still_active_enchantment"]
+  },
+  "objects": {
+    "required": ["weathered_stones", "ancient_carvings"],
+    "common": ["scattered_offerings", "charred_wood", "wildflowers_growing_in_pattern"],
+    "rare": ["intact_runestone", "buried_ritual_tool", "crystal_that_hums", "bone_fragments"]
+  },
+  "npcs": {
+    "required": [],
+    "common": ["curious_traveler"],
+    "rare": ["druid", "fey_creature", "ghost_of_ancient_priest", "local_performing_folk_ritual"]
+  },
+  "exits": {
+    "required": ["path_away"],
+    "common": ["game_trail", "old_processional_road"],
+    "rare": ["stairs_beneath_altar", "portal_during_solstice", "fey_crossing"]
+  },
+  "atmosphere": {
+    "sounds": ["wind_between_stones", "low_hum_felt_in_teeth", "birdsong_that_stops_at_edge", "nothing"],
+    "smells": ["grass", "old_stone", "ozone_before_storm", "wild_thyme"],
+    "lighting": ["open_sky", "long_stone_shadows", "moonlit", "unnatural_twilight"]
+  },
+  "layout": {
+    "footprint": "medium",
+    "floors": [1],
+    "shape": ["circular", "elliptical", "horseshoe"]
+  }
+}

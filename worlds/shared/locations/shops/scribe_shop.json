@@ -1,0 +1,39 @@
+{
+  "id": "shop_scribe",
+  "type": "location",
+  "category": "shop",
+  "name": "Scribe's Shop",
+  "description": "In a world where most can't read, the scribe is gatekeeper to contracts, letters, and official records. Every document has a fee.",
+  "tier": ["town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["writing_desk", "ink_and_quill_supply", "document_shelves"],
+    "common": ["wax_seal_collection", "contract_templates", "client_waiting_area", "locked_records_cabinet"],
+    "rare": ["forgery_supplies_hidden", "encrypted_document_collection", "magical_preservation_ward", "secret_client_list"]
+  },
+  "objects": {
+    "required": ["parchment_stock", "ink_bottles", "sealing_wax"],
+    "common": ["magnifying_lens", "blotting_sand", "official_stamps", "reading_candle"],
+    "rare": ["invisible_ink", "forged_noble_seal", "ancient_document_under_study", "blackmail_material_filed_as_records"]
+  },
+  "npcs": {
+    "required": ["scribe"],
+    "common": ["apprentice_scribe", "customer_dictating_letter"],
+    "rare": ["forger", "spy_retrieving_copied_documents", "scholar_needing_translation"]
+  },
+  "exits": {
+    "required": ["front_door"],
+    "common": ["back_room_archive"],
+    "rare": ["hidden_vault"]
+  },
+  "atmosphere": {
+    "sounds": ["quill_scratching", "wax_melting", "paper_rustling", "quiet_dictation"],
+    "smells": ["ink", "parchment", "sealing_wax", "candle_smoke"],
+    "lighting": ["good_reading_light", "desk_lamps", "natural_from_large_window"]
+  },
+  "layout": {
+    "footprint": "small",
+    "floors": [1],
+    "shape": ["rectangular"]
+  }
+}

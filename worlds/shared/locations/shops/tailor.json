@@ -1,0 +1,39 @@
+{
+  "id": "shop_tailor",
+  "type": "location",
+  "category": "shop",
+  "name": "Tailor & Clothier",
+  "description": "Bolts of fabric, a measuring tape, and strong opinions about hemlines. The tailor dresses the town and overhears everything during fittings.",
+  "tier": ["town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["fitting_area", "fabric_shelves", "sewing_table"],
+    "common": ["mannequins", "mirror", "thread_rack", "pattern_books"],
+    "rare": ["private_fitting_room", "dye_workshop", "silk_vault", "design_studio"]
+  },
+  "objects": {
+    "required": ["scissors", "measuring_tape", "pins_and_needles"],
+    "common": ["fabric_bolts", "thread_spools", "pattern_paper", "thimbles"],
+    "rare": ["enchanted_thread", "noble_commission_in_progress", "disguise_components"]
+  },
+  "npcs": {
+    "required": ["tailor"],
+    "common": ["seamstress", "customer_being_fitted"],
+    "rare": ["fabric_merchant", "spy_needing_disguise", "noble_with_urgent_order"]
+  },
+  "exits": {
+    "required": ["front_door"],
+    "common": ["back_storeroom"],
+    "rare": ["upstairs_apartments", "dye_workshop_door"]
+  },
+  "atmosphere": {
+    "sounds": ["scissors_snipping", "needle_through_cloth", "fabric_unfurling", "gossip"],
+    "smells": ["new_cloth", "lavender_sachets", "dye_chemicals", "starch"],
+    "lighting": ["bright_natural_from_large_windows", "lamp_at_sewing_table"]
+  },
+  "layout": {
+    "footprint": "small",
+    "floors": [1, 2],
+    "shape": ["narrow_deep"]
+  }
+}

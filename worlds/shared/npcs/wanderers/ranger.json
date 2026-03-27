@@ -1,0 +1,85 @@
+{
+  "id": "ranger",
+  "type": "npc",
+  "category": "wanderer",
+  "name": "Ranger / Scout",
+  "description": "A wilderness expert who patrols between settlements. Tracks threats, guides travelers.",
+  "stats_tier": "expert",
+  "traits": {
+    "common": [
+      "vigilant",
+      "independent",
+      "laconic",
+      "dependable"
+    ],
+    "rare": [
+      "haunted_by_loss",
+      "tracking_specific_quarry",
+      "distrustful_of_cities",
+      "bounty_hunter"
+    ]
+  },
+  "skills": [
+    "survival",
+    "nature",
+    "stealth",
+    "perception"
+  ],
+  "inventory": {
+    "required": [
+      "bow",
+      "hunting_knife",
+      "bedroll"
+    ],
+    "common": [
+      "trail_rations",
+      "rope",
+      "flint_and_steel",
+      "waterskin"
+    ],
+    "rare": [
+      "poisoned_arrows",
+      "encoded_message",
+      "trophy_from_kill",
+      "ranger_badge"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "local_terrain",
+      "animal_tracks",
+      "safe_campsites",
+      "weather_signs"
+    ],
+    "sometimes": [
+      "monster_territories",
+      "bandit_movements",
+      "hidden_trails",
+      "foraging_spots"
+    ],
+    "rarely": [
+      "ancient_ruins_deep_in_wilderness",
+      "enemy_army_movements",
+      "secret_druid_circles"
+    ]
+  },
+  "dialogue_hooks": [
+    "warnings about creatures or dangers on a specific path",
+    "offering to guide for a fee or favor",
+    "asking for news from settlements",
+    "reporting unusual activity in the wilds",
+    "requesting help tracking something dangerous"
+  ],
+  "voice_patterns": [
+    "terse and to the point",
+    "quiet authority born from experience",
+    "friendly but always scanning the treeline",
+    "storyteller around the campfire"
+  ],
+  "schedule": {
+    "morning": "breaking camp, scouting",
+    "afternoon": "patrolling, tracking",
+    "evening": "making camp, checking territory",
+    "night": "light sleep, alert watch"
+  }
+}

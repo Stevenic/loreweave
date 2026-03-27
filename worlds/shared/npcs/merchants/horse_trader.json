@@ -1,0 +1,81 @@
+{
+  "id": "horse_trader",
+  "type": "npc",
+  "category": "merchant",
+  "name": "Horse Trader",
+  "description": "Knows every trick for making a lame horse look sound and a sound horse look exceptional. Smiles too much. Always has a deal for you.",
+  "stats_tier": "skilled",
+  "traits": {
+    "common": [
+      "silver_tongued",
+      "appraising",
+      "patient",
+      "competitive"
+    ],
+    "rare": [
+      "horse_whisperer",
+      "former_cavalry",
+      "smuggler_using_horse_trade_as_cover",
+      "genuinely_honest"
+    ]
+  },
+  "skills": [
+    "animal_handling",
+    "persuasion",
+    "deception",
+    "insight"
+  ],
+  "inventory": {
+    "required": [
+      "lead_ropes",
+      "sugar_cubes",
+      "bill_of_sale_blanks"
+    ],
+    "common": [
+      "hoof_pick",
+      "grooming_brush",
+      "price_list",
+      "horse_blankets"
+    ],
+    "rare": [
+      "forged_pedigree_papers",
+      "calming_draft",
+      "exotic_mount_care_guide"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "horse_breeds",
+      "road_conditions",
+      "local_stables"
+    ],
+    "sometimes": [
+      "military_movements",
+      "bandit_activity_on_roads",
+      "noble_families_breeding_programs"
+    ],
+    "rarely": [
+      "smuggling_routes",
+      "stolen_horse_networks",
+      "upcoming_cavalry_draft"
+    ]
+  },
+  "dialogue_hooks": [
+    "appraising the party's mounts with professional interest",
+    "offering a 'special deal' on a horse that's 'almost' perfect",
+    "complaining about bandits disrupting the trade routes",
+    "asking where you're headed — to recommend the right horse for the terrain"
+  ],
+  "voice_patterns": [
+    "fast-talking salesman — always closing",
+    "quiet horseman — lets the animal speak for itself",
+    "old hand — seen every trick, respects people who know horses",
+    "jovial showman — treats every sale like a performance"
+  ],
+  "schedule": {
+    "morning": "exercising and grooming stock",
+    "afternoon": "showing horses to buyers, negotiating deals",
+    "evening": "feeding, watering, tallying the day's sales",
+    "night": "sleeping near the horses, one eye open for thieves"
+  }
+}

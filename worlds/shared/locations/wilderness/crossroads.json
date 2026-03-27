@@ -1,0 +1,39 @@
+{
+  "id": "wilderness_crossroads",
+  "type": "location",
+  "category": "wilderness",
+  "name": "Crossroads",
+  "description": "An intersection of two or more roads. A natural meeting point and decision point.",
+  "tier": ["hamlet", "village", "town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["road_intersection"],
+    "common": ["signpost", "worn_ground", "wagon_ruts"],
+    "rare": ["wayside_shrine", "gibbet", "milestone", "abandoned_cart"]
+  },
+  "objects": {
+    "required": [],
+    "common": ["directional_signs", "discarded_provisions"],
+    "rare": ["lost_coin_purse", "warning_notice", "offerings_at_shrine"]
+  },
+  "npcs": {
+    "required": [],
+    "common": ["traveling_merchant", "farmer_with_cart"],
+    "rare": ["bandit_scout", "lost_pilgrim", "patrol_guard", "fortune_teller"]
+  },
+  "exits": {
+    "required": ["road_north", "road_south"],
+    "common": ["road_east", "road_west"],
+    "rare": ["hidden_trail", "ditch_path"]
+  },
+  "atmosphere": {
+    "sounds": ["wind", "distant_hooves", "creaking_signpost"],
+    "smells": ["road_dust", "grass", "horse_dung"],
+    "lighting": ["open_sky", "exposed"]
+  },
+  "layout": {
+    "footprint": "small",
+    "floors": [1],
+    "shape": ["cross", "T-junction", "Y-fork"]
+  }
+}

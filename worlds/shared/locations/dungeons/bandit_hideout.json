@@ -1,0 +1,39 @@
+{
+  "id": "dungeon_bandit_hideout",
+  "type": "location",
+  "category": "dungeon",
+  "name": "Bandit Hideout",
+  "description": "A repurposed ruin, cave, or abandoned structure where outlaws stash their loot and plan their next raid.",
+  "tier": ["hamlet", "village", "town"],
+  "biomes": ["forest", "hills", "mountain", "plains"],
+  "features": {
+    "required": ["crude_fortifications", "lookout_post", "sleeping_area"],
+    "common": ["campfire_pit", "stolen_goods_pile", "weapon_rack", "prisoner_cage"],
+    "rare": ["escape_tunnel", "war_room_with_map", "hidden_vault", "trapped_entrance"]
+  },
+  "objects": {
+    "required": ["bedrolls", "stolen_supplies"],
+    "common": ["dice_and_cards", "wanted_posters", "empty_bottles", "crude_map"],
+    "rare": ["forged_documents", "noble_ransom_letter", "magical_item_they_dont_understand", "coded_ledger"]
+  },
+  "npcs": {
+    "required": ["bandit"],
+    "common": ["bandit_captain", "lookout", "prisoner"],
+    "rare": ["spy_posing_as_bandit", "deserter_soldier", "bandit_mage", "trained_beast"]
+  },
+  "exits": {
+    "required": ["main_entrance"],
+    "common": ["back_exit", "window_climb"],
+    "rare": ["escape_tunnel", "hidden_river_exit", "rooftop"]
+  },
+  "atmosphere": {
+    "sounds": ["rough_laughter", "dice_clatter", "sharpening_blades", "nervous_horses"],
+    "smells": ["unwashed_bodies", "campfire_smoke", "cheap_drink", "leather"],
+    "lighting": ["campfire_glow", "torchlit", "natural_light_through_gaps"]
+  },
+  "layout": {
+    "footprint": "medium",
+    "floors": [1],
+    "shape": ["irregular", "adapted_ruins", "cave_with_additions"]
+  }
+}

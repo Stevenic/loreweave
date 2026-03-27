@@ -1,0 +1,81 @@
+{
+  "id": "fortune_teller",
+  "type": "npc",
+  "category": "wanderer",
+  "name": "Fortune Teller",
+  "description": "Reads cards, stars, palms, or tea leaves — depends on the audience. Some of it's theater. Some of it isn't. The unsettling part is not knowing which.",
+  "stats_tier": "skilled",
+  "traits": {
+    "common": [
+      "mysterious",
+      "theatrical",
+      "perceptive",
+      "ambiguous"
+    ],
+    "rare": [
+      "genuinely_prophetic",
+      "fraud_with_spy_network",
+      "cursed_to_see_true_futures",
+      "former_court_diviner"
+    ]
+  },
+  "skills": [
+    "insight",
+    "deception",
+    "persuasion",
+    "arcana"
+  ],
+  "inventory": {
+    "required": [
+      "divination_tools",
+      "coin_purse"
+    ],
+    "common": [
+      "crystal_ball",
+      "tarot_deck",
+      "incense",
+      "veiled_tent"
+    ],
+    "rare": [
+      "genuine_scrying_device",
+      "prophetic_journal",
+      "cursed_mirror",
+      "patron_deity_symbol_hidden"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "local_gossip_repackaged_as_prophecy",
+      "cold_reading_psychology",
+      "superstitions"
+    ],
+    "sometimes": [
+      "actual_omens",
+      "historical_prophecies",
+      "hidden_desires_of_clients"
+    ],
+    "rarely": [
+      "true_visions_of_the_future",
+      "cosmic_threats",
+      "the_moment_of_your_death"
+    ]
+  },
+  "dialogue_hooks": [
+    "calling out to you specifically — they've been 'expecting' someone like you",
+    "offering a free reading to draw you in",
+    "delivering a cryptic warning that turns out to be accurate",
+    "asking to read your palm and going pale at what they see"
+  ],
+  "voice_patterns": [
+    "theatrical mystic — every sentence drips with drama",
+    "quiet seer — speaks reluctantly, as if the visions are a burden",
+    "carnival barker — all show, preys on hope and fear",
+    "matter-of-fact prophet — states the future like a weather report"
+  ],
+  "schedule": {
+    "morning": "setting up tent or stall at market",
+    "afternoon": "readings, cold reading passersby",
+    "evening": "busy period — people come after dark for serious questions",
+    "night": "genuine divination practice, or counting the day's coin"
+  }
+}

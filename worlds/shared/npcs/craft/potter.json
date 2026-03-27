@@ -1,0 +1,80 @@
+{
+  "id": "potter",
+  "type": "npc",
+  "category": "craft",
+  "name": "Potter",
+  "description": "Shapes earth and fire into the vessels a community eats from, drinks from, and stores everything in. Underappreciated until something breaks.",
+  "stats_tier": "commoner",
+  "traits": {
+    "common": [
+      "earthy",
+      "steady_hands",
+      "observant",
+      "pragmatic"
+    ],
+    "rare": [
+      "sculptor_of_hidden_talent",
+      "clay_reader",
+      "former_tomb_sealer",
+      "kiln_alchemist"
+    ]
+  },
+  "skills": [
+    "perception",
+    "nature",
+    "investigation"
+  ],
+  "inventory": {
+    "required": [
+      "clay",
+      "potter_wheel_tools",
+      "kiln_tools"
+    ],
+    "common": [
+      "glazes",
+      "finished_pots",
+      "molds",
+      "apron"
+    ],
+    "rare": [
+      "unusual_clay_from_distant_source",
+      "ceremonial_vessel",
+      "sealed_jar_with_unknown_contents"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "clay_sources",
+      "local_soil_quality",
+      "who_needs_new_pots"
+    ],
+    "sometimes": [
+      "burial_customs",
+      "underground_water_sources",
+      "trade_goods_shipped_in_pots"
+    ],
+    "rarely": [
+      "sealed_artifacts_found_in_clay",
+      "ancient_kiln_sites",
+      "what_was_buried_in_the_potter_field"
+    ]
+  },
+  "dialogue_hooks": [
+    "offering a pot at a fair price — everyone needs pots",
+    "asking about clay they've heard is found in a specific area",
+    "telling you about something strange found in the clay pit",
+    "muttering about a kiln firing that went wrong in an unusual way"
+  ],
+  "voice_patterns": [
+    "quiet and steady — speaks like someone used to working alone",
+    "warm community pillar — knows everyone because everyone needs pots",
+    "gruff artisan — doesn't suffer fools or cheap clay",
+    "curious naturalist — fascinated by what the earth produces"
+  ],
+  "schedule": {
+    "morning": "digging and preparing clay",
+    "afternoon": "throwing pots on the wheel",
+    "evening": "loading and tending kiln, glazing",
+    "night": "watching kiln temperature, sleeping in shifts"
+  }
+}

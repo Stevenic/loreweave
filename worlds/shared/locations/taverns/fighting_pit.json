@@ -1,0 +1,39 @@
+{
+  "id": "tavern_fighting_pit",
+  "type": "location",
+  "category": "tavern",
+  "name": "Fighting Pit Tavern",
+  "description": "The drinks are secondary. The main attraction is the sunken ring where fists settle scores and coin changes hands.",
+  "tier": ["town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["bar_counter", "fighting_pit", "spectator_gallery"],
+    "common": ["betting_window", "champions_board", "weapon_rack", "sawdust_floor"],
+    "rare": ["underground_cells", "beast_cage", "healers_corner", "back_office"]
+  },
+  "objects": {
+    "required": ["tankards", "bloodstained_sand", "betting_chalkboard"],
+    "common": ["brass_knuckles_display", "trophy_belt", "coin_piles", "rules_board"],
+    "rare": ["rigged_dice", "poison_vial", "forged_fight_record", "hidden_weapon_stash"]
+  },
+  "npcs": {
+    "required": ["pit_master"],
+    "common": ["bookie", "fighter", "spectator", "barkeep"],
+    "rare": ["retired_champion", "fight_fixer", "healer", "bounty_hunter"]
+  },
+  "exits": {
+    "required": ["front_door"],
+    "common": ["pit_entrance", "back_door"],
+    "rare": ["underground_tunnel", "champion_suite", "rooftop_escape"]
+  },
+  "atmosphere": {
+    "sounds": ["roaring_crowd", "fist_on_flesh", "coins_clinking", "shouted_bets"],
+    "smells": ["sweat", "blood", "sawdust", "cheap_ale"],
+    "lighting": ["torchlit", "smoky", "harsh_shadows"]
+  },
+  "layout": {
+    "footprint": "large",
+    "floors": [1],
+    "shape": ["square", "circular"]
+  }
+}

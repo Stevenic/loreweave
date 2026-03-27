@@ -1,0 +1,39 @@
+{
+  "id": "residence_townhouse",
+  "type": "location",
+  "category": "residence",
+  "name": "Townhouse",
+  "description": "A narrow, multi-story home squeezed between neighbors on a town street. Each floor serves a different purpose.",
+  "tier": ["town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["ground_floor_shop_or_hall", "upper_bedrooms", "steep_stairs"],
+    "common": ["small_kitchen", "parlor", "storage_attic", "window_boxes"],
+    "rare": ["hidden_room", "rooftop_access", "connected_cellar", "servant_quarters"]
+  },
+  "objects": {
+    "required": ["furniture", "hearth", "personal_effects"],
+    "common": ["books", "larder", "clothing_chest", "wash_basin"],
+    "rare": ["hidden_safe", "love_letters", "evidence_of_crime", "family_secret"]
+  },
+  "npcs": {
+    "required": ["resident"],
+    "common": ["spouse", "child"],
+    "rare": ["tenant", "secret_guest", "burglar"]
+  },
+  "exits": {
+    "required": ["front_door_to_street"],
+    "common": ["back_door_to_yard"],
+    "rare": ["roof_hatch", "shared_wall_passage"]
+  },
+  "atmosphere": {
+    "sounds": ["street_noise_below", "floorboards_creaking", "clock_ticking", "neighbors_through_walls"],
+    "smells": ["cooking", "wood_fire", "laundry_drying", "street_air_from_windows"],
+    "lighting": ["window_light_from_front", "candle_lit_upper_floors", "dim_interior"]
+  },
+  "layout": {
+    "footprint": "small",
+    "floors": [2, 3, 4],
+    "shape": ["narrow_tall"]
+  }
+}

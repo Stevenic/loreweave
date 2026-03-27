@@ -1,0 +1,81 @@
+{
+  "id": "bard_npc",
+  "type": "npc",
+  "category": "wanderer",
+  "name": "Bard / Minstrel",
+  "description": "Travels from settlement to settlement trading songs for supper. Carries news, stories, and sometimes secrets in their instrument case.",
+  "stats_tier": "skilled",
+  "traits": {
+    "common": [
+      "charismatic",
+      "observant",
+      "adaptable",
+      "dramatic"
+    ],
+    "rare": [
+      "spy_for_hire",
+      "exiled_noble",
+      "keeper_of_forbidden_songs",
+      "truth_teller"
+    ]
+  },
+  "skills": [
+    "performance",
+    "persuasion",
+    "deception",
+    "history"
+  ],
+  "inventory": {
+    "required": [
+      "instrument",
+      "traveling_clothes"
+    ],
+    "common": [
+      "songbook",
+      "coin_pouch",
+      "flask",
+      "hat_for_coins"
+    ],
+    "rare": [
+      "coded_message_in_lyrics",
+      "noble_signet_ring",
+      "enchanted_strings"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "news_from_other_settlements",
+      "local_legends",
+      "popular_songs"
+    ],
+    "sometimes": [
+      "noble_scandals",
+      "road_conditions",
+      "which_taverns_pay_best"
+    ],
+    "rarely": [
+      "coded_messages_in_ballads",
+      "rebellion_sentiments",
+      "ancient_lore_preserved_in_song"
+    ]
+  },
+  "dialogue_hooks": [
+    "offering to play a song for a coin or a story",
+    "asking what news you carry from wherever you've been",
+    "hinting that a certain ballad contains more truth than people think",
+    "looking for someone specific — a patron, a lover, a debtor",
+    "requesting safe passage to the next town"
+  ],
+  "voice_patterns": [
+    "lyrical — speaks in rhythm even in conversation",
+    "roguish charm — everything's a performance",
+    "melancholy — the songs are sadder than the singer lets on",
+    "enthusiastic collector — fascinated by every story they hear"
+  ],
+  "schedule": {
+    "morning": "sleeping off last night's performance",
+    "afternoon": "practicing, writing, exploring the town",
+    "evening": "performing at the tavern",
+    "night": "drinking with admirers, gathering stories, moving on"
+  }
+}

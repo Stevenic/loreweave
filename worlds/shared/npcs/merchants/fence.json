@@ -1,0 +1,82 @@
+{
+  "id": "fence",
+  "type": "npc",
+  "category": "merchant",
+  "name": "Fence / Black Market Dealer",
+  "description": "Buys what others won't ask about and sells what you won't find in any shop. Trust is currency here.",
+  "stats_tier": "skilled",
+  "traits": {
+    "common": [
+      "shrewd",
+      "cautious",
+      "well_connected",
+      "morally_flexible"
+    ],
+    "rare": [
+      "paranoid",
+      "surprisingly_principled",
+      "former_thief",
+      "informant"
+    ]
+  },
+  "skills": [
+    "deception",
+    "insight",
+    "sleight_of_hand",
+    "persuasion"
+  ],
+  "inventory": {
+    "required": [
+      "coin_purse",
+      "hidden_blade"
+    ],
+    "common": [
+      "lockpicks",
+      "forged_documents",
+      "stolen_jewelry",
+      "unmarked_potions"
+    ],
+    "rare": [
+      "poison",
+      "blackmail_material",
+      "stolen_artifact",
+      "guard_patrol_schedule"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "black_market_prices",
+      "who_buys_what",
+      "safe_houses"
+    ],
+    "sometimes": [
+      "thieves_guild_contacts",
+      "smuggling_routes",
+      "corrupt_officials"
+    ],
+    "rarely": [
+      "assassination_contracts",
+      "noble_secrets",
+      "underground_network_leaders"
+    ]
+  },
+  "dialogue_hooks": [
+    "casually asking what you've got to sell",
+    "warning you about asking too many questions",
+    "offering a 'special deal' for first-timers",
+    "mentioning a job that needs doing",
+    "dropping hints about who's looking for what"
+  ],
+  "voice_patterns": [
+    "quiet and businesslike",
+    "overly friendly to mask suspicion",
+    "cryptic — speaks in implications, never direct",
+    "gruff and impatient — time is money"
+  ],
+  "schedule": {
+    "morning": "sleeping or laundering money",
+    "afternoon": "meeting contacts, moving goods",
+    "evening": "conducting business in back rooms",
+    "night": "peak operating hours"
+  }
+}

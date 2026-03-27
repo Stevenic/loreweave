@@ -1,0 +1,82 @@
+{
+  "id": "traveling_merchant",
+  "type": "npc",
+  "category": "merchant",
+  "name": "Traveling Merchant",
+  "description": "An itinerant trader who moves between settlements. Carries unusual goods and distant news.",
+  "stats_tier": "skilled",
+  "traits": {
+    "common": [
+      "charming",
+      "well_traveled",
+      "deal_maker",
+      "storyteller"
+    ],
+    "rare": [
+      "spy",
+      "fence_for_stolen_goods",
+      "cursed_item_seller",
+      "secretly_wealthy"
+    ]
+  },
+  "skills": [
+    "persuasion",
+    "deception",
+    "survival"
+  ],
+  "inventory": {
+    "required": [
+      "pack_or_cart",
+      "trade_goods",
+      "coin_purse"
+    ],
+    "common": [
+      "exotic_spices",
+      "foreign_cloth",
+      "road_rations",
+      "map"
+    ],
+    "rare": [
+      "magical_trinket",
+      "forged_documents",
+      "rare_ingredient",
+      "encrypted_message"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "news_from_other_settlements",
+      "road_conditions",
+      "trade_prices_elsewhere"
+    ],
+    "sometimes": [
+      "political_changes_in_distant_places",
+      "bandit_activity",
+      "caravan_routes"
+    ],
+    "rarely": [
+      "secret_trade_routes",
+      "hidden_ruins_locations",
+      "wanted_persons_info"
+    ]
+  },
+  "dialogue_hooks": [
+    "tales from the road",
+    "special deals on exotic wares",
+    "warnings about dangers between settlements",
+    "looking for guards or traveling companions",
+    "seeking specific rare items to buy"
+  ],
+  "voice_patterns": [
+    "silver-tongued salesman",
+    "cautious and cryptic",
+    "boisterous and exaggerating",
+    "quiet observer who reveals information slowly"
+  ],
+  "schedule": {
+    "morning": "breaking camp or setting up market stall",
+    "afternoon": "trading, haggling, socializing",
+    "evening": "tavern — buying drinks, trading stories",
+    "night": "guarding goods, planning next route"
+  }
+}

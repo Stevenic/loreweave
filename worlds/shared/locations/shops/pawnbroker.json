@@ -1,0 +1,39 @@
+{
+  "id": "shop_pawnbroker",
+  "type": "location",
+  "category": "shop",
+  "name": "Pawnbroker",
+  "description": "Every object has a story its owner doesn't want told. The pawnbroker buys the object and the silence.",
+  "tier": ["town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["barred_counter", "display_cases", "back_vault"],
+    "common": ["appraisal_desk", "iron_strongbox", "ledger_on_chain", "barred_windows"],
+    "rare": ["hidden_room_for_special_clients", "magical_detection_ward", "fence_operation"]
+  },
+  "objects": {
+    "required": ["miscellaneous_goods", "scales", "ledger"],
+    "common": ["jewelry", "weapons", "tools", "family_heirlooms"],
+    "rare": ["stolen_noble_signet", "cursed_item_unknowingly_held", "map_nobody_asked_about", "item_from_a_murder"]
+  },
+  "npcs": {
+    "required": ["pawnbroker"],
+    "common": ["desperate_seller", "bargain_hunter"],
+    "rare": ["thief_fencing_goods", "noble_in_disguise", "detective_investigating"]
+  },
+  "exits": {
+    "required": ["front_door"],
+    "common": ["back_room"],
+    "rare": ["hidden_basement", "alley_exit"]
+  },
+  "atmosphere": {
+    "sounds": ["coins_counting", "lock_clicking", "hushed_negotiation", "bell_over_door"],
+    "smells": ["old_metal", "dust", "lamp_oil", "anxiety"],
+    "lighting": ["dim", "focused_on_counter", "shadows_in_corners"]
+  },
+  "layout": {
+    "footprint": "small",
+    "floors": [1],
+    "shape": ["rectangular", "narrow_frontage"]
+  }
+}

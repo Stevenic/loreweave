@@ -1,0 +1,39 @@
+{
+  "id": "temple_roadside_shrine",
+  "type": "location",
+  "category": "temple",
+  "name": "Roadside Shrine",
+  "description": "A small stone or wooden shelter marking a crossroads, spring, or place where something happened. Travelers leave offerings for safe passage.",
+  "tier": ["hamlet", "village", "town"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["stone_or_wood_shelter", "deity_symbol", "offering_niche"],
+    "common": ["prayer_ribbons", "bench", "worn_path_to_shrine"],
+    "rare": ["healing_spring", "ancient_inscription", "still_active_ward"]
+  },
+  "objects": {
+    "required": ["small_offerings", "worn_icon"],
+    "common": ["dried_flowers", "coins", "travel_prayer_scroll", "carved_name"],
+    "rare": ["valuable_offering_left_by_desperate_traveler", "enchanted_stone", "hidden_cache_behind_icon"]
+  },
+  "npcs": {
+    "required": [],
+    "common": ["traveler_resting"],
+    "rare": ["hermit_shrine_keeper", "pilgrim", "wounded_fugitive", "deity_in_disguise"]
+  },
+  "exits": {
+    "required": ["back_to_road"],
+    "common": ["path_through_woods"],
+    "rare": ["hidden_cellar", "portal_when_offering_made"]
+  },
+  "atmosphere": {
+    "sounds": ["wind_in_branches", "birdsong", "distant_road_traffic", "quiet"],
+    "smells": ["wildflowers", "old_incense", "rain_on_stone"],
+    "lighting": ["dappled_sunlight", "open_sky", "sheltered_shadow"]
+  },
+  "layout": {
+    "footprint": "tiny",
+    "floors": [1],
+    "shape": ["alcove", "open_pavilion", "carved_niche"]
+  }
+}

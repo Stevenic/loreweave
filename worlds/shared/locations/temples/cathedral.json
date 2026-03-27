@@ -1,0 +1,39 @@
+{
+  "id": "temple_cathedral",
+  "type": "location",
+  "category": "temple",
+  "name": "Cathedral",
+  "description": "A soaring house of worship with stained glass, vaulted ceilings, and the weight of centuries of prayer pressed into the stone.",
+  "tier": ["city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["nave", "altar", "stained_glass_windows", "bell_tower"],
+    "common": ["side_chapels", "cloister", "vestry", "baptismal_font"],
+    "rare": ["catacombs_beneath", "reliquary", "hidden_scriptorium", "miracle_site"]
+  },
+  "objects": {
+    "required": ["holy_symbol", "prayer_books", "candles"],
+    "common": ["offering_bowl", "incense_burner", "tapestries", "carved_pews"],
+    "rare": ["sacred_relic", "ancient_scripture", "enchanted_bell", "confession_records"]
+  },
+  "npcs": {
+    "required": ["high_priest"],
+    "common": ["acolyte", "worshipper", "choir_member"],
+    "rare": ["penitent_knight", "visiting_bishop", "haunted_sexton", "sanctuary_seeker"]
+  },
+  "exits": {
+    "required": ["grand_entrance"],
+    "common": ["side_door", "stairs_to_bell_tower", "cloister_door"],
+    "rare": ["passage_to_catacombs", "hidden_door_behind_altar", "rooftop_access"]
+  },
+  "atmosphere": {
+    "sounds": ["echoing_hymns", "bell_tolling", "whispered_prayers", "footsteps_on_stone"],
+    "smells": ["incense", "candle_wax", "old_stone", "flowers"],
+    "lighting": ["colored_light_through_stained_glass", "candlelit", "solemn_dimness"]
+  },
+  "layout": {
+    "footprint": "large",
+    "floors": [-1, 1, 2],
+    "shape": ["cruciform", "basilica"]
+  }
+}

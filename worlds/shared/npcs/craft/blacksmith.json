@@ -1,0 +1,80 @@
+{
+  "id": "blacksmith",
+  "type": "npc",
+  "category": "craft",
+  "name": "Blacksmith",
+  "description": "Forges tools, weapons, and armor. Strong, straightforward, respected in the community.",
+  "stats_tier": "skilled",
+  "traits": {
+    "common": [
+      "strong",
+      "patient",
+      "straightforward",
+      "proud_of_craft"
+    ],
+    "rare": [
+      "former_soldier",
+      "dwarven_trained",
+      "secretive_about_past",
+      "artistic"
+    ]
+  },
+  "skills": [
+    "athletics",
+    "perception",
+    "intimidation"
+  ],
+  "inventory": {
+    "required": [
+      "hammer",
+      "apron",
+      "tongs"
+    ],
+    "common": [
+      "finished_tools",
+      "horseshoes",
+      "dagger"
+    ],
+    "rare": [
+      "masterwork_blade",
+      "exotic_metal_sample",
+      "old_military_insignia"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "metal_quality",
+      "equipment_condition",
+      "local_tool_needs"
+    ],
+    "sometimes": [
+      "military_movements",
+      "mining_conditions",
+      "weapon_fighting_styles"
+    ],
+    "rarely": [
+      "ancient_forging_techniques",
+      "enchanting_basics",
+      "hidden_ore_deposits"
+    ]
+  },
+  "dialogue_hooks": [
+    "opinions on the quality of someone's gear",
+    "need for raw materials (iron, coal, leather)",
+    "stories about notable commissions",
+    "complaints about the heat or lazy apprentices",
+    "requests to find specific materials"
+  ],
+  "voice_patterns": [
+    "few words, all meaningful",
+    "grumpy but generous",
+    "takes pride in explaining the craft",
+    "loud and boisterous from shouting over the forge"
+  ],
+  "schedule": {
+    "morning": "lighting forge, starting work orders",
+    "afternoon": "peak smithing, customer fittings",
+    "evening": "finishing work, cooling forge, tavern",
+    "night": "home, sharpening personal tools"
+  }
+}

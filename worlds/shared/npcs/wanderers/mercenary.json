@@ -1,0 +1,82 @@
+{
+  "id": "mercenary",
+  "type": "npc",
+  "category": "wanderer",
+  "name": "Mercenary / Sellsword",
+  "description": "Fights for coin, not causes. Professional, pragmatic, and exactly as loyal as the contract specifies. Good ones are expensive. Cheap ones are dangerous.",
+  "stats_tier": "expert",
+  "traits": {
+    "common": [
+      "pragmatic",
+      "disciplined",
+      "scarred",
+      "calculating"
+    ],
+    "rare": [
+      "honorable_despite_reputation",
+      "wanted_in_another_region",
+      "protecting_someone_secretly",
+      "burned_by_last_employer"
+    ]
+  },
+  "skills": [
+    "athletics",
+    "intimidation",
+    "perception",
+    "survival"
+  ],
+  "inventory": {
+    "required": [
+      "weapon",
+      "armor",
+      "coin_purse"
+    ],
+    "common": [
+      "whetstone",
+      "bedroll",
+      "rations",
+      "trophy_from_past_job"
+    ],
+    "rare": [
+      "contract_with_sensitive_target",
+      "poison",
+      "forged_noble_signet",
+      "map_to_hidden_cache"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "local_conflicts",
+      "who_is_hiring",
+      "terrain_assessment"
+    ],
+    "sometimes": [
+      "military_intelligence",
+      "bounty_targets",
+      "mercenary_company_politics"
+    ],
+    "rarely": [
+      "assassination_plots",
+      "upcoming_war_declarations",
+      "location_of_rival_forces"
+    ]
+  },
+  "dialogue_hooks": [
+    "sizing you up professionally — not threatening, just assessing",
+    "looking for work or a traveling companion for safety",
+    "warning about trouble on the road ahead — professionally speaking",
+    "telling a story about a job that went wrong"
+  ],
+  "voice_patterns": [
+    "clipped professional — speaks in tactical shorthand",
+    "war-weary veteran — seen too much, drinks to forget",
+    "cocky young blade — thinks they're invincible",
+    "quiet old soldier — lets the scars do the talking"
+  ],
+  "schedule": {
+    "morning": "training, maintaining equipment",
+    "afternoon": "looking for work, negotiating contracts",
+    "evening": "drinking at tavern, assessing potential employers",
+    "night": "light sleep — always ready to move"
+  }
+}

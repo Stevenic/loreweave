@@ -1,0 +1,81 @@
+{
+  "id": "smuggler",
+  "type": "npc",
+  "category": "merchant",
+  "name": "Smuggler",
+  "description": "Doesn't have a shop. Has a contact. Can get you what you need if you don't ask where it came from and pay in advance.",
+  "stats_tier": "skilled",
+  "traits": {
+    "common": [
+      "cautious",
+      "resourceful",
+      "street_smart",
+      "unreliable"
+    ],
+    "rare": [
+      "heart_of_gold",
+      "working_for_the_resistance",
+      "former_pirate",
+      "addicted_to_own_product"
+    ]
+  },
+  "skills": [
+    "stealth",
+    "deception",
+    "sleight_of_hand",
+    "persuasion"
+  ],
+  "inventory": {
+    "required": [
+      "concealed_goods",
+      "coin"
+    ],
+    "common": [
+      "lockpicks",
+      "forged_documents",
+      "signal_whistle",
+      "dark_cloak"
+    ],
+    "rare": [
+      "stolen_magical_item",
+      "banned_substance",
+      "blackmail_material",
+      "escape_route_map"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "black_market_prices",
+      "guard_patrol_schedules",
+      "who_can_be_bribed"
+    ],
+    "sometimes": [
+      "thieves_guild_politics",
+      "noble_vices",
+      "secret_passages"
+    ],
+    "rarely": [
+      "planned_heists",
+      "political_assassination_contracts",
+      "location_of_hidden_treasure"
+    ]
+  },
+  "dialogue_hooks": [
+    "sidling up and asking what you're looking for — 'off the record'",
+    "nervously checking over their shoulder mid-conversation",
+    "offering something 'hard to get' at a steep markup",
+    "needing a favor before they'll deal with you"
+  ],
+  "voice_patterns": [
+    "whispering hustler — everything's a secret deal",
+    "charming rogue — makes crime sound like adventure",
+    "paranoid professional — trust no one, verify everything",
+    "matter-of-fact — it's just business, nothing personal"
+  ],
+  "schedule": {
+    "morning": "sleeping — never works mornings",
+    "afternoon": "meeting contacts, arranging shipments",
+    "evening": "making deals in tavern back rooms",
+    "night": "moving goods, dead drops, avoiding patrols"
+  }
+}

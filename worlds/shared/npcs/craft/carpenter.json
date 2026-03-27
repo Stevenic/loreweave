@@ -1,0 +1,81 @@
+{
+  "id": "carpenter",
+  "type": "npc",
+  "category": "craft",
+  "name": "Carpenter",
+  "description": "Builds and repairs everything from furniture to foundations. Knows every building in town by its creaks.",
+  "stats_tier": "commoner",
+  "traits": {
+    "common": [
+      "methodical",
+      "strong",
+      "patient",
+      "proud_of_craft"
+    ],
+    "rare": [
+      "perfectionist",
+      "former_shipwright",
+      "hides_a_talent_for_art",
+      "union_organizer"
+    ]
+  },
+  "skills": [
+    "athletics",
+    "perception",
+    "investigation"
+  ],
+  "inventory": {
+    "required": [
+      "tool_belt",
+      "hammer",
+      "saw"
+    ],
+    "common": [
+      "nails",
+      "measuring_stick",
+      "plane",
+      "chisel"
+    ],
+    "rare": [
+      "master_blueprint",
+      "rare_wood_sample",
+      "hidden_flask"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "building_conditions",
+      "who_needs_repairs",
+      "lumber_supply"
+    ],
+    "sometimes": [
+      "structural_weaknesses",
+      "hidden_rooms_in_buildings",
+      "construction_history"
+    ],
+    "rarely": [
+      "secret_passages_built_on_commission",
+      "building_used_as_hideout",
+      "land_disputes"
+    ]
+  },
+  "dialogue_hooks": [
+    "complaining about the quality of available lumber",
+    "offering to fix something they noticed is broken",
+    "telling you what a building used to be before it was converted",
+    "asking for help retrieving timber from a dangerous area",
+    "opinions on the local lord's latest construction project"
+  ],
+  "voice_patterns": [
+    "practical and direct — measures words like wood",
+    "laconic — lets the work speak",
+    "chatty while working — hands busy, mouth free",
+    "grumpy about cheap materials"
+  ],
+  "schedule": {
+    "morning": "at the job site, early start",
+    "afternoon": "working, possibly at the lumber yard",
+    "evening": "cleaning tools, heading to tavern",
+    "night": "sleeping — early riser"
+  }
+}

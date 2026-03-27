@@ -1,0 +1,81 @@
+{
+  "id": "beggar",
+  "type": "npc",
+  "category": "wanderer",
+  "name": "Beggar",
+  "description": "Sits where people pass. Overlooked by most, seen by none — which makes them the best eyes and ears in town.",
+  "stats_tier": "commoner",
+  "traits": {
+    "common": [
+      "observant",
+      "resourceful",
+      "invisible_to_society",
+      "survivor"
+    ],
+    "rare": [
+      "fallen_noble",
+      "spy_in_disguise",
+      "prophet",
+      "former_soldier"
+    ]
+  },
+  "skills": [
+    "perception",
+    "stealth",
+    "insight",
+    "survival"
+  ],
+  "inventory": {
+    "required": [
+      "begging_bowl",
+      "ragged_cloak"
+    ],
+    "common": [
+      "crust_of_bread",
+      "small_knife",
+      "found_trinket"
+    ],
+    "rare": [
+      "hidden_coin_stash",
+      "stolen_key",
+      "letter_proving_identity",
+      "map_scratched_on_cloth"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "who_comes_and_goes",
+      "daily_patterns",
+      "best_begging_spots"
+    ],
+    "sometimes": [
+      "overheard_arguments",
+      "secret_meetings_seen",
+      "guard_patrol_gaps"
+    ],
+    "rarely": [
+      "murder_witness",
+      "hidden_entrance_locations",
+      "noble_secret"
+    ]
+  },
+  "dialogue_hooks": [
+    "asking for a coin and offering information in return",
+    "warning you about something they saw — for a price",
+    "telling a story that may or may not be about themselves",
+    "recognizing someone you're looking for",
+    "asking why you looked at them — most people don't"
+  ],
+  "voice_patterns": [
+    "rasping and weary",
+    "surprisingly articulate — education peeks through",
+    "cryptic — speaks in riddles to test whether you're listening",
+    "cheerfully shameless"
+  ],
+  "schedule": {
+    "morning": "finding a spot, scavenging",
+    "afternoon": "begging at market or temple steps",
+    "evening": "begging at tavern doors",
+    "night": "finding shelter — doorway, barn, or hedge"
+  }
+}

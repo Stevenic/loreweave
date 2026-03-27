@@ -1,0 +1,39 @@
+{
+  "id": "wilderness_waterfall",
+  "type": "location",
+  "category": "wilderness",
+  "name": "Waterfall",
+  "description": "Water crashes from a height into a pool that never seems to fill. The noise drowns thought. Behind the curtain of water, there might be something.",
+  "tier": ["hamlet", "village", "town"],
+  "biomes": ["forest", "hills", "mountain"],
+  "features": {
+    "required": ["falling_water", "plunge_pool", "mist_cloud"],
+    "common": ["slippery_rocks", "rainbow_in_mist", "mossy_bank", "narrow_path_behind_falls"],
+    "rare": ["cave_behind_waterfall", "ancient_carved_face_in_cliff", "frozen_in_winter", "natural_power_source"]
+  },
+  "objects": {
+    "required": ["smooth_river_stones", "wet_moss"],
+    "common": ["fish_in_pool", "birds_nesting_on_cliff", "old_rope_from_climber"],
+    "rare": ["offering_at_pool_edge", "lost_weapon_in_deep_pool", "crystal_formation_behind_falls"]
+  },
+  "npcs": {
+    "required": [],
+    "common": ["traveler_bathing", "fisher"],
+    "rare": ["druid", "water_elemental", "hermit_behind_falls", "fey_creature"]
+  },
+  "exits": {
+    "required": ["path_along_river"],
+    "common": ["scramble_up_cliff", "wade_across_pool"],
+    "rare": ["behind_the_falls", "dive_into_deep_pool"]
+  },
+  "atmosphere": {
+    "sounds": ["roaring_water", "echoing_crash", "muffled_birdsong", "dripping_everywhere"],
+    "smells": ["fresh_water", "wet_stone", "green_moss", "ozone"],
+    "lighting": ["prismatic_mist", "dappled_through_canopy", "bright_open_sky"]
+  },
+  "layout": {
+    "footprint": "medium",
+    "floors": [1],
+    "shape": ["vertical_natural", "amphitheater"]
+  }
+}

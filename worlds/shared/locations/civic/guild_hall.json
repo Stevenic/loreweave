@@ -1,0 +1,39 @@
+{
+  "id": "civic_guild_hall",
+  "type": "location",
+  "category": "civic",
+  "name": "Guild Hall",
+  "description": "Where a trade or craft organizes its power. Finer than most buildings on the street — guilds like their members to know who's in charge.",
+  "tier": ["town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["meeting_hall", "guild_master_office", "member_registry"],
+    "common": ["trophy_room", "apprentice_quarters", "dispute_resolution_chamber", "vault"],
+    "rare": ["secret_meeting_room", "underground_connection_to_other_guild", "enchanted_contract_room", "test_chamber"]
+  },
+  "objects": {
+    "required": ["guild_charter", "member_ledger", "guild_seal"],
+    "common": ["trade_samples", "quality_standards_board", "dues_collection_box", "apprentice_contract_forms"],
+    "rare": ["blackmail_files", "stolen_rival_guild_plans", "enchanted_seal", "treasury_records"]
+  },
+  "npcs": {
+    "required": ["guild_master"],
+    "common": ["guild_clerk", "member", "apprentice"],
+    "rare": ["spy_from_rival_guild", "disgruntled_expelled_member", "noble_patron", "inspector"]
+  },
+  "exits": {
+    "required": ["front_entrance"],
+    "common": ["back_door", "stairs_up"],
+    "rare": ["passage_to_warehouse", "tunnel_to_docks"]
+  },
+  "atmosphere": {
+    "sounds": ["heated_debate", "quill_on_ledger", "coins_counting", "gavel_bang"],
+    "smells": ["ink", "polished_wood", "whatever_the_guild_trades"],
+    "lighting": ["well_lit", "chandelier", "tall_windows"]
+  },
+  "layout": {
+    "footprint": "medium",
+    "floors": [1, 2],
+    "shape": ["rectangular", "townhouse_style"]
+  }
+}

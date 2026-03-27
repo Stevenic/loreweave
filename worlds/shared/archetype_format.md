@@ -44,6 +44,12 @@ Defines the schema for location and NPC archetype files used by the world genera
     "footprint": "medium",
     "floors": [1, 2],
     "shape": ["rectangular", "L-shaped"]
+  },
+  "challenges": {
+    "encounters": ["bar_fight", "pickpocket", "drunken_brawl"],
+    "traps": [],
+    "skill_checks": ["perception_eavesdrop", "persuasion_haggle", "insight_read_crowd"],
+    "loot_tier": "low"
   }
 }
 ```
@@ -65,6 +71,18 @@ Defines the schema for location and NPC archetype files used by the world genera
 | `exits` | object | yes | Exit types with same probability tiers |
 | `atmosphere` | object | yes | Sensory descriptors for narrative generation |
 | `layout` | object | yes | Physical dimensions and shape options |
+| `challenges` | object | no | Mechanical encounter data (populated by Loremaster). See below. |
+
+### Challenges Field
+
+Optional field for locations that have mechanical encounters. Required for `dungeon` and `wilderness` categories; optional for others.
+
+| Sub-field | Type | Description |
+|-----------|------|-------------|
+| `encounters` | string[] | Possible encounter types (Loremaster defines CR and stat blocks separately) |
+| `traps` | string[] | Trap types present (Loremaster defines DCs and damage separately) |
+| `skill_checks` | string[] | Relevant skill check opportunities (narrative hooks for the rules engine) |
+| `loot_tier` | string | `"none"`, `"low"`, `"medium"`, `"high"`, `"legendary"` — Loremaster defines loot tables per tier |
 
 ### Probability Tiers
 
@@ -111,6 +129,7 @@ The generator uses weighted random selection:
     "suspicious of strangers",
     "cheerful busybody"
   ],
+  "stats_tier": "commoner",
   "schedule": {
     "morning": "cleaning, restocking",
     "afternoon": "serving, cooking",
@@ -129,6 +148,7 @@ The generator uses weighted random selection:
 | `category` | string | yes | Grouping: `merchant`, `authority`, `craft`, `service`, `wanderer` |
 | `name` | string | yes | Human-readable role name |
 | `description` | string | yes | One-line summary |
+| `stats_tier` | string | yes | Power level for stat block generation: `commoner`, `skilled`, `expert`, `veteran`, `elite` |
 | `traits` | object | yes | Personality traits: `common` (pick 2–3), `rare` (pick 0–1) |
 | `skills` | string[] | yes | D&D 5e skills this NPC is proficient in |
 | `inventory` | object | yes | What they carry, probability-tiered |
@@ -136,3 +156,15 @@ The generator uses weighted random selection:
 | `dialogue_hooks` | string[] | yes | Conversation starters for the narrative engine |
 | `voice_patterns` | string[] | yes | Tone options for LLM narration |
 | `schedule` | object | no | Daily routine by time of day |
+
+### Stats Tier Reference
+
+The `stats_tier` field tells the rules engine what power level to generate for this NPC. Loremaster defines the mechanical mapping; Bard assigns the tier based on narrative role.
+
+| Tier | Narrative Role | Typical CR Range |
+|------|---------------|-----------------|
+| `commoner` | Civilians, laborers, merchants | CR 0 – 1/8 |
+| `skilled` | Trained professionals, guards, apprentices | CR 1/4 – 1/2 |
+| `expert` | Masters of their craft, sergeants, experienced adventurers | CR 1 – 3 |
+| `veteran` | War-hardened fighters, guild leaders, elite agents | CR 4 – 8 |
+| `elite` | Faction leaders, legendary figures, boss encounters | CR 9+ |

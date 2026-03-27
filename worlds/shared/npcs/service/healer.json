@@ -1,0 +1,83 @@
+{
+  "id": "healer",
+  "type": "npc",
+  "category": "service",
+  "name": "Healer",
+  "description": "Part physician, part herbalist, part counselor. The healer patches wounds, sets bones, and knows which villagers aren't sleeping well.",
+  "stats_tier": "skilled",
+  "traits": {
+    "common": [
+      "compassionate",
+      "calm_under_pressure",
+      "observant",
+      "tired"
+    ],
+    "rare": [
+      "haunted_by_failures",
+      "secretly_magical",
+      "battlefield_trained",
+      "addicted_to_own_medicines"
+    ]
+  },
+  "skills": [
+    "medicine",
+    "nature",
+    "insight",
+    "perception"
+  ],
+  "inventory": {
+    "required": [
+      "healer_kit",
+      "herb_pouch",
+      "bandages"
+    ],
+    "common": [
+      "poultice_supplies",
+      "needle_and_thread",
+      "calming_tea",
+      "splint_materials"
+    ],
+    "rare": [
+      "rare_antidote",
+      "surgical_tools",
+      "forbidden_remedy",
+      "anatomy_book"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "common_ailments",
+      "medicinal_herbs",
+      "health_of_townsfolk"
+    ],
+    "sometimes": [
+      "poison_identification",
+      "pregnancy_secrets",
+      "contagion_patterns"
+    ],
+    "rarely": [
+      "plague_signs",
+      "magical_affliction_symptoms",
+      "who_has_been_in_fights"
+    ]
+  },
+  "dialogue_hooks": [
+    "assessing your injuries at a glance before you even ask",
+    "warning about a sickness going around",
+    "needing a rare herb from a dangerous location",
+    "confiding worry about a patient they can't help",
+    "sharing folk remedies with practical advice"
+  ],
+  "voice_patterns": [
+    "gentle but firm — the bedside manner of someone used to being obeyed",
+    "weary but compassionate — they've seen too much",
+    "brisk and clinical — no time for pleasantries",
+    "folksy — 'my grandmother always said...'"
+  ],
+  "schedule": {
+    "morning": "gathering herbs, checking on patients",
+    "afternoon": "receiving visitors, treating injuries",
+    "evening": "preparing medicines, making house calls",
+    "night": "on call — a healer never truly rests"
+  }
+}

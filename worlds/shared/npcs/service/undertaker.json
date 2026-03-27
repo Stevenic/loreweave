@@ -1,0 +1,82 @@
+{
+  "id": "undertaker",
+  "type": "npc",
+  "category": "service",
+  "name": "Undertaker / Gravedigger",
+  "description": "The last professional most people ever need. Quiet, respectful, and knows the soil better than the farmers do — for different reasons.",
+  "stats_tier": "commoner",
+  "traits": {
+    "common": [
+      "somber",
+      "respectful",
+      "practical",
+      "night_owl"
+    ],
+    "rare": [
+      "speaks_to_the_dead",
+      "grave_robber_sideline",
+      "knows_cause_of_every_death",
+      "necromancer_suspicion"
+    ]
+  },
+  "skills": [
+    "medicine",
+    "investigation",
+    "religion",
+    "history"
+  ],
+  "inventory": {
+    "required": [
+      "shovel",
+      "burial_shroud",
+      "prayer_book"
+    ],
+    "common": [
+      "lantern",
+      "embalming_herbs",
+      "measuring_cord",
+      "ledger_of_the_dead"
+    ],
+    "rare": [
+      "ring_taken_from_corpse",
+      "death_mask_mold",
+      "strange_soil_sample",
+      "bone_that_wouldnt_stay_buried"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "recent_deaths",
+      "burial_customs",
+      "graveyard_layout"
+    ],
+    "sometimes": [
+      "cause_of_death_patterns",
+      "old_family_plots",
+      "who_visits_which_graves"
+    ],
+    "rarely": [
+      "disturbed_graves",
+      "undead_activity",
+      "what_was_buried_with_whom"
+    ]
+  },
+  "dialogue_hooks": [
+    "noting that business has been too good lately",
+    "asking if you've come about the 'disturbance' in the old section",
+    "offering funeral services with professional detachment",
+    "mentioning that a grave was found opened this morning"
+  ],
+  "voice_patterns": [
+    "quietly professional — death is just the job",
+    "morbid humorist — laughs at things that make others uncomfortable",
+    "religious solemnity — treats every burial as sacred",
+    "unsettling calm — too comfortable around the dead"
+  ],
+  "schedule": {
+    "morning": "digging graves, maintaining grounds",
+    "afternoon": "preparing bodies, meeting with bereaved",
+    "evening": "conducting burials, prayers",
+    "night": "watching the graveyard — someone has to"
+  }
+}

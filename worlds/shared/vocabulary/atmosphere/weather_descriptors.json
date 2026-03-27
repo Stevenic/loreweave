@@ -1,0 +1,56 @@
+{
+  "id": "weather_descriptors",
+  "type": "vocabulary",
+  "category": "atmosphere",
+  "description": "Sensory descriptors for weather conditions, layered on top of biome and time-of-day vocabulary.",
+  "weather": {
+    "clear": {
+      "sky": ["cloudless expanse", "pale blue dome", "sharp bright sky", "endless open heavens"],
+      "light": ["bright and unfiltered", "harsh noon shadows", "clean golden light", "stark clarity"],
+      "feel": ["dry air on skin", "warmth on the face", "cool breeze carrying nothing", "still and calm"],
+      "sound": ["wind unobstructed", "clear acoustics", "sounds carry further", "quiet clarity"]
+    },
+    "overcast": {
+      "sky": ["low grey ceiling", "featureless white", "heavy blanket of cloud", "bruised and sullen"],
+      "light": ["flat and shadowless", "dim all day", "grey wash over everything", "muted colors"],
+      "feel": ["damp air pressing close", "neither warm nor cold", "threatening without delivering", "oppressive stillness"],
+      "sound": ["muffled", "sounds feel closer", "birds go quiet", "world holding its breath"]
+    },
+    "rain_light": {
+      "sky": ["grey with moving silver", "soft drizzle curtain", "misty veil", "gentle weeping sky"],
+      "light": ["diffused silver", "everything glistens", "soft edges on the world", "green intensified"],
+      "feel": ["cool mist on face", "clothes slowly dampening", "refreshing at first", "persistent chill building"],
+      "sound": ["pattering on leaves", "dripping from eaves", "gentle drumming", "whispered percussion"]
+    },
+    "rain_heavy": {
+      "sky": ["black wall of water", "horizon erased", "hammering grey curtain", "sky emptying itself"],
+      "light": ["near darkness at midday", "lightning flash white", "murky grey", "visibility in yards not miles"],
+      "feel": ["soaked instantly", "cold seeping through everything", "wind driving rain sideways", "beaten down"],
+      "sound": ["roaring on rooftops", "rivers running where paths were", "thunder", "shouting to be heard"]
+    },
+    "fog": {
+      "sky": ["invisible", "white nothing above", "sun a pale disc", "swallowed"],
+      "light": ["directionless glow", "everything the same grey-white", "shapes loom from nothing", "distance ceases to exist"],
+      "feel": ["wet air breathing", "cold fingers in clothing", "disorienting", "alone even in company"],
+      "sound": ["deadened", "footsteps vanish", "dripping from invisible sources", "sounds from wrong directions"]
+    },
+    "snow": {
+      "sky": ["low and heavy", "white merging with ground", "flurries from nowhere", "softly falling curtain"],
+      "light": ["bright white everywhere", "blue shadows on snow", "blinding in sun", "grey and dim in storm"],
+      "feel": ["biting cold", "snow crunching underfoot", "face stinging", "numb fingers"],
+      "sound": ["muffled", "crunch of every step", "wind howling or deathly quiet", "world wrapped in cotton"]
+    },
+    "wind_strong": {
+      "sky": ["clouds racing", "dust in the air", "torn and wild", "flags snapping"],
+      "light": ["flickering through moving clouds", "shadows running", "bright then dark", "restless"],
+      "feel": ["pushed and pulled", "cloak whipping", "eyes watering", "leaning into it"],
+      "sound": ["howling", "creaking trees and signs", "whistling through gaps", "impossible to hear conversation"]
+    },
+    "storm": {
+      "sky": ["green-black", "electric", "churning", "apocalyptic"],
+      "light": ["lightning crack white", "darkness between flashes", "eerie glow", "hellish"],
+      "feel": ["hair standing on end", "ozone taste", "primal fear", "seeking shelter"],
+      "sound": ["thunder shaking ground", "trees cracking", "rain like gravel", "world ending noise"]
+    }
+  }
+}

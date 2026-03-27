@@ -1,0 +1,39 @@
+{
+  "id": "residence_noble_estate",
+  "type": "location",
+  "category": "residence",
+  "name": "Noble Estate",
+  "description": "A walled compound with gardens, servants' quarters, and more rooms than most families know what to do with. Power lives here.",
+  "tier": ["city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["grand_entrance_hall", "private_chambers", "dining_room", "walled_grounds"],
+    "common": ["library", "solar", "servants_wing", "stable", "garden"],
+    "rare": ["hidden_passage", "dungeon_below", "chapel", "tower_room", "war_room"]
+  },
+  "objects": {
+    "required": ["fine_furniture", "family_portraits", "coat_of_arms"],
+    "common": ["silver_candlesticks", "tapestries", "wine_collection", "correspondence_desk"],
+    "rare": ["secret_ledger", "political_correspondence", "hidden_safe", "ancestral_weapon"]
+  },
+  "npcs": {
+    "required": ["head_servant"],
+    "common": ["guard", "cook", "maid", "stable_hand"],
+    "rare": ["noble_lord_or_lady", "scheming_advisor", "imprisoned_relative", "spy_among_servants"]
+  },
+  "exits": {
+    "required": ["main_gate"],
+    "common": ["garden_gate", "servants_entrance", "stable_gate"],
+    "rare": ["secret_tunnel", "rooftop_escape", "passage_to_sewers"]
+  },
+  "atmosphere": {
+    "sounds": ["hushed_servants", "clock_chiming", "distant_music_practice", "footsteps_on_marble"],
+    "smells": ["beeswax_polish", "flowers", "expensive_perfume", "old_wood"],
+    "lighting": ["chandelier", "tall_windows", "candlelit_corridors"]
+  },
+  "layout": {
+    "footprint": "large",
+    "floors": [-1, 1, 2, 3],
+    "shape": ["U-shaped", "courtyard", "sprawling"]
+  }
+}

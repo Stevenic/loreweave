@@ -1,0 +1,70 @@
+{
+  "id": "building_styles",
+  "type": "vocabulary",
+  "description": "Architectural vocabulary by biome. Used to flavor location descriptions with regionally appropriate materials and styles.",
+  "biomes": {
+    "forest": {
+      "materials": ["timber", "thatch", "wattle_and_daub", "stone_foundation", "bark_shingle"],
+      "features": ["carved_lintels", "steep_roof", "covered_porch", "shuttered_windows", "chimney"],
+      "conditions": {
+        "well_maintained": ["freshly whitewashed", "oiled timber", "neat thatch", "swept path"],
+        "weathered": ["moss on roof", "sagging thatch", "warped shutters", "overgrown path"],
+        "ruined": ["collapsed roof", "vine-covered walls", "broken windows", "door hanging open"]
+      }
+    },
+    "plains": {
+      "materials": ["stone", "plaster", "clay_tile_roof", "brick", "wooden_beam"],
+      "features": ["flat_or_low_roof", "courtyard", "thick_walls", "arched_doorway", "window_boxes"],
+      "conditions": {
+        "well_maintained": ["fresh plaster", "bright shutters", "flowering window boxes", "clean courtyard"],
+        "weathered": ["cracked plaster", "faded paint", "dusty", "weeds in courtyard"],
+        "ruined": ["walls crumbling", "roof collapsed", "blackened by fire", "field reclaiming foundation"]
+      }
+    },
+    "mountain": {
+      "materials": ["heavy_stone", "slate_roof", "iron_fittings", "thick_timber", "mortar"],
+      "features": ["low_profile", "deep_set_windows", "massive_door", "buttressed_walls", "cellar"],
+      "conditions": {
+        "well_maintained": ["solid stonework", "clear chimney", "oiled hinges", "banked snow cleared"],
+        "weathered": ["frost-cracked mortar", "icicle-hung eaves", "wind-scoured", "patched walls"],
+        "ruined": ["avalanche-crushed", "foundation stones exposed", "chimney standing alone", "ice-filled interior"]
+      }
+    },
+    "swamp": {
+      "materials": ["raised_stilts", "treated_timber", "reed_thatch", "rope_lashing", "waxed_canvas"],
+      "features": ["elevated_floor", "wide_eaves", "mosquito_netting", "dock_or_boat_tie", "drainage_channels"],
+      "conditions": {
+        "well_maintained": ["fresh oil on stilts", "tight thatch", "dry interior", "repaired netting"],
+        "weathered": ["green with algae", "tilting", "damp interior", "rotting boards"],
+        "ruined": ["collapsed into water", "only stilts remaining", "submerged", "abandoned to the bog"]
+      }
+    },
+    "tundra": {
+      "materials": ["sod_roof", "stone_and_turf", "hide_coverings", "bone_framework", "packed_snow"],
+      "features": ["partially_underground", "entry_tunnel", "smoke_hole", "storage_pit", "windbreak"],
+      "conditions": {
+        "well_maintained": ["fresh sod", "tight hide covers", "warm smoke rising", "cleared entrance"],
+        "weathered": ["wind-stripped sod", "patched hides", "drifted entrance", "cold drafts"],
+        "ruined": ["collapsed inward", "snow-filled", "scattered bones and hide", "only a depression in the ground"]
+      }
+    },
+    "desert": {
+      "materials": ["mud_brick", "sandstone", "lime_plaster", "flat_roof", "awning_cloth"],
+      "features": ["inner_courtyard", "thick_walls", "small_windows", "rooftop_sleeping", "cistern"],
+      "conditions": {
+        "well_maintained": ["crisp plaster", "bright awnings", "swept threshold", "water in cistern"],
+        "weathered": ["sand-blasted walls", "cracked plaster", "faded awnings", "dry cistern"],
+        "ruined": ["half-buried in sand", "walls reduced to stumps", "roofless", "sand drifts filling rooms"]
+      }
+    },
+    "taiga": {
+      "materials": ["log_cabin", "pine_shingle", "tar_sealed", "stone_hearth", "notched_joints"],
+      "features": ["steeply_pitched_roof", "small_windows", "large_hearth", "covered_woodpile", "root_cellar"],
+      "conditions": {
+        "well_maintained": ["fresh tar", "stacked firewood", "smoke rising steadily", "clear path"],
+        "weathered": ["moss between logs", "settling foundation", "smoke-blackened", "needle-covered roof"],
+        "ruined": ["logs rotting", "roof caved in", "forest reclaiming", "bear den now"]
+      }
+    }
+  }
+}

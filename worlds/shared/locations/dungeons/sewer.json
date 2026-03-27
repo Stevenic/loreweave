@@ -1,0 +1,39 @@
+{
+  "id": "dungeon_sewer",
+  "type": "location",
+  "category": "dungeon",
+  "name": "Sewer Network",
+  "description": "The city's underbelly, literally. Brick tunnels carry more than wastewater — smugglers, thieves, and things that prefer the dark.",
+  "tier": ["town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["brick_tunnels", "flowing_water_channel", "maintenance_walkways"],
+    "common": ["iron_grates", "junction_chamber", "overflow_basin", "ladder_to_surface"],
+    "rare": ["smuggler_stash", "thieves_guild_hideout", "collapsed_section", "ancient_ruins_beneath"]
+  },
+  "objects": {
+    "required": ["refuse", "iron_rungs"],
+    "common": ["dead_rat", "lost_coin", "graffiti_marks", "broken_grate"],
+    "rare": ["thieves_cant_markings", "hidden_door_mechanism", "alchemist_waste", "dropped_weapon"]
+  },
+  "npcs": {
+    "required": [],
+    "common": ["giant_rat", "rat_swarm"],
+    "rare": ["wererat", "sewer_goblin", "fugitive", "cult_acolyte", "otyugh"]
+  },
+  "exits": {
+    "required": ["tunnel_continues"],
+    "common": ["manhole_up", "side_pipe", "junction"],
+    "rare": ["secret_door", "underwater_passage", "bricked_up_archway"]
+  },
+  "atmosphere": {
+    "sounds": ["rushing_water", "echoing_footsteps", "squeaking_rats", "distant_city_noise"],
+    "smells": ["sewage", "mold", "rot", "alchemical_runoff"],
+    "lighting": ["slivers_of_light_from_above", "bioluminescent_slime", "total_darkness"]
+  },
+  "layout": {
+    "footprint": "large",
+    "floors": [-1, -2],
+    "shape": ["grid", "branching", "ring"]
+  }
+}

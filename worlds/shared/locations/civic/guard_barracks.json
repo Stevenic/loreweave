@@ -1,0 +1,39 @@
+{
+  "id": "civic_guard_barracks",
+  "type": "location",
+  "category": "civic",
+  "name": "Guard Barracks",
+  "description": "Where the town's muscle sleeps, trains, and waits for trouble. The armory is the most secured room. The mess hall is the loudest.",
+  "tier": ["town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["bunk_room", "armory", "training_yard"],
+    "common": ["mess_hall", "duty_roster_board", "weapon_racks", "officer_quarters"],
+    "rare": ["war_room", "prison_wing", "siege_equipment_storage", "secret_intelligence_office"]
+  },
+  "objects": {
+    "required": ["weapons", "armor_stands", "bedrolls"],
+    "common": ["duty_roster", "training_dummies", "dice_and_cards", "wanted_posters"],
+    "rare": ["confiscated_contraband", "intelligence_reports", "siege_plans", "captain_private_ledger"]
+  },
+  "npcs": {
+    "required": ["guard"],
+    "common": ["guard_captain", "off_duty_guard", "recruit_in_training"],
+    "rare": ["spy_among_guards", "prisoner_in_holding", "visiting_knight", "deserter_returned"]
+  },
+  "exits": {
+    "required": ["front_gate"],
+    "common": ["training_yard_door", "back_entrance"],
+    "rare": ["tunnel_to_town_hall", "rooftop_lookout"]
+  },
+  "atmosphere": {
+    "sounds": ["armor_clanking", "shouted_orders", "sparring", "snoring"],
+    "smells": ["sweat", "weapon_oil", "cheap_food", "leather"],
+    "lighting": ["torchlit", "yard_sunlight", "dim_bunkroom"]
+  },
+  "layout": {
+    "footprint": "large",
+    "floors": [1, 2],
+    "shape": ["rectangular", "compound"]
+  }
+}

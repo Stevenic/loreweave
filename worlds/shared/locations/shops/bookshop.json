@@ -1,0 +1,39 @@
+{
+  "id": "shop_bookshop",
+  "type": "location",
+  "category": "shop",
+  "name": "Bookshop & Scrivener",
+  "description": "Shelves floor to ceiling, a smell you'd bottle if you could, and an owner who remembers every volume they've ever sold.",
+  "tier": ["town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["bookshelves", "reading_table", "counter"],
+    "common": ["writing_desk", "map_section", "scroll_cubbies", "ladder_on_rails"],
+    "rare": ["restricted_section", "copying_room", "rare_manuscript_vault", "reading_nook_by_window"]
+  },
+  "objects": {
+    "required": ["books", "ink_and_quills", "ledger"],
+    "common": ["magnifying_glass", "bookmarks", "wax_seals", "blank_journals"],
+    "rare": ["forbidden_tome", "coded_manuscript", "ancient_map", "forged_documents"]
+  },
+  "npcs": {
+    "required": ["bookseller"],
+    "common": ["scholar", "student"],
+    "rare": ["information_broker", "banned_author", "desperate_researcher", "book_thief"]
+  },
+  "exits": {
+    "required": ["front_door"],
+    "common": ["back_office"],
+    "rare": ["cellar_archive", "secret_reading_room"]
+  },
+  "atmosphere": {
+    "sounds": ["page_turning", "quill_scratching", "creaking_shelves", "deep_quiet"],
+    "smells": ["old_paper", "leather_binding", "ink", "dust"],
+    "lighting": ["reading_lamp_pools", "afternoon_window_light", "dim_between_stacks"]
+  },
+  "layout": {
+    "footprint": "medium",
+    "floors": [1, 2],
+    "shape": ["narrow_deep", "rectangular"]
+  }
+}

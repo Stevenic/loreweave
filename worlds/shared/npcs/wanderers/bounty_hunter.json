@@ -1,0 +1,82 @@
+{
+  "id": "bounty_hunter",
+  "type": "npc",
+  "category": "wanderer",
+  "name": "Bounty Hunter",
+  "description": "Tracks people for money. Not a guard — guards have rules. The bounty hunter has a contract and a deadline. Everything between is negotiable.",
+  "stats_tier": "expert",
+  "traits": {
+    "common": [
+      "persistent",
+      "observant",
+      "cold",
+      "methodical"
+    ],
+    "rare": [
+      "hunting_an_innocent",
+      "personal_vendetta_disguised_as_job",
+      "reformed_criminal",
+      "works_with_supernatural_aid"
+    ]
+  },
+  "skills": [
+    "investigation",
+    "perception",
+    "survival",
+    "stealth"
+  ],
+  "inventory": {
+    "required": [
+      "manacles",
+      "bounty_posters",
+      "weapon"
+    ],
+    "common": [
+      "tracking_gear",
+      "rope",
+      "disguise_kit",
+      "notebook"
+    ],
+    "rare": [
+      "enchanted_compass",
+      "truth_serum",
+      "trophy_from_famous_capture",
+      "list_of_informants"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "wanted_criminals",
+      "reward_amounts",
+      "local_law_enforcement"
+    ],
+    "sometimes": [
+      "criminal_networks",
+      "safe_house_locations",
+      "corruption_in_authorities"
+    ],
+    "rarely": [
+      "target_who_knows_powerful_secrets",
+      "conspiracy_behind_the_bounty",
+      "rival_hunter_locations"
+    ]
+  },
+  "dialogue_hooks": [
+    "showing a sketch and asking if you've seen this person",
+    "buying a drink while watching the room — working",
+    "offering coin for information about a specific target",
+    "warning you that whoever you're protecting has a price on their head"
+  ],
+  "voice_patterns": [
+    "all business — every word is a question or a transaction",
+    "friendly mask — warmth is a tool for extracting information",
+    "grim tracker — speaks like someone who's seen the worst of people",
+    "weary professional — this is just another job, nothing personal"
+  ],
+  "schedule": {
+    "morning": "checking leads, asking questions around town",
+    "afternoon": "tracking, surveillance, staking out locations",
+    "evening": "tavern — where targets feel safe and talk too much",
+    "night": "moving on target or sleeping light near their trail"
+  }
+}

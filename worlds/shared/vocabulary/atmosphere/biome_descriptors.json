@@ -1,0 +1,84 @@
+{
+  "id": "biome_descriptors",
+  "type": "vocabulary",
+  "description": "Sensory descriptor pools organized by biome. Used by the narrative engine to build LLM context.",
+  "biomes": {
+    "forest": {
+      "terrain": ["dense woodland", "old-growth trees", "mossy floor", "fern-choked undergrowth", "canopy overhead", "root-tangled path"],
+      "sounds": ["birdsong", "rustling leaves", "snapping twigs", "distant woodpecker", "wind in branches", "owl hooting"],
+      "smells": ["pine resin", "damp earth", "rotting leaves", "mushrooms", "wildflowers", "bark"],
+      "atmosphere": ["dappled light", "cool shade", "thick air", "quiet", "watchful", "ancient"],
+      "weather_mods": {
+        "rain": ["dripping canopy", "streams forming on paths", "muffled by leaves"],
+        "fog": ["trees fading into mist", "sounds deadened", "shapes in the murk"],
+        "snow": ["snow on branches", "muffled footsteps", "bare canopy revealing sky"]
+      }
+    },
+    "plains": {
+      "terrain": ["rolling grassland", "open horizon", "windswept fields", "wildflower meadow", "gentle hills", "tall grass"],
+      "sounds": ["wind in grass", "distant birdsong", "buzzing insects", "lark overhead", "thunder on horizon"],
+      "smells": ["cut grass", "warm earth", "pollen", "rain coming", "dust"],
+      "atmosphere": ["exposed", "vast", "bright", "lonely", "free", "endless"],
+      "weather_mods": {
+        "rain": ["no shelter in sight", "grass flattened by downpour", "puddles forming in ruts"],
+        "fog": ["ground fog hiding everything below knee height", "disorienting flatness"],
+        "snow": ["featureless white expanse", "wind-sculpted drifts", "brutal exposure"]
+      }
+    },
+    "mountain": {
+      "terrain": ["rocky slopes", "narrow ledges", "scree fields", "cliff faces", "alpine meadow", "wind-carved stone"],
+      "sounds": ["wind howling", "rockfall", "eagle cry", "echoes", "silence broken by gusts"],
+      "smells": ["cold rock", "thin air", "lichen", "snow melt", "alpine flowers"],
+      "atmosphere": ["exposed", "majestic", "dangerous", "thin air", "vertigo", "stark beauty"],
+      "weather_mods": {
+        "rain": ["rain turning to sleet at altitude", "treacherous footing", "waterfalls appearing"],
+        "fog": ["cloud-wrapped peaks", "visibility to arm's length", "cliff edges invisible"],
+        "snow": ["blinding white", "avalanche risk", "ice-crusted rock"]
+      }
+    },
+    "swamp": {
+      "terrain": ["standing water", "muddy ground", "twisted trees", "reed beds", "hummocks", "submerged roots"],
+      "sounds": ["frog chorus", "buzzing mosquitoes", "bubbling mud", "splashing", "eerie silence"],
+      "smells": ["rot", "stagnant water", "sulfur", "peat", "decay"],
+      "atmosphere": ["oppressive", "humid", "murky", "treacherous footing", "watched", "festering"],
+      "weather_mods": {
+        "rain": ["impossible to tell rain from mist from spray", "water level rising"],
+        "fog": ["impenetrable", "sounds coming from wrong directions", "will-o-wisps"],
+        "snow": ["frozen surface over deep water", "false solid ground", "eerie silence"]
+      }
+    },
+    "tundra": {
+      "terrain": ["frozen ground", "permafrost", "lichen-covered rock", "ice fields", "frozen rivers", "windswept barrens"],
+      "sounds": ["howling wind", "cracking ice", "silence", "distant wolf howl"],
+      "smells": ["clean cold", "nothing", "faint lichen", "snow"],
+      "atmosphere": ["desolate", "harsh", "beautiful", "unforgiving", "stark", "lonely"],
+      "weather_mods": {
+        "rain": ["freezing rain", "ice forming on everything", "hypothermia risk"],
+        "fog": ["ice fog", "frost crystals in air", "otherworldly"],
+        "snow": ["whiteout blizzard", "drifts taller than a person", "navigation impossible"]
+      }
+    },
+    "desert": {
+      "terrain": ["sand dunes", "cracked earth", "rocky outcrops", "dry riverbed", "scrub brush", "heat shimmer"],
+      "sounds": ["wind over sand", "silence", "lizard skittering", "sand hissing"],
+      "smells": ["hot sand", "dust", "nothing", "rare bloom after rain"],
+      "atmosphere": ["blistering", "vast", "blinding", "thirsty", "timeless", "mirages"],
+      "weather_mods": {
+        "rain": ["flash flood risk in wadis", "desert blooming overnight", "brief but violent"],
+        "fog": ["morning mist burning off quickly", "dew on rare plants"],
+        "snow": ["surreal", "melts by midday", "cold desert night"]
+      }
+    },
+    "taiga": {
+      "terrain": ["dense conifers", "needle-carpet floor", "frozen streams", "rocky ridges", "snow-laden boughs", "deadfall"],
+      "sounds": ["creaking trees", "distant crack of falling branch", "wind in pines", "crows"],
+      "smells": ["pine", "cold", "sap", "damp needles", "wood rot"],
+      "atmosphere": ["dark", "dense", "cold", "primeval", "claustrophobic", "northern"],
+      "weather_mods": {
+        "rain": ["needles channeling water into streams", "dripping from every surface"],
+        "fog": ["thick between trunks", "trees appearing and vanishing", "disorienting"],
+        "snow": ["heavy on boughs", "sudden dumps when branches release", "deep drifts between trees"]
+      }
+    }
+  }
+}

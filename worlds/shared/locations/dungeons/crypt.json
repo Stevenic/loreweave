@@ -1,0 +1,39 @@
+{
+  "id": "dungeon_crypt",
+  "type": "location",
+  "category": "dungeon",
+  "name": "Crypt",
+  "description": "A burial chamber beneath a temple or graveyard. The dead rest here — or they should.",
+  "tier": ["village", "town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["stone_sarcophagi", "burial_niches", "vaulted_ceiling"],
+    "common": ["iron_gate", "offering_alcove", "carved_epitaphs", "drainage_channel"],
+    "rare": ["collapsed_wall_to_deeper_level", "sealed_inner_sanctum", "animate_guardian", "hidden_reliquary"]
+  },
+  "objects": {
+    "required": ["stone_coffins", "funerary_urns"],
+    "common": ["tarnished_candelabra", "faded_flowers", "dust_thick_on_everything", "prayer_scroll"],
+    "rare": ["intact_burial_goods", "cursed_amulet", "glowing_runes", "journal_of_the_interred"]
+  },
+  "npcs": {
+    "required": [],
+    "common": ["skeleton", "rat_swarm"],
+    "rare": ["wight", "ghost", "grave_robber", "mourning_spirit", "undead_priest"]
+  },
+  "exits": {
+    "required": ["stairs_up"],
+    "common": ["corridor_deeper", "side_chamber"],
+    "rare": ["collapsed_tunnel", "hidden_passage_behind_sarcophagus", "flooded_lower_level"]
+  },
+  "atmosphere": {
+    "sounds": ["dripping_water", "skittering_claws", "distant_scraping", "absolute_silence"],
+    "smells": ["damp_stone", "old_incense", "decay", "dust"],
+    "lighting": ["pitch_dark", "faint_phosphorescence", "guttering_torch"]
+  },
+  "layout": {
+    "footprint": "medium",
+    "floors": [-1, -2],
+    "shape": ["cruciform", "linear_corridor", "circular_chamber"]
+  }
+}

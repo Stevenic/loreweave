@@ -1,0 +1,39 @@
+{
+  "id": "wilderness_ruins",
+  "type": "location",
+  "category": "wilderness",
+  "name": "Overgrown Ruins",
+  "description": "Crumbling walls and half-buried foundations of something that used to matter. Nature is winning, but the bones of the old place remain.",
+  "tier": ["hamlet", "village", "town"],
+  "biomes": ["forest", "plains", "hills", "swamp"],
+  "features": {
+    "required": ["crumbling_walls", "overgrown_foundations"],
+    "common": ["collapsed_roof", "moss_covered_stairs", "old_well", "broken_archway"],
+    "rare": ["intact_basement", "hidden_vault", "shrine_still_standing", "working_mechanism"]
+  },
+  "objects": {
+    "required": ["rubble", "weathered_stonework"],
+    "common": ["pottery_shards", "rusted_hinge", "animal_den_in_corner", "carved_stone_fragment"],
+    "rare": ["legible_inscription", "buried_chest", "old_weapon", "magical_residue"]
+  },
+  "npcs": {
+    "required": [],
+    "common": ["scavenger", "explorer"],
+    "rare": ["bandit_camp", "archaeologist", "ghost", "creature_nest", "hermit"]
+  },
+  "exits": {
+    "required": ["gap_in_walls"],
+    "common": ["path_through_rubble", "overgrown_road"],
+    "rare": ["stairs_down", "tunnel_entrance", "collapsed_passage"]
+  },
+  "atmosphere": {
+    "sounds": ["wind_through_gaps", "crumbling_mortar", "birds_nesting", "dripping_water"],
+    "smells": ["old_stone", "moss", "damp_earth", "decay"],
+    "lighting": ["shafts_through_broken_roof", "shadow_pockets", "green_filtered"]
+  },
+  "layout": {
+    "footprint": "large",
+    "floors": [0, -1],
+    "shape": ["irregular", "fragmentary"]
+  }
+}

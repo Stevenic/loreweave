@@ -1,0 +1,39 @@
+{
+  "id": "residence_hovel",
+  "type": "location",
+  "category": "residence",
+  "name": "Hovel",
+  "description": "A single-room shelter of scavenged materials. Proof that someone is surviving here — barely.",
+  "tier": ["hamlet", "village", "town"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["sleeping_area", "fire_pit_or_small_hearth"],
+    "common": ["leaky_roof", "makeshift_door", "water_bucket", "patched_walls"],
+    "rare": ["hidden_valuables", "escape_hole", "shrine_corner"]
+  },
+  "objects": {
+    "required": ["bedroll", "cooking_pot"],
+    "common": ["ragged_clothing", "scraps_of_food", "whittling_knife"],
+    "rare": ["stolen_goods", "letter_from_better_days", "hidden_weapon"]
+  },
+  "npcs": {
+    "required": ["occupant"],
+    "common": [],
+    "rare": ["stray_animal", "orphan", "fugitive"]
+  },
+  "exits": {
+    "required": ["doorway"],
+    "common": [],
+    "rare": ["crawl_hole", "loose_wall_panel"]
+  },
+  "atmosphere": {
+    "sounds": ["wind_through_gaps", "dripping", "rats_in_walls", "coughing"],
+    "smells": ["damp", "smoke", "unwashed_cloth", "mildew"],
+    "lighting": ["cracks_of_daylight", "single_candle", "embers"]
+  },
+  "layout": {
+    "footprint": "tiny",
+    "floors": [1],
+    "shape": ["irregular"]
+  }
+}

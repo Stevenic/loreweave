@@ -1,0 +1,80 @@
+{
+  "id": "priest",
+  "type": "npc",
+  "category": "service",
+  "name": "Priest / Cleric",
+  "description": "Tends to the spiritual needs of the community. Healer, counselor, record-keeper.",
+  "stats_tier": "skilled",
+  "traits": {
+    "common": [
+      "compassionate",
+      "devout",
+      "calm",
+      "community_minded"
+    ],
+    "rare": [
+      "crisis_of_faith",
+      "zealot",
+      "secretly_doubting",
+      "healer_first_priest_second"
+    ]
+  },
+  "skills": [
+    "medicine",
+    "religion",
+    "insight"
+  ],
+  "inventory": {
+    "required": [
+      "holy_symbol",
+      "prayer_book"
+    ],
+    "common": [
+      "healing_herbs",
+      "blessed_water",
+      "candles"
+    ],
+    "rare": [
+      "ancient_text",
+      "relic_fragment",
+      "sealed_confession"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "local_births_deaths_marriages",
+      "religious_calendar",
+      "funeral_rites",
+      "community_morale"
+    ],
+    "sometimes": [
+      "theological_history",
+      "nearby_holy_sites",
+      "heretical_movements"
+    ],
+    "rarely": [
+      "forbidden_texts",
+      "divine_visions",
+      "supernatural_threats"
+    ]
+  },
+  "dialogue_hooks": [
+    "offering blessings or healing",
+    "asking for help with a troubled parishioner",
+    "sharing local history through religious lens",
+    "concerns about spiritual disturbances",
+    "requests to retrieve sacred items or texts"
+  ],
+  "voice_patterns": [
+    "gentle and measured",
+    "fire-and-brimstone passionate",
+    "quietly wise, speaks in parables",
+    "practical healer who happens to pray"
+  ],
+  "schedule": {
+    "morning": "dawn prayers, tending shrine",
+    "afternoon": "visiting sick, counseling, record-keeping",
+    "evening": "evening service or community gathering",
+    "night": "private meditation, reading sacred texts"
+  }
+}

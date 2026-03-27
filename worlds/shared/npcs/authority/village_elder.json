@@ -1,0 +1,80 @@
+{
+  "id": "village_elder",
+  "type": "npc",
+  "category": "authority",
+  "name": "Village Elder / Headperson",
+  "description": "The settlement's leader. Manages disputes, makes decisions, represents the community.",
+  "stats_tier": "commoner",
+  "traits": {
+    "common": [
+      "diplomatic",
+      "burdened",
+      "experienced",
+      "cautious"
+    ],
+    "rare": [
+      "corrupt",
+      "visionary",
+      "haunted_by_past_decision",
+      "secretly_weak"
+    ]
+  },
+  "skills": [
+    "persuasion",
+    "insight",
+    "history"
+  ],
+  "inventory": {
+    "required": [
+      "seal_of_office",
+      "ledger"
+    ],
+    "common": [
+      "coin_purse",
+      "walking_stick",
+      "letter"
+    ],
+    "rare": [
+      "hidden_weapon",
+      "blackmail_material",
+      "heirloom_ring"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "settlement_history",
+      "family_feuds",
+      "resource_situation",
+      "nearby_settlements"
+    ],
+    "sometimes": [
+      "regional_politics",
+      "old_alliances",
+      "local_legends"
+    ],
+    "rarely": [
+      "ancient_secrets",
+      "buried_scandals",
+      "hidden_resources"
+    ]
+  },
+  "dialogue_hooks": [
+    "asking for help with a community problem",
+    "mediating between feuding parties",
+    "sharing settlement history when prompted",
+    "warning about external threats",
+    "offering quests tied to settlement welfare"
+  ],
+  "voice_patterns": [
+    "measured and deliberate",
+    "folksy wisdom",
+    "tired but determined",
+    "formal and slightly distant"
+  ],
+  "schedule": {
+    "morning": "rounds through settlement, checking on people",
+    "afternoon": "meetings, dispute resolution, paperwork",
+    "evening": "community gathering or private contemplation",
+    "night": "home, reading correspondence"
+  }
+}

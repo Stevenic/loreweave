@@ -1,0 +1,80 @@
+{
+  "id": "guard",
+  "type": "npc",
+  "category": "authority",
+  "name": "Guard / Watch",
+  "description": "Settlement security. Patrols, gate duty, and responding to trouble.",
+  "stats_tier": "skilled",
+  "traits": {
+    "common": [
+      "dutiful",
+      "alert",
+      "territorial",
+      "by_the_book"
+    ],
+    "rare": [
+      "bribable",
+      "vigilante_streak",
+      "cowardly",
+      "secretly_kind"
+    ]
+  },
+  "skills": [
+    "perception",
+    "athletics",
+    "intimidation"
+  ],
+  "inventory": {
+    "required": [
+      "weapon",
+      "armor",
+      "badge_or_tabard"
+    ],
+    "common": [
+      "handcuffs_or_rope",
+      "whistle_or_horn",
+      "lantern"
+    ],
+    "rare": [
+      "confiscated_contraband",
+      "bribe_money",
+      "wanted_poster"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "gate_traffic",
+      "recent_disturbances",
+      "settlement_layout"
+    ],
+    "sometimes": [
+      "criminal_activity",
+      "suspicious_persons",
+      "patrol_routes"
+    ],
+    "rarely": [
+      "guard_captain_secrets",
+      "smuggling_operations",
+      "political_corruption"
+    ]
+  },
+  "dialogue_hooks": [
+    "asking for identification or purpose",
+    "warnings about curfew or restricted areas",
+    "reporting recent crimes or disturbances",
+    "asking for help with a problem beyond their pay grade",
+    "bored small talk during quiet shifts"
+  ],
+  "voice_patterns": [
+    "professional and clipped",
+    "bored and going through motions",
+    "aggressive and power-tripping",
+    "friendly neighborhood watchman"
+  ],
+  "schedule": {
+    "morning": "gate duty or morning patrol",
+    "afternoon": "patrol or training",
+    "evening": "gate watch, tavern rounds",
+    "night": "night watch or sleeping at barracks"
+  }
+}

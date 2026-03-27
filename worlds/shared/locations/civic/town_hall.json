@@ -1,0 +1,39 @@
+{
+  "id": "civic_town_hall",
+  "type": "location",
+  "category": "civic",
+  "name": "Town Hall",
+  "description": "The seat of local governance. Meeting room, records, and the headperson's office.",
+  "tier": ["village", "town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["meeting_hall", "records_shelf", "headperson_seat"],
+    "common": ["notice_board", "tax_ledger", "waiting_area"],
+    "rare": ["jail_cell", "armory", "war_room", "treasury"]
+  },
+  "objects": {
+    "required": ["ledgers", "seal_and_ink", "benches"],
+    "common": ["town_charter", "map_of_region", "lanterns"],
+    "rare": ["evidence_box", "confiscated_contraband", "ceremonial_weapon"]
+  },
+  "npcs": {
+    "required": ["headperson"],
+    "common": ["clerk", "guard"],
+    "rare": ["petitioner", "visiting_noble", "prisoner"]
+  },
+  "exits": {
+    "required": ["front_entrance"],
+    "common": ["back_office"],
+    "rare": ["cellar", "balcony"]
+  },
+  "atmosphere": {
+    "sounds": ["murmured_debate", "quill_scratching", "door_opening"],
+    "smells": ["old_parchment", "wood_polish", "candle_wax"],
+    "lighting": ["bright_natural", "lamp_lit"]
+  },
+  "layout": {
+    "footprint": "medium",
+    "floors": [1, 2],
+    "shape": ["rectangular"]
+  }
+}

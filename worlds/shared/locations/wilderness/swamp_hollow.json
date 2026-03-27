@@ -1,0 +1,39 @@
+{
+  "id": "wilderness_swamp_hollow",
+  "type": "location",
+  "category": "wilderness",
+  "name": "Swamp Hollow",
+  "description": "A depression in the wetland where the water is still and the trees close in. Things sink here and aren't always found.",
+  "tier": ["hamlet"],
+  "biomes": ["swamp", "forest"],
+  "features": {
+    "required": ["stagnant_pool", "gnarled_trees", "soft_ground"],
+    "common": ["fallen_log_bridge", "reed_thicket", "will_o_wisp_area", "moss_curtains"],
+    "rare": ["sunken_structure", "hag_circle", "buried_treasure", "gas_vents"]
+  },
+  "objects": {
+    "required": ["murky_water", "tangled_roots"],
+    "common": ["animal_bones", "mushroom_clusters", "strange_bubbles", "half_submerged_log"],
+    "rare": ["old_sword_hilt_in_mud", "glowing_moss", "sealed_bottle", "skeleton"]
+  },
+  "npcs": {
+    "required": [],
+    "common": ["giant_frog", "snake"],
+    "rare": ["hag", "lost_traveler", "swamp_witch", "undead"]
+  },
+  "exits": {
+    "required": ["squelching_path_back"],
+    "common": ["deeper_into_swamp"],
+    "rare": ["dry_island", "submerged_passage"]
+  },
+  "atmosphere": {
+    "sounds": ["frogs_croaking", "bubbling_mud", "insect_drone", "dripping", "silence_between"],
+    "smells": ["rot", "stagnant_water", "sulfur", "green_decay"],
+    "lighting": ["dim_filtered", "fog_diffused", "green_murk", "phosphorescent_glow"]
+  },
+  "layout": {
+    "footprint": "medium",
+    "floors": [0],
+    "shape": ["irregular", "sunken"]
+  }
+}

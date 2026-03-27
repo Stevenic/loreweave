@@ -1,0 +1,39 @@
+{
+  "id": "wilderness_ancient_tree",
+  "type": "location",
+  "category": "wilderness",
+  "name": "Ancient Tree",
+  "description": "Older than the settlement. Older than the road. The kind of tree that has a name and everyone in the area knows it.",
+  "tier": ["hamlet", "village", "town"],
+  "biomes": ["forest", "plains", "hills"],
+  "features": {
+    "required": ["massive_trunk", "vast_canopy", "exposed_root_system"],
+    "common": ["hollow_in_trunk", "carved_initials_and_dates", "natural_shelter_under_roots", "bird_colony_in_branches"],
+    "rare": ["dryad_home", "natural_shrine", "tree_is_sentient", "entrance_to_underground_via_roots"]
+  },
+  "objects": {
+    "required": ["fallen_leaves", "acorns_or_seeds"],
+    "common": ["prayer_ribbons_tied_to_branches", "animal_nest", "old_rope_swing"],
+    "rare": ["face_in_bark", "embedded_arrowhead_centuries_old", "hidden_cache_in_hollow"]
+  },
+  "npcs": {
+    "required": [],
+    "common": ["traveler_resting_in_shade"],
+    "rare": ["druid", "treant", "dryad", "owl_that_watches_too_carefully"]
+  },
+  "exits": {
+    "required": ["path_away"],
+    "common": ["climb_the_tree", "path_through_roots"],
+    "rare": ["hollow_leads_underground", "canopy_pathway"]
+  },
+  "atmosphere": {
+    "sounds": ["leaves_in_wind", "creaking_branches", "birdsong", "deep_groaning_on_windy_days"],
+    "smells": ["bark", "leaf_litter", "sap", "rich_earth"],
+    "lighting": ["dappled_green", "deep_shade", "cathedral_light_through_canopy"]
+  },
+  "layout": {
+    "footprint": "medium",
+    "floors": [1],
+    "shape": ["circular_canopy", "natural"]
+  }
+}

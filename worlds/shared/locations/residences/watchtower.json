@@ -1,0 +1,39 @@
+{
+  "id": "residence_watchtower",
+  "type": "location",
+  "category": "residence",
+  "name": "Watchtower",
+  "description": "Built to see trouble coming. Someone still lives here — either stationed by the guard or too stubborn to leave when the guard stopped coming.",
+  "tier": ["hamlet", "village", "town"],
+  "biomes": ["plains", "hills", "mountain", "coastal"],
+  "features": {
+    "required": ["observation_platform", "spiral_stairs", "signal_fire_brazier"],
+    "common": ["arrow_slits", "small_living_quarters", "storage_room", "rain_cistern"],
+    "rare": ["telescope", "dovecote_for_messenger_birds", "intact_warning_bell", "collapsed_upper_level"]
+  },
+  "objects": {
+    "required": ["firewood_for_signal", "viewing_horn"],
+    "common": ["old_logbook", "stored_rations", "blanket_roll", "pennant"],
+    "rare": ["encoded_signal_chart", "warning_horn_with_magical_range", "abandoned_personal_effects"]
+  },
+  "npcs": {
+    "required": [],
+    "common": ["watchman"],
+    "rare": ["hermit_squatter", "deserter_hiding", "ranger_using_as_base", "ghost_of_last_watchman"]
+  },
+  "exits": {
+    "required": ["ground_door"],
+    "common": ["ladder_to_roof"],
+    "rare": ["underground_escape_route", "hidden_door_at_base"]
+  },
+  "atmosphere": {
+    "sounds": ["wind_at_height", "flag_snapping", "creaking_stairs", "distant_everything"],
+    "smells": ["cold_air", "old_stone", "smoke_residue", "bird_droppings"],
+    "lighting": ["360_degree_sky", "dim_interior", "fire_glow_at_night"]
+  },
+  "layout": {
+    "footprint": "small",
+    "floors": [1, 2, 3, 4],
+    "shape": ["cylindrical", "square_tower"]
+  }
+}

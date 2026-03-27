@@ -1,0 +1,39 @@
+{
+  "id": "tavern_gambling_den",
+  "type": "location",
+  "category": "tavern",
+  "name": "Gambling Den",
+  "description": "The drinks are watered but nobody's here for the drinks. Every table runs a different game. The house always wins — the question is how much.",
+  "tier": ["town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["gaming_tables", "bar_counter", "money_changing_desk"],
+    "common": ["private_high_stakes_room", "bouncer_at_door", "peephole_from_office", "dice_pit"],
+    "rare": ["rigged_table", "underground_arena", "thieves_guild_front", "debt_ledger_room"]
+  },
+  "objects": {
+    "required": ["dice", "cards", "coin_stacks"],
+    "common": ["marked_cards_confiscated", "lucky_charm_display", "house_rules_sign", "empty_purses"],
+    "rare": ["loaded_dice", "debt_contracts_with_blood_signatures", "hidden_weapon_under_table"]
+  },
+  "npcs": {
+    "required": ["house_dealer"],
+    "common": ["bouncer", "gambler", "barmaid", "loan_shark"],
+    "rare": ["noble_losing_badly", "cheater_about_to_be_caught", "fortune_teller", "pickpocket"]
+  },
+  "exits": {
+    "required": ["front_door"],
+    "common": ["back_door", "upstairs_private_rooms"],
+    "rare": ["secret_escape_route", "tunnel_to_fence"]
+  },
+  "atmosphere": {
+    "sounds": ["dice_rolling", "coins_stacking", "groans_and_cheers", "whispered_bets"],
+    "smells": ["pipe_smoke", "nervous_sweat", "cheap_perfume", "spilled_drink"],
+    "lighting": ["low_focused_on_tables", "smoky_haze", "shadows_on_purpose"]
+  },
+  "layout": {
+    "footprint": "medium",
+    "floors": [1, 2],
+    "shape": ["rectangular", "basement"]
+  }
+}

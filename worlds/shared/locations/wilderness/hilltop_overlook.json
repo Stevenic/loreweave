@@ -1,0 +1,39 @@
+{
+  "id": "wilderness_hilltop",
+  "type": "location",
+  "category": "wilderness",
+  "name": "Hilltop Overlook",
+  "description": "The kind of high ground that rewards the climb. You can see for miles — and anything out there can see you.",
+  "tier": ["hamlet", "village"],
+  "biomes": ["plains", "hills", "forest"],
+  "features": {
+    "required": ["elevated_viewpoint", "exposed_rock"],
+    "common": ["wind_bent_tree", "cairn", "scrub_brush", "animal_burrow"],
+    "rare": ["old_watchtower_foundation", "standing_stone", "signal_fire_pit", "ancient_carving"]
+  },
+  "objects": {
+    "required": ["loose_stones"],
+    "common": ["bleached_bones", "weather_worn_marker", "bird_nest"],
+    "rare": ["broken_telescope", "buried_stash", "faded_flag"]
+  },
+  "npcs": {
+    "required": [],
+    "common": ["shepherd", "lookout"],
+    "rare": ["hermit", "scout", "brigand_spotter", "ghost_of_a_sentinel"]
+  },
+  "exits": {
+    "required": ["path_down"],
+    "common": ["ridge_trail"],
+    "rare": ["hidden_cave_below", "old_stairs_carved_in_rock"]
+  },
+  "atmosphere": {
+    "sounds": ["strong_wind", "distant_valley_sounds", "hawk_cry", "silence"],
+    "smells": ["clean_air", "dry_grass", "sun_baked_rock"],
+    "lighting": ["full_sky_exposure", "wind_swept_clouds", "sunset_panorama"]
+  },
+  "layout": {
+    "footprint": "medium",
+    "floors": [0],
+    "shape": ["irregular", "dome"]
+  }
+}

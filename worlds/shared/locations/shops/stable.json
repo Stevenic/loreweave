@@ -1,0 +1,39 @@
+{
+  "id": "shop_stable",
+  "type": "location",
+  "category": "shop",
+  "name": "Stable & Horse Trader",
+  "description": "Hay, manure, and the smell of money. A good horse costs more than most people earn in a year. The trader knows every beast's temperament better than their own family.",
+  "tier": ["village", "town", "city"],
+  "biomes": ["plains", "forest", "hills"],
+  "features": {
+    "required": ["stalls", "tack_room", "water_trough"],
+    "common": ["hayloft", "paddock", "farrier_station", "feed_storage"],
+    "rare": ["training_ring", "exotic_mount_stall", "breeding_records", "racing_track"]
+  },
+  "objects": {
+    "required": ["saddles", "bridles", "hay_bales"],
+    "common": ["horseshoes", "brushes", "feed_buckets", "mounting_block"],
+    "rare": ["pedigree_documents", "racing_trophies", "medicinal_poultices", "cart_for_sale"]
+  },
+  "npcs": {
+    "required": ["stable_master"],
+    "common": ["stable_hand", "customer"],
+    "rare": ["horse_thief_casing_stock", "knight_needing_warhorse", "traveling_merchant_with_exotic_mount"]
+  },
+  "exits": {
+    "required": ["main_entrance"],
+    "common": ["paddock_gate", "back_field"],
+    "rare": ["hayloft_escape", "tunnel_to_road"]
+  },
+  "atmosphere": {
+    "sounds": ["horses_whickering", "hay_rustling", "hoof_stamps", "stable_hand_whistling"],
+    "smells": ["hay", "horse", "manure", "leather"],
+    "lighting": ["dusty_shafts_through_gaps", "open_air", "lantern_at_night"]
+  },
+  "layout": {
+    "footprint": "large",
+    "floors": [1, 2],
+    "shape": ["long_rectangular", "U-shaped_with_paddock"]
+  }
+}

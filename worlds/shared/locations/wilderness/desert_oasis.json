@@ -1,0 +1,39 @@
+{
+  "id": "wilderness_desert_oasis",
+  "type": "location",
+  "category": "wilderness",
+  "name": "Desert Oasis",
+  "description": "Palm trees and water where there should be neither. The most valuable real estate for a hundred miles in any direction.",
+  "tier": ["hamlet", "village"],
+  "biomes": ["desert"],
+  "features": {
+    "required": ["spring_fed_pool", "palm_trees", "green_vegetation"],
+    "common": ["date_palms", "animal_tracks_converging", "shade", "sandy_bank"],
+    "rare": ["ancient_well_structure", "hidden_cave_behind_vegetation", "mirage_effect", "sacred_site"]
+  },
+  "objects": {
+    "required": ["fresh_water", "fruit_bearing_trees"],
+    "common": ["animal_droppings", "campfire_remains", "discarded_waterskin"],
+    "rare": ["buried_trade_goods", "carved_stone_marker", "ancient_irrigation_channel"]
+  },
+  "npcs": {
+    "required": [],
+    "common": ["caravan_resting", "desert_nomad"],
+    "rare": ["water_guardian", "djinn", "hermit_sage", "ambush_waiting"]
+  },
+  "exits": {
+    "required": ["back_to_desert"],
+    "common": ["trade_route"],
+    "rare": ["hidden_canyon", "underground_passage"]
+  },
+  "atmosphere": {
+    "sounds": ["trickling_water", "palm_fronds_rustling", "insects_buzzing", "blessed_silence_from_wind"],
+    "smells": ["fresh_water", "date_fruit", "green_growing_things", "relief"],
+    "lighting": ["dappled_palm_shade", "blinding_brightness_beyond", "stars_reflected_in_pool"]
+  },
+  "layout": {
+    "footprint": "medium",
+    "floors": [1],
+    "shape": ["organic", "clustered_around_water"]
+  }
+}

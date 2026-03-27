@@ -1,0 +1,39 @@
+{
+  "id": "tavern_mead_hall",
+  "type": "location",
+  "category": "tavern",
+  "name": "Mead Hall",
+  "description": "A longhouse-style hall where the whole community gathers. The jarl or chief sits at the high table. Everyone else earns their seat.",
+  "tier": ["hamlet", "village", "town"],
+  "biomes": ["tundra", "mountain", "forest"],
+  "features": {
+    "required": ["long_tables", "central_hearth_pit", "high_seat"],
+    "common": ["weapon_racks_by_door", "trophy_mounts", "tapestry_walls", "mead_brewing_corner"],
+    "rare": ["throne", "skald_corner", "ritual_alcove", "feasting_horn_display"]
+  },
+  "objects": {
+    "required": ["drinking_horns", "mead_barrels", "iron_pot_over_fire"],
+    "common": ["animal_pelts", "carved_wooden_pillars", "shield_wall_decoration", "bread_trenchers"],
+    "rare": ["ancestral_weapon_on_wall", "runestone", "challenger_horn", "guest_gift_chest"]
+  },
+  "npcs": {
+    "required": ["mead_keeper"],
+    "common": ["warrior_patron", "storyteller", "serving_thrall"],
+    "rare": ["chieftain", "skald_with_ancient_song", "blood_oath_challenger", "outlander_seeking_shelter"]
+  },
+  "exits": {
+    "required": ["main_door"],
+    "common": ["back_door_to_kitchen", "side_door"],
+    "rare": ["trapdoor_to_cellar", "chiefs_private_chamber"]
+  },
+  "atmosphere": {
+    "sounds": ["roaring_laughter", "clashing_cups", "crackling_massive_fire", "boasting_songs"],
+    "smells": ["roasting_meat", "mead", "wood_smoke", "wet_fur"],
+    "lighting": ["hearth_fire_glow", "smoky_rafters", "warm_and_wild"]
+  },
+  "layout": {
+    "footprint": "large",
+    "floors": [1],
+    "shape": ["longhouse", "rectangular"]
+  }
+}

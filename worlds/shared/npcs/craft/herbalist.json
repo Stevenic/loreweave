@@ -1,0 +1,82 @@
+{
+  "id": "herbalist",
+  "type": "npc",
+  "category": "craft",
+  "name": "Herbalist",
+  "description": "Knows which plants cure and which ones kill. Sometimes the difference is the dose. Lives half in the garden and half in the woods.",
+  "stats_tier": "skilled",
+  "traits": {
+    "common": [
+      "knowledgeable",
+      "eccentric",
+      "kind",
+      "solitary"
+    ],
+    "rare": [
+      "witch_rumored",
+      "poisoner_for_hire",
+      "druidic_training",
+      "last_keeper_of_dying_tradition"
+    ]
+  },
+  "skills": [
+    "nature",
+    "medicine",
+    "survival",
+    "arcana"
+  ],
+  "inventory": {
+    "required": [
+      "herb_pouches",
+      "mortar_and_pestle",
+      "drying_rack"
+    ],
+    "common": [
+      "healing_salves",
+      "tea_blends",
+      "pressed_flower_book",
+      "garden_tools"
+    ],
+    "rare": [
+      "rare_plant_specimen",
+      "poison_antidote",
+      "enchanted_growing_pot",
+      "recipe_for_forbidden_tincture"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "local_plant_identification",
+      "basic_remedies",
+      "seasonal_growing_cycles"
+    ],
+    "sometimes": [
+      "rare_plant_locations",
+      "disease_outbreaks",
+      "animal_behavior_linked_to_plants"
+    ],
+    "rarely": [
+      "magical_plant_properties",
+      "poison_recipes",
+      "ancient_druidic_lore"
+    ]
+  },
+  "dialogue_hooks": [
+    "offering a remedy for that cough you didn't know you had",
+    "asking if you've seen a particular plant growing anywhere unusual",
+    "warning about a poisonous look-alike near the settlement",
+    "needing someone to gather ingredients from a dangerous area"
+  ],
+  "voice_patterns": [
+    "gentle grandmother — medicine wrapped in comfort",
+    "sharp-eyed scientist — clinical and precise about dosages",
+    "wild woman — half feral, speaks to plants more than people",
+    "worried healer — there's a sickness coming and not enough supplies"
+  ],
+  "schedule": {
+    "morning": "tending garden, harvesting",
+    "afternoon": "preparing remedies, seeing patients",
+    "evening": "foraging in nearby woods",
+    "night": "reading, drying herbs, experimenting"
+  }
+}

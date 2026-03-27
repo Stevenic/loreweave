@@ -1,0 +1,39 @@
+{
+  "id": "tavern_dockside",
+  "type": "location",
+  "category": "tavern",
+  "name": "Dockside Tavern",
+  "description": "A salt-crusted drinking hole where sailors, fishers, and drifters swap tales between voyages.",
+  "tier": ["town", "city"],
+  "biomes": ["coastal", "swamp"],
+  "features": {
+    "required": ["bar_counter", "seating", "porthole_windows"],
+    "common": ["rope_railings", "cargo_net_decor", "ship_figurehead", "oil_lamps"],
+    "rare": ["smugglers_hatch", "tide_cellar", "crows_nest_loft", "fighting_ring"]
+  },
+  "objects": {
+    "required": ["tankards", "barrels", "anchor_doorstop"],
+    "common": ["navigational_chart", "harpoon_on_wall", "ship_in_bottle", "nets"],
+    "rare": ["contraband_crate", "treasure_map_fragment", "cursed_compass"]
+  },
+  "npcs": {
+    "required": ["innkeeper"],
+    "common": ["sailor", "fisher", "dockworker"],
+    "rare": ["smuggler", "press_gang_recruiter", "shipwrecked_stranger", "retired_pirate"]
+  },
+  "exits": {
+    "required": ["front_door_to_docks"],
+    "common": ["back_door_to_alley", "stairs_to_rooms"],
+    "rare": ["trapdoor_to_tide_cellar", "window_to_roof", "tunnel_to_waterfront"]
+  },
+  "atmosphere": {
+    "sounds": ["creaking_timbers", "lapping_water", "shanty_humming", "gulls_outside"],
+    "smells": ["salt_air", "tar", "fried_fish", "wet_rope"],
+    "lighting": ["smoky", "oil_lamp_glow", "grey_daylight_through_portholes"]
+  },
+  "layout": {
+    "footprint": "medium",
+    "floors": [1, 2],
+    "shape": ["rectangular", "narrow_deep"]
+  }
+}

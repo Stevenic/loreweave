@@ -1,0 +1,39 @@
+{
+  "id": "wilderness_cave_entrance",
+  "type": "location",
+  "category": "wilderness",
+  "name": "Cave Entrance",
+  "description": "The mouth of a cave system. Could be a shelter, a den, or the start of a dungeon.",
+  "tier": ["hamlet", "village", "town", "city"],
+  "biomes": ["mountain", "forest", "tundra"],
+  "features": {
+    "required": ["cave_mouth", "rocky_overhang"],
+    "common": ["dripping_water", "shallow_alcove", "rubble"],
+    "rare": ["carved_symbols", "iron_gate", "collapsed_section", "luminous_moss"]
+  },
+  "objects": {
+    "required": [],
+    "common": ["animal_bones", "loose_stones", "old_ashes"],
+    "rare": ["mining_tools", "torn_cloth", "scratched_warning", "broken_cage"]
+  },
+  "npcs": {
+    "required": [],
+    "common": [],
+    "rare": ["bear", "goblin_lookout", "injured_explorer", "hermit"]
+  },
+  "exits": {
+    "required": ["outside", "deeper_into_cave"],
+    "common": [],
+    "rare": ["hidden_side_passage", "chimney_climb"]
+  },
+  "atmosphere": {
+    "sounds": ["dripping_water", "echo", "wind_whistling", "distant_rumble"],
+    "smells": ["damp_rock", "bat_guano", "mineral", "cold_air"],
+    "lighting": ["dark", "dim_from_entrance", "pitch_black_deeper"]
+  },
+  "layout": {
+    "footprint": "medium",
+    "floors": [1],
+    "shape": ["irregular_natural"]
+  }
+}

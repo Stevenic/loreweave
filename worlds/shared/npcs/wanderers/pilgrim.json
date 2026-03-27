@@ -1,0 +1,83 @@
+{
+  "id": "pilgrim",
+  "type": "npc",
+  "category": "wanderer",
+  "name": "Pilgrim",
+  "description": "Traveling to a holy site, a shrine, or a place of personal significance. Their journey is the point — the destination is just an excuse.",
+  "stats_tier": "commoner",
+  "traits": {
+    "common": [
+      "devout",
+      "peaceful",
+      "contemplative",
+      "open_to_strangers"
+    ],
+    "rare": [
+      "crisis_of_faith",
+      "running_from_something",
+      "secretly_dangerous",
+      "carrying_a_relic"
+    ]
+  },
+  "skills": [
+    "religion",
+    "insight",
+    "persuasion",
+    "survival"
+  ],
+  "inventory": {
+    "required": [
+      "holy_symbol",
+      "walking_staff",
+      "travel_pack"
+    ],
+    "common": [
+      "prayer_beads",
+      "journal",
+      "dried_food",
+      "offering_coin"
+    ],
+    "rare": [
+      "sacred_relic",
+      "sealed_letter_for_temple",
+      "map_to_hidden_shrine",
+      "healing_herb"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "religious_customs",
+      "shrine_locations",
+      "road_conditions"
+    ],
+    "sometimes": [
+      "temple_politics",
+      "local_beliefs",
+      "other_pilgrims_encountered"
+    ],
+    "rarely": [
+      "divine_vision",
+      "heretical_knowledge",
+      "lost_holy_site_location"
+    ]
+  },
+  "dialogue_hooks": [
+    "asking for directions to a shrine or temple",
+    "sharing a blessing or a prayer",
+    "telling the story of why they're on this journey",
+    "asking to travel together for safety",
+    "offering spiritual counsel — whether you want it or not"
+  ],
+  "voice_patterns": [
+    "serene and deliberate",
+    "zealous — burning with purpose",
+    "humble and self-deprecating",
+    "questioning — the journey has raised more doubts than answers"
+  ],
+  "schedule": {
+    "morning": "dawn prayers, breaking camp",
+    "afternoon": "walking, resting at waypoints",
+    "evening": "seeking shelter, evening devotions",
+    "night": "sleeping rough or at temples that take travelers"
+  }
+}

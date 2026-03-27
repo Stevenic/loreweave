@@ -1,0 +1,87 @@
+{
+  "id": "innkeeper",
+  "type": "npc",
+  "category": "service",
+  "name": "Innkeeper",
+  "description": "Runs a tavern or inn. Social hub of the community. Knows everyone and everything.",
+  "stats_tier": "commoner",
+  "traits": {
+    "common": [
+      "hospitable",
+      "observant",
+      "gossip",
+      "practical",
+      "patient"
+    ],
+    "rare": [
+      "secretive",
+      "retired_adventurer",
+      "debt_ridden",
+      "connected_to_underworld"
+    ]
+  },
+  "skills": [
+    "persuasion",
+    "insight",
+    "perception"
+  ],
+  "inventory": {
+    "required": [
+      "keys",
+      "ledger",
+      "apron"
+    ],
+    "common": [
+      "coin_purse",
+      "club_behind_bar",
+      "rag"
+    ],
+    "rare": [
+      "hidden_weapon",
+      "contraband",
+      "love_letter",
+      "old_adventuring_gear"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "local_rumors",
+      "regular_patrons",
+      "road_conditions",
+      "drink_prices"
+    ],
+    "sometimes": [
+      "settlement_politics",
+      "nearby_threats",
+      "trade_caravans",
+      "traveler_gossip"
+    ],
+    "rarely": [
+      "secret_passages",
+      "criminal_contacts",
+      "ancient_local_history",
+      "hidden_treasure_rumors"
+    ]
+  },
+  "dialogue_hooks": [
+    "complaints about business or suppliers",
+    "opinions on recent visitors or strangers",
+    "warnings about local dangers or road conditions",
+    "requests for pest removal or supply runs",
+    "gossip about other townsfolk",
+    "stories about the old days"
+  ],
+  "voice_patterns": [
+    "friendly but transactional",
+    "world-weary storyteller",
+    "suspicious of strangers until they order",
+    "cheerful busybody who talks too much",
+    "gruff but fair"
+  ],
+  "schedule": {
+    "morning": "cleaning, restocking, receiving deliveries",
+    "afternoon": "light service, cooking prep, bookkeeping",
+    "evening": "busy service, socializing with regulars",
+    "night": "closing up, counting coin, sweeping"
+  }
+}

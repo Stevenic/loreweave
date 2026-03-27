@@ -1,0 +1,79 @@
+{
+  "id": "refugee",
+  "type": "npc",
+  "category": "wanderer",
+  "name": "Refugee / Displaced Person",
+  "description": "Left everything behind. Carries whatever they could grab and knowledge of wherever they fled. A reminder that safety is temporary.",
+  "stats_tier": "commoner",
+  "traits": {
+    "common": [
+      "wary",
+      "resilient",
+      "desperate",
+      "resourceful"
+    ],
+    "rare": [
+      "carries_valuable_secret",
+      "former_noble",
+      "skilled_professional_from_destroyed_town",
+      "pursued_by_what_they_fled"
+    ]
+  },
+  "skills": [
+    "survival",
+    "insight",
+    "stealth"
+  ],
+  "inventory": {
+    "required": [
+      "ragged_bundle_of_possessions"
+    ],
+    "common": [
+      "family_keepsake",
+      "empty_waterskin",
+      "worn_shoes",
+      "child_on_hip"
+    ],
+    "rare": [
+      "hidden_jewel_sewn_in_lining",
+      "key_to_home_that_no_longer_exists",
+      "document_proving_identity",
+      "map_of_danger_zone"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "what_they_fled_from",
+      "road_conditions_behind_them",
+      "refugee_camp_locations"
+    ],
+    "sometimes": [
+      "enemy_movements",
+      "destroyed_settlement_layout",
+      "survivors_and_missing"
+    ],
+    "rarely": [
+      "why_the_disaster_really_happened",
+      "military_intelligence",
+      "location_of_buried_valuables"
+    ]
+  },
+  "dialogue_hooks": [
+    "asking for food, water, or shelter — too proud to beg, too desperate not to",
+    "warning about what's coming from the direction they fled",
+    "looking for a specific family member who was separated",
+    "offering to work for shelter — they have skills, they just need a chance"
+  ],
+  "voice_patterns": [
+    "shell-shocked quiet — speaks in flat, distant sentences",
+    "fierce survivor — anger burns hotter than despair",
+    "pleading parent — will do anything for their children's safety",
+    "dignified despite everything — refuses to be pitied"
+  ],
+  "schedule": {
+    "morning": "searching for food, water, work",
+    "afternoon": "resting, mending clothes, looking for family",
+    "evening": "seeking shelter before dark",
+    "night": "sleeping rough, keeping watch"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "id": "baker",
+  "type": "npc",
+  "category": "craft",
+  "name": "Baker",
+  "description": "Up before anyone else, asleep before sundown. The baker feeds the town and knows who's hungry, who's celebrating, and who stopped buying bread.",
+  "stats_tier": "commoner",
+  "traits": {
+    "common": [
+      "warm",
+      "early_riser",
+      "community_pillar",
+      "practical"
+    ],
+    "rare": [
+      "gossip_monger",
+      "secret_sweet_tooth_alchemist",
+      "widowed",
+      "fiercely_protective"
+    ]
+  },
+  "skills": [
+    "insight",
+    "persuasion",
+    "perception"
+  ],
+  "inventory": {
+    "required": [
+      "flour_dusted_apron",
+      "bread_basket"
+    ],
+    "common": [
+      "rolling_pin",
+      "coin_pouch",
+      "recipe_cards"
+    ],
+    "rare": [
+      "special_ingredient_pouch",
+      "love_letter_in_apron",
+      "family_recipe_book"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "daily_routines_of_townsfolk",
+      "grain_supply_chain",
+      "who_ate_what_today"
+    ],
+    "sometimes": [
+      "domestic_disputes",
+      "new_arrivals_in_town",
+      "food_shortages"
+    ],
+    "rarely": [
+      "poisoning_attempts",
+      "rationing_politics",
+      "grain_theft"
+    ]
+  },
+  "dialogue_hooks": [
+    "offering a fresh roll while you talk",
+    "noting that someone hasn't come in for their usual order",
+    "asking if you've seen their flour delivery — it's late",
+    "proud story about winning the harvest festival bake-off",
+    "worried about grain prices this season"
+  ],
+  "voice_patterns": [
+    "warm and maternal/paternal",
+    "bustling — always moving while talking",
+    "surprisingly sharp observer behind the friendly exterior",
+    "flour-dusted philosopher"
+  ],
+  "schedule": {
+    "morning": "baking since before dawn, open at first light",
+    "afternoon": "selling, restocking, mixing dough for tomorrow",
+    "evening": "closing shop, cleaning ovens",
+    "night": "early to bed — the oven won't light itself"
+  }
+}

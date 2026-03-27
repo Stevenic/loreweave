@@ -1,0 +1,39 @@
+{
+  "id": "wilderness_fairy_ring",
+  "type": "location",
+  "category": "wilderness",
+  "name": "Fairy Ring",
+  "description": "A perfect circle of mushrooms in a clearing where the light falls wrong. Local children know better than to step inside. Local adults pretend they don't believe.",
+  "tier": ["hamlet", "village"],
+  "biomes": ["forest", "swamp", "plains"],
+  "features": {
+    "required": ["mushroom_circle", "unnaturally_green_grass_inside", "clearing"],
+    "common": ["dancing_motes_of_light", "flowers_blooming_out_of_season", "silence_at_edge"],
+    "rare": ["time_moves_differently_inside", "invisible_threshold", "fey_crossing_active", "music_from_nowhere"]
+  },
+  "objects": {
+    "required": ["mushrooms_in_circle"],
+    "common": ["tiny_offerings_from_locals", "lost_trinket_inside_ring", "flowers_facing_wrong_way"],
+    "rare": ["fey_gift_left_behind", "shoes_of_someone_who_danced_too_long", "changeling_cradle"]
+  },
+  "npcs": {
+    "required": [],
+    "common": [],
+    "rare": ["pixie", "sprite", "fey_trickster", "lost_child", "dryad"]
+  },
+  "exits": {
+    "required": ["path_away"],
+    "common": ["game_trail"],
+    "rare": ["step_inside_the_ring", "fey_path_that_wasnt_there_before"]
+  },
+  "atmosphere": {
+    "sounds": ["birdsong_stops_at_edge", "faint_music", "buzzing_insects", "ringing_silence"],
+    "smells": ["wildflowers_too_sweet", "fresh_rain_on_dry_day", "honey"],
+    "lighting": ["golden_even_on_overcast_days", "moonlight_pool", "shifting_shadows"]
+  },
+  "layout": {
+    "footprint": "small",
+    "floors": [1],
+    "shape": ["perfect_circle"]
+  }
+}

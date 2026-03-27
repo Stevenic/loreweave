@@ -1,0 +1,53 @@
+{
+  "id": "settlement_descriptors",
+  "type": "vocabulary",
+  "description": "Sensory descriptor pools for settlement types and sizes. Layers on top of biome descriptors to give inhabited places their own character.",
+  "settlement_sizes": {
+    "hamlet": {
+      "terrain": ["a handful of buildings", "a crossroads with a well", "clustered around a single lane", "fields visible from every doorstep"],
+      "sounds": ["a dog barking", "chickens", "someone chopping wood", "distant conversation", "a creaking gate"],
+      "smells": ["cooking smoke", "animal pens", "turned earth", "drying herbs"],
+      "atmosphere": ["quiet", "tight-knit", "everyone knows everyone", "wary of strangers", "self-reliant"]
+    },
+    "village": {
+      "terrain": ["a main road through the center", "a few dozen buildings", "a square or green", "outlying farms"],
+      "sounds": ["market-day chatter", "smithy hammering", "children playing", "cart wheels on dirt", "temple bell"],
+      "smells": ["fresh bread from the bakery", "river nearby", "livestock", "hearth smoke"],
+      "atmosphere": ["lived-in", "familiar", "gossip travels fast", "seasonal rhythms", "proud of small things"]
+    },
+    "town": {
+      "terrain": ["cobbled main street", "several neighborhoods", "a market square", "walls or a palisade", "multiple districts"],
+      "sounds": ["crowd noise", "street vendors calling", "guard boots on cobblestone", "clanging from workshops", "music from a tavern"],
+      "smells": ["spiced food", "tannery downwind", "canal water", "perfume and sweat", "coal smoke"],
+      "atmosphere": ["bustling", "competitive", "opportunity", "class divides visible", "politics in every corner"]
+    },
+    "city": {
+      "terrain": ["stone walls and towers", "wide avenues and narrow alleys", "bridges over canals", "grand buildings", "slums beside mansions"],
+      "sounds": ["constant crowd murmur", "bells from multiple temples", "hawkers", "distant hammering", "music layered over shouts"],
+      "smells": ["everything at once", "sewer and perfume", "exotic spices", "horse dung", "river stink"],
+      "atmosphere": ["overwhelming", "anonymous", "dangerous and alive", "power concentrated", "opportunity and exploitation"]
+    }
+  },
+  "conditions": {
+    "prosperous": {
+      "visual": ["well-maintained buildings", "painted shutters", "fat livestock", "flowers in windowboxes"],
+      "sounds": ["laughter", "coin clinking", "music"],
+      "atmosphere": ["content", "confident", "generous"]
+    },
+    "struggling": {
+      "visual": ["patched roofs", "thin faces", "overgrown gardens", "closed shops"],
+      "sounds": ["arguments", "coughing", "quiet"],
+      "atmosphere": ["tense", "suspicious", "making do"]
+    },
+    "threatened": {
+      "visual": ["reinforced doors", "watchtowers manned", "weapons visible", "wagons packed for flight"],
+      "sounds": ["hushed voices", "sharpening steel", "children kept indoors"],
+      "atmosphere": ["fear in the air", "solidarity or fracture", "braced"]
+    },
+    "abandoned": {
+      "visual": ["empty doorways", "collapsed roofs", "possessions left behind", "nature reclaiming"],
+      "sounds": ["wind through empty buildings", "doors banging", "rats", "eerie silence"],
+      "atmosphere": ["ghostly", "sad", "something happened here", "wrong"]
+    }
+  }
+}

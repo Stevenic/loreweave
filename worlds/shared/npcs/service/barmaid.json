@@ -1,0 +1,79 @@
+{
+  "id": "barmaid",
+  "type": "npc",
+  "category": "service",
+  "name": "Barmaid / Barman",
+  "description": "Works the floor, clears the tables, and hears every conversation in the room. Invisible to those who don't look, invaluable to those who do.",
+  "stats_tier": "commoner",
+  "traits": {
+    "common": [
+      "quick_on_feet",
+      "good_memory",
+      "friendly",
+      "resilient"
+    ],
+    "rare": [
+      "eavesdropper_by_trade",
+      "escaped_from_elsewhere",
+      "saving_to_leave",
+      "secretly_educated"
+    ]
+  },
+  "skills": [
+    "perception",
+    "insight",
+    "sleight_of_hand"
+  ],
+  "inventory": {
+    "required": [
+      "tray",
+      "apron"
+    ],
+    "common": [
+      "bar_rag",
+      "pocket_money",
+      "small_knife"
+    ],
+    "rare": [
+      "overheard_secret_written_down",
+      "stolen_trinket",
+      "love_token"
+    ]
+  },
+  "knowledge": {
+    "always": [
+      "who_drinks_what",
+      "regulars_habits",
+      "tavern_layout"
+    ],
+    "sometimes": [
+      "overheard_plans",
+      "who_is_meeting_whom",
+      "who_tips_and_who_doesnt"
+    ],
+    "rarely": [
+      "criminal_meetings",
+      "affair_details",
+      "escape_routes"
+    ]
+  },
+  "dialogue_hooks": [
+    "asking what you'll have while sizing you up",
+    "warning you about a patron who's been watching you",
+    "sharing gossip in exchange for a good tip",
+    "asking for help with a problem the innkeeper won't address",
+    "mentioning that someone was asking about you earlier"
+  ],
+  "voice_patterns": [
+    "cheerful and efficient — talks while working",
+    "conspiratorial whisper when sharing gossip",
+    "sharp-tongued with rude customers",
+    "wistful — dreams of somewhere else"
+  ],
+  "schedule": {
+    "morning": "sleeping in or cleaning up from last night",
+    "afternoon": "setting up, light prep, early customers",
+    "evening": "peak service — running all night",
+    "night": "closing, counting tips, walking home"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "id": "shop_bakery",
+  "type": "location",
+  "category": "shop",
+  "name": "Bakery",
+  "description": "Warm light, warm bread. The baker is up before dawn and knows everyone's morning habits.",
+  "tier": ["village", "town", "city"],
+  "biomes": ["any"],
+  "features": {
+    "required": ["brick_oven", "counter", "bread_shelves"],
+    "common": ["flour_stores", "pastry_display", "kneading_table", "cooling_racks"],
+    "rare": ["upstairs_living_quarters", "millstone", "herb_drying_rack", "cellar_pantry"]
+  },
+  "objects": {
+    "required": ["loaves", "flour_sacks", "rolling_pin"],
+    "common": ["bread_paddle", "yeast_jar", "recipe_board", "coin_box"],
+    "rare": ["secret_ingredient_jar", "old_family_recipe", "contest_ribbon"]
+  },
+  "npcs": {
+    "required": ["baker"],
+    "common": ["apprentice", "morning_customer"],
+    "rare": ["grain_merchant", "food_critic", "hungry_urchin"]
+  },
+  "exits": {
+    "required": ["front_door"],
+    "common": ["kitchen_back", "delivery_alley"],
+    "rare": ["cellar", "upstairs"]
+  },
+  "atmosphere": {
+    "sounds": ["oven_crackling", "dough_slapping", "morning_greetings", "bell_on_door"],
+    "smells": ["fresh_bread", "cinnamon", "yeast", "warm_butter"],
+    "lighting": ["oven_glow", "early_morning_light", "flour_dust_in_sunbeams"]
+  },
+  "layout": {
+    "footprint": "small",
+    "floors": [1, 2],
+    "shape": ["rectangular"]
+  }
+}

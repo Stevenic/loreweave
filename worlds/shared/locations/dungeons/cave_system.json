@@ -1,0 +1,39 @@
+{
+  "id": "dungeon_cave_system",
+  "type": "location",
+  "category": "dungeon",
+  "name": "Cave System",
+  "description": "Natural caverns that wind deep into the earth. Something carved these passages — water, or something else.",
+  "tier": ["hamlet", "village", "town"],
+  "biomes": ["forest", "hills", "mountain", "swamp"],
+  "features": {
+    "required": ["stalactites", "uneven_floor", "narrow_passages"],
+    "common": ["underground_pool", "mineral_deposits", "fungal_growth", "bat_colony"],
+    "rare": ["underground_river", "crystal_formation", "ancient_carvings", "thermal_vent"]
+  },
+  "objects": {
+    "required": ["loose_rocks", "damp_walls"],
+    "common": ["animal_bones", "old_campfire_remains", "dripping_mineral_formations", "discarded_torch"],
+    "rare": ["prospectors_tools", "hidden_cache", "fossilized_remains", "ore_vein"]
+  },
+  "npcs": {
+    "required": [],
+    "common": ["bat_swarm", "cave_spider"],
+    "rare": ["bear", "goblin_scouts", "hermit_alchemist", "underground_creature"]
+  },
+  "exits": {
+    "required": ["cave_mouth"],
+    "common": ["branching_tunnel", "squeeze_through_gap"],
+    "rare": ["chimney_climb", "underwater_passage", "collapsed_section"]
+  },
+  "atmosphere": {
+    "sounds": ["dripping_echo", "distant_rumble", "wing_flutter", "your_own_breathing"],
+    "smells": ["mineral_damp", "guano", "wet_stone", "sulfur"],
+    "lighting": ["total_darkness", "faint_bioluminescence", "reflected_torchlight"]
+  },
+  "layout": {
+    "footprint": "large",
+    "floors": [-1, -2, -3],
+    "shape": ["branching", "winding", "layered"]
+  }
+}

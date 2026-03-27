@@ -1,0 +1,39 @@
+{
+  "id": "civic_docks",
+  "type": "location",
+  "category": "civic",
+  "name": "Docks / Harbor",
+  "description": "Where the water meets commerce. Crates stacked like walls, ropes thick as arms, and the shouts of dockworkers competing with gulls.",
+  "tier": ["town", "city"],
+  "biomes": ["coastal", "swamp"],
+  "features": {
+    "required": ["wooden_piers", "mooring_posts", "loading_area"],
+    "common": ["harbormaster_office", "warehouse_row", "fish_market", "chandlers_shed"],
+    "rare": ["smuggler_dock", "dry_dock", "lighthouse", "customs_inspection_house"]
+  },
+  "objects": {
+    "required": ["crates", "rope_coils", "boats"],
+    "common": ["fishing_nets", "cargo_manifest", "barrels", "seagull_droppings"],
+    "rare": ["contraband_hidden_in_cargo", "treasure_map_on_hull", "message_in_bottle"]
+  },
+  "npcs": {
+    "required": ["dockworker"],
+    "common": ["harbormaster", "fishmonger", "sailor", "merchant"],
+    "rare": ["smuggler_captain", "press_gang", "sea_creature_in_shallows", "stowaway"]
+  },
+  "exits": {
+    "required": ["to_town"],
+    "common": ["along_waterfront", "onto_pier"],
+    "rare": ["boat_for_hire", "swim_to_ship", "underwater_passage"]
+  },
+  "atmosphere": {
+    "sounds": ["waves_lapping", "gulls_crying", "rope_creaking", "shouted_cargo_counts"],
+    "smells": ["salt_water", "fish", "tar", "wet_wood"],
+    "lighting": ["open_sky", "reflected_water_light", "warehouse_shadow"]
+  },
+  "layout": {
+    "footprint": "large",
+    "floors": [1],
+    "shape": ["linear_waterfront", "horseshoe_harbor"]
+  }
+}

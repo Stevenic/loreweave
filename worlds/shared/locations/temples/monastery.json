@@ -1,0 +1,39 @@
+{
+  "id": "temple_monastery",
+  "type": "location",
+  "category": "temple",
+  "name": "Monastery",
+  "description": "A walled compound where an order lives by rule and routine. Self-sufficient, guarded, and full of secrets accumulated over centuries.",
+  "tier": ["village", "town"],
+  "biomes": ["hills", "mountain", "forest", "plains"],
+  "features": {
+    "required": ["prayer_hall", "dormitory", "refectory", "walled_compound"],
+    "common": ["herb_garden", "scriptorium", "training_yard", "well"],
+    "rare": ["hidden_archive", "underground_vault", "astronomical_observatory", "sealed_wing"]
+  },
+  "objects": {
+    "required": ["prayer_mats", "simple_furnishings"],
+    "common": ["illuminated_manuscripts", "herb_drying_racks", "meditation_bells", "communal_dining_table"],
+    "rare": ["forbidden_text", "ancient_artifact", "encoded_map", "relic_of_founder"]
+  },
+  "npcs": {
+    "required": ["abbot_or_abbess"],
+    "common": ["monk", "novice", "herbalist_monk", "guest"],
+    "rare": ["monk_with_secret_past", "imprisoned_heretic", "spy_among_novices", "visiting_scholar"]
+  },
+  "exits": {
+    "required": ["main_gate"],
+    "common": ["garden_gate", "path_to_fields"],
+    "rare": ["escape_tunnel", "hidden_door_in_cellar", "mountain_path"]
+  },
+  "atmosphere": {
+    "sounds": ["chanting", "bells_at_intervals", "quill_on_parchment", "wind_across_walls"],
+    "smells": ["beeswax", "herbs", "bread_baking", "ink"],
+    "lighting": ["austere_natural_light", "candlelit_corridors", "dawn_through_east_windows"]
+  },
+  "layout": {
+    "footprint": "large",
+    "floors": [-1, 1, 2],
+    "shape": ["quadrangle", "terraced"]
+  }
+}

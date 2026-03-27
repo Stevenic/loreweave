@@ -1,0 +1,39 @@
+{
+  "id": "tavern_wayside_campfire",
+  "type": "location",
+  "category": "tavern",
+  "name": "Wayside Campfire",
+  "description": "Not a building at all — a fire pit beside the road with a kettle, a few stumps for seats, and a tinker who sells drink from a cart. The oldest kind of tavern.",
+  "tier": ["hamlet"],
+  "biomes": ["forest", "plains", "hills"],
+  "features": {
+    "required": ["fire_pit", "log_seating", "drink_cart"],
+    "common": ["lean_to_shelter", "hitching_post", "cooking_spit", "blanket_pile"],
+    "rare": ["storyteller_stump", "shrine_marker", "hidden_cache", "warning_signs"]
+  },
+  "objects": {
+    "required": ["kettle", "mugs", "firewood"],
+    "common": ["road_map_scratched_in_dirt", "travelers_pack", "lantern_on_pole"],
+    "rare": ["abandoned_journal", "broken_weapon", "strange_talisman"]
+  },
+  "npcs": {
+    "required": ["tinker_barkeep"],
+    "common": ["fellow_traveler", "road_warden"],
+    "rare": ["hermit", "fugitive", "fey_in_disguise", "lost_child"]
+  },
+  "exits": {
+    "required": ["road_onward", "road_back"],
+    "common": ["trail_into_woods"],
+    "rare": ["hidden_path", "animal_track"]
+  },
+  "atmosphere": {
+    "sounds": ["crackling_fire", "wind_in_trees", "distant_owl", "road_silence"],
+    "smells": ["woodsmoke", "pine", "hot_cider", "damp_earth"],
+    "lighting": ["firelight_circle", "starlit", "deep_dark_beyond"]
+  },
+  "layout": {
+    "footprint": "small",
+    "floors": [0],
+    "shape": ["circular", "irregular"]
+  }
+}

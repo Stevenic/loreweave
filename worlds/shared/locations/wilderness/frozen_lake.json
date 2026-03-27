@@ -1,0 +1,39 @@
+{
+  "id": "wilderness_frozen_lake",
+  "type": "location",
+  "category": "wilderness",
+  "name": "Frozen Lake",
+  "description": "A sheet of ice stretching to the far shore. Dark shapes move beneath it. The ice groans like something turning in its sleep.",
+  "tier": ["hamlet", "village"],
+  "biomes": ["tundra", "mountain"],
+  "features": {
+    "required": ["ice_sheet", "snow_covered_shore", "visible_depth_beneath"],
+    "common": ["ice_fishing_holes", "snowdrift_banks", "cracked_sections", "frozen_reeds"],
+    "rare": ["something_visible_under_ice", "ice_formations", "hot_spring_pocket", "structure_on_far_shore"]
+  },
+  "objects": {
+    "required": ["ice", "snow"],
+    "common": ["animal_tracks_across_ice", "abandoned_fishing_gear", "frozen_fish"],
+    "rare": ["weapon_frozen_in_ice", "body_visible_beneath", "ice_crystal_cluster"]
+  },
+  "npcs": {
+    "required": [],
+    "common": ["ice_fisher"],
+    "rare": ["frost_spirit", "wolf_pack_crossing", "stranded_traveler", "creature_beneath_ice"]
+  },
+  "exits": {
+    "required": ["shore_path"],
+    "common": ["across_the_ice", "path_around_lake"],
+    "rare": ["crack_in_ice_leading_down", "snow_tunnel"]
+  },
+  "atmosphere": {
+    "sounds": ["ice_groaning", "wind_across_flat", "cracking", "muffled_silence"],
+    "smells": ["cold_clean_air", "snow", "nothing"],
+    "lighting": ["blinding_white", "blue_beneath_ice", "grey_overcast"]
+  },
+  "layout": {
+    "footprint": "large",
+    "floors": [1],
+    "shape": ["open_flat", "irregular_shoreline"]
+  }
+}
