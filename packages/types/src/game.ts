@@ -1356,6 +1356,145 @@ export type SeasonWeatherTable = Partial<Record<Weather, number>>;
 /** Biome weather modifiers — adjustments to seasonal probabilities. */
 export type BiomeWeatherModifiers = Partial<Record<Weather, number>>;
 
+// ─── Faction Reputation ───
+
+/** Faction identifier for the 5 Threadhallow factions. */
+export type FactionId =
+	| 'wardweavers'
+	| 'threadwalkers'
+	| 'rememberers'
+	| 'hollow_court'
+	| 'common_folk';
+
+/** Reputation tier — derived from score. */
+export type ReputationTier =
+	| 'enemy'
+	| 'hostile'
+	| 'unfavorable'
+	| 'neutral_negative'
+	| 'neutral'
+	| 'neutral_positive'
+	| 'favorable'
+	| 'friendly'
+	| 'allied';
+
+/** A logged reputation change event. */
+export type ReputationEvent = {
+	actionId: string;
+	delta: number;
+	reason: string;
+	timestamp: number;
+	crossEffect: boolean;
+};
+
+/** Per-faction reputation state. */
+export type FactionReputation = {
+	factionId: FactionId;
+	score: number;
+	tier: ReputationTier;
+	history: ReputationEvent[];
+};
+
+/** Dialogue modifiers derived from faction reputation. */
+export type DialogueModifiers = {
+	dcModifier: number;
+	merchantPriceModifier: number;
+	knowledgeTier: 'always' | 'sometimes' | 'rarely';
+	toneDescriptor: string;
+};
+
+/** Access requirement for content gating. */
+export type AccessRequirement = {
+	factionId: FactionId;
+	minTier?: ReputationTier;
+	minScore?: number;
+	notTier?: ReputationTier;
+};
+
+// ─── Player Threadcraft ───
+
+/** Threadcraft tradition. */
+export type ThreadcraftTradition =
+	| 'wardweaving'
+	| 'threadwalking'
+	| 'binding'
+	| 'remembering'
+	| 'fraytouch'
+	| 'threadline_reading';
+
+/** Player Threadcraft progression state. */
+export type PlayerThreadcraft = {
+	tradition: ThreadcraftTradition;
+	secondTradition?: ThreadcraftTradition;
+	tier: 1 | 2 | 3;
+	isSpeaker: boolean;
+	knownCantrips: string[];
+	knownSpells: string[];
+	freecastsRemaining: Record<string, number>;
+	frayRiskCastsToday: number;
+	signatureAbilityUsed: boolean;
+};
+
+/** Information about a Threadcraft spell for UI/engine queries. */
+export type SpellInfo = {
+	id: string;
+	name: string;
+	level: number;
+	tradition: ThreadcraftTradition;
+	canFreecast: boolean;
+};
+
+// ─── Threadcraft Crafting ───
+
+/** Threadcraft crafting material type. */
+export type CraftingMaterial =
+	| 'thread_iron_ingot'
+	| 'ward_crystal'
+	| 'threadline_silk'
+	| 'fray_essence'
+	| 'gold';
+
+/** Material requirement for crafting an item. */
+export type MaterialRequirement = {
+	material: CraftingMaterial;
+	quantity: number;
+};
+
+/** Effect descriptor for a craftable item. */
+export type ItemEffect = {
+	description: string;
+	/** Mechanical properties (ac bonus, damage type, ward strength, etc.). */
+	properties: Record<string, string | number | boolean>;
+};
+
+/** Threadcraft item recipe definition. */
+export type ThreadcraftItem = {
+	id: string;
+	name: string;
+	tier: 1 | 2 | 3;
+	materials: MaterialRequirement[];
+	craftingTime: number;
+	toolDC: number;
+	infusionDC: number;
+	requiredWeaveState: WeaveState[];
+	requiredTradition?: ThreadcraftTradition;
+	effect: ItemEffect;
+	isConsumable: boolean;
+	durability?: number;
+};
+
+/** Result of a crafting attempt. */
+export type CraftResult = {
+	outcome: 'critical_success' | 'success' | 'flawed' | 'failed' | 'backfire';
+	item?: ThreadcraftItem;
+	/** For flawed items, remaining uses before breaking. */
+	remainingUses?: number;
+	/** Fray exposure triggered by backfire. */
+	frayExposure: boolean;
+	toolRoll: number;
+	infusionRoll: number;
+};
+
 // ─── Constants ───
 
 export const CHUNK_SIZE = 32;

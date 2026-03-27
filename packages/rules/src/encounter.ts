@@ -194,7 +194,12 @@ const CR_XP_TABLE: Record<number, number> = {
 };
 
 function crToXP(cr: number): number {
-	return CR_XP_TABLE[cr] ?? CR_XP_TABLE[Math.floor(cr)] ?? 0;
+	const xp = CR_XP_TABLE[cr] ?? CR_XP_TABLE[Math.floor(cr)];
+	if (xp === undefined) {
+		console.warn(`crToXP: unmapped CR ${cr}, returning 0 XP`);
+		return 0;
+	}
+	return xp;
 }
 
 // ─── Weave State Encounter Modifiers ───
@@ -207,7 +212,7 @@ const FRAY_INJECTION_TABLE: { minLevel: number; maxLevel: number; type: string; 
 	{ minLevel: 1, maxLevel: 4, type: 'looseling', count: '1d4', cr: 0.25 },
 	{ minLevel: 5, maxLevel: 8, type: 'thread_eater', count: '1', cr: 2 },
 	{ minLevel: 9, maxLevel: 12, type: 'hollow_walker', count: '1', cr: 4 },
-	{ minLevel: 13, maxLevel: 20, type: 'thread_sovereign', count: '1', cr: 12 },
+	{ minLevel: 13, maxLevel: 20, type: 'hollow_walker', count: '1d4', cr: 4 },
 ];
 
 /**
@@ -271,7 +276,7 @@ export function applyWeaveModifiers(
 		// Frayed: replace "no encounter" with environmental hazard
 		if (modifiedResult.isNonCombat && modifiedResult.creatures.length === 0) {
 			modifiers.environmentalHazard = true;
-			modifiers.hazardDC = 14;
+			modifiers.hazardDC = 15;
 			modifiers.hazardDamage = '2d6';
 		}
 

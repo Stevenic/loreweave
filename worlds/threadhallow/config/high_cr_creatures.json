@@ -388,5 +388,65 @@
 				"description": "All magical effects in 20-ft radius area end. Void Loom regains 10 HP per spell level absorbed."
 			}
 		]
+	},
+	{
+		"id": "weaver_fragment",
+		"name": "Weaver Fragment",
+		"size": "Large",
+		"type": "celestial (aberration)",
+		"alignment": "chaotic neutral",
+		"cr": 16,
+		"ac": 19,
+		"hp": 200,
+		"hpFormula": "16d10 + 112",
+		"speed": "0 ft., fly 60 ft. (hover)",
+		"abilities": { "STR": 10, "DEX": 20, "CON": 24, "INT": 26, "WIS": 22, "CHA": 24 },
+		"savingThrows": { "INT": 14, "WIS": 12, "CHA": 13 },
+		"damageResistances": ["bludgeoning, piercing, slashing from nonmagical attacks"],
+		"damageImmunities": ["force", "psychic", "radiant"],
+		"conditionImmunities": ["blinded", "charmed", "deafened", "frightened", "grappled", "paralyzed", "petrified", "poisoned", "prone", "restrained", "stunned"],
+		"senses": "truesight 120 ft., passive Perception 16",
+		"languages": "all; telepathy 300 ft.",
+		"traits": [
+			{ "name": "Incorporeal Movement", "description": "Can move through creatures and objects as difficult terrain. Takes 5 (1d10) force damage if it ends its turn inside an object." },
+			{ "name": "Legendary Resistance (3/Day)", "description": "If the Weaver Fragment fails a saving throw, it can choose to succeed instead." },
+			{ "name": "Magic Resistance", "description": "Advantage on saving throws against spells and other magical effects." },
+			{ "name": "Tapestry Weaver", "description": "The Fragment can reshape reality within 60 ft. as a lair action. This is instinctive, not hostile. The Fragment tries to weave mortals into the Tapestry because that is all it knows." }
+		],
+		"actions": [
+			{
+				"name": "Multiattack",
+				"description": "The Weaver Fragment makes two Pattern Weave attacks."
+			},
+			{
+				"name": "Pattern Weave",
+				"description": "Ranged Spell Attack: +14 to hit, range 120 ft., one target. Hit: 27 (4d8 + 8) radiant plus 14 (4d6) force damage. Target must succeed DC 19 CHA save or be Restrained as reality threads bind them (escape: DC 19 STR or CHA check).",
+				"attackBonus": 14,
+				"damage": "4d8+8",
+				"saveDC": 19,
+				"saveAbility": "CHA"
+			},
+			{
+				"name": "Absorb into Tapestry",
+				"description": "One Restrained creature within 60 ft. must succeed DC 19 CHA save. Failure: transported to pocket dimension inside the Tapestry. Incapacitated and takes 22 (4d10) radiant at start of each turn. Another creature can free them with DC 19 Arcana check or Performance DC 16 Binding Song.",
+				"saveDC": 19,
+				"saveAbility": "CHA",
+				"recharge": "5-6"
+			}
+		],
+		"legendaryActions": [
+			{
+				"name": "Shift (1 Action)",
+				"description": "Teleports up to 60 ft. to an unoccupied space it can see."
+			},
+			{
+				"name": "Thread Burst (2 Actions)",
+				"description": "20-ft. radius centered on the Fragment. DC 19 DEX save. 28 (8d6) radiant damage, half on save."
+			},
+			{
+				"name": "Reweave (3 Actions)",
+				"description": "Reshapes a 30-ft. cube of terrain within 120 ft. Walls appear, floors shift, passages seal or open."
+			}
+		]
 	}
 ]

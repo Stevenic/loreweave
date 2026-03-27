@@ -1,0 +1,80 @@
+{
+  "id": "threadhallow_biome_overlay",
+  "type": "vocabulary",
+  "description": "World-specific biome descriptor overlays for Threadhallow. Applied on top of shared biome_descriptors.json to add thread/weave metaphors, Loom Stone references, and ward-circle atmosphere to the LLM context. A forest in Threadhallow should feel different from a forest in any other world.",
+  "overlay_mode": "append",
+  "biomes": {
+    "forest": {
+      "terrain": ["threadline shimmer between the trunks", "ward-stones marking the tree line", "paths worn by Threadwalker patrols"],
+      "sounds": ["the low hum of a nearby Threadline", "a Binding Song fragment drifting from a distant village", "the creak of a tree growing against its pattern"],
+      "smells": ["burnt lavender from an old ward-mark", "copper tang where a Threadline runs close to the ground"],
+      "atmosphere": ["the feeling of being inside a woven thing", "a sense that the trees were placed, not grown", "watchfulness that isn't animal — it's structural"]
+    },
+    "plains": {
+      "terrain": ["Threadlines visible as heat-shimmer ribbons on clear days", "Loom Stone pillars on distant hilltops", "grass growing in weft-and-warp patterns after rain"],
+      "sounds": ["wind carrying the hum of the Bright Weave in summer", "a faint drone from the nearest ward-circle", "the snap of a Threadline adjusting — like a bowstring plucked by nothing"],
+      "smells": ["clean ozone where the weave is healthy", "the old-wool scent that follows thin places"],
+      "atmosphere": ["exposure — nothing between you and the pattern of the sky", "the uneasy knowledge that the nearest ward is hours away"]
+    },
+    "mountain": {
+      "terrain": ["Loom Stones at summit cairns, carved with Weaver's Marks", "Threadlines visible along ridgelines like luminous veins", "stone split by ancient weave stress — cracks filled with a faint crystalline residue"],
+      "sounds": ["the Threadlines singing in the wind — a harmonic that changes with elevation", "Weaver's echoes in narrow canyons — sounds that were never made repeating softly"],
+      "smells": ["ozone at altitude where Threadlines converge", "a mineral smell from Loom Stone dust"],
+      "atmosphere": ["proximity to the Loom — the weave feels thinner in the vertical sense, as if reality has less padding at height", "the sense that the mountains are knots in the Tapestry, load-bearing and permanent"]
+    },
+    "swamp": {
+      "terrain": ["ward-posts half-sunk and abandoned", "Thread-residue in the water — faintly luminous scum on still pools", "root systems that follow Threadline paths, forming unnatural straight lines"],
+      "sounds": ["the gurgle of Fray-tainted water — a sound just off from normal", "ward-chimes from a drowned settlement, still ringing below the waterline"],
+      "smells": ["the wet-wool smell of thin places, permanent here", "copper and rot where the weave has frayed into the water table"],
+      "atmosphere": ["a place where the ward failed and the land remembers", "the feeling of standing in someone's lost protection"]
+    },
+    "hills": {
+      "terrain": ["standing stones that are actually ancient Loom Stone fragments", "heather growing in spiral patterns around weave-active spots", "cairns topped with Threadwalker offerings — woven tokens weathered to gray thread"],
+      "sounds": ["the teeth-resonance hum of standing stones at dawn and dusk", "wind that carries syllables — not words, just the shape of old speech"],
+      "smells": ["peat smoke from hidden crofts inside makeshift ward-circles", "the sharp green smell of heather flowering near a healthy Threadline"],
+      "atmosphere": ["an old place — the hills were hills before the Weavers, and the weave lies thin over ancient bones", "openness that feels like vulnerability without ward walls"]
+    },
+    "farmland": {
+      "terrain": ["ward-circle boundary stones at field edges, carved with binding-knots", "crop rows that subtly follow the direction of underground Threadlines", "scarecrows — some with fresh thread-knots at the wrists, a folk ward tradition"],
+      "sounds": ["the low hum of the village ward-circle, constant as breathing", "children's songs that are actually simplified Binding Song fragments", "the creak of a warding-pole in the wind"],
+      "smells": ["burnt lavender and copper at the ward boundary", "clean earth inside the ward — the soil smells different where the weave is maintained", "bread and woodsmoke from the settlement center"],
+      "atmosphere": ["safety — the ward is close, the ward is working", "the comforting lie of normalcy, three miles from a thin place"]
+    },
+    "coast": {
+      "terrain": ["sea-stack Loom Stones visible at low tide, carved with salt-worn Weaver's Marks", "Threadlines running out to sea — visible at dawn as light catches the weave over water", "driftwood tangled with luminous thread-residue after storms"],
+      "sounds": ["the Threadline hum blending with wave rhythm — the sea sings in a different key than land", "ward-bells on fishing boats, ringing in patterns that are half-prayer, half-navigation"],
+      "smells": ["salt and ozone together — the coast is where the weave meets something older", "kelp that smells faintly of copper after a Fray-tide"],
+      "atmosphere": ["the edge of the known pattern — the sea was not woven the same way as land", "a frontier feeling, even in settled ports"]
+    },
+    "cavern": {
+      "terrain": ["Loom Stone veins in the rock walls — natural Threadline conduits, glowing faintly", "crystal formations that grew along weave-stress lines", "the carved marks of Weavers who worked underground — older than anything on the surface"],
+      "sounds": ["the deep resonance of Threadlines in enclosed stone — a sub-bass felt in the bones", "dripping water that falls in rhythms matching the ward-cycle", "silence that is the absence of the surface hum, noticed only by its lack"],
+      "smells": ["mineral dust with a copper edge", "the dry-thread smell of ancient binding work", "ozone near crystal formations"],
+      "atmosphere": ["closeness to the Loom itself — underground, the metaphysical framework feels nearer", "the unsettling knowledge that this is where the Weavers went deepest"]
+    },
+    "deep_forest": {
+      "terrain": ["trees woven into each other — roots and branches indistinguishable, as if the Weavers treated them as thread", "Threadlines so dense they're visible as a permanent luminous haze", "Weaver's Marks grown into living wood over a thousand years"],
+      "sounds": ["the forest breathing — a collective exhalation of a thousand interlocked trees, rhythmic and slow", "Threadline harmonics layered so thick they form a chord", "whispers that might be Weaver-speech degraded by twelve hundred years"],
+      "smells": ["the concentrated scent of living weave — resin, copper, ozone, all layered", "old growth that smells of time itself"],
+      "atmosphere": ["the densest weave outside of a Loom Stone — this is where the Tapestry was woven thickest", "being inside a living thing — not nature, not building, but *pattern*"]
+    },
+    "taiga": {
+      "terrain": ["Threadlines frozen into the permafrost — visible as luminous veins under thin ice", "Loom Stones half-buried by glacial drift, their marks pointing to constellations that have shifted", "pine forests growing in geometric patterns that betray an underlying weave grid"],
+      "sounds": ["the brittle hum of frozen Threadlines — a high, thin sound like a glass harmonica", "ice cracking in sequences that map to Binding Song notation"],
+      "smells": ["cold that smells of nothing — the weave preserves by freezing", "pine resin sharper than normal, as if the cold concentrates everything"],
+      "atmosphere": ["preservation — the cold has kept the weave intact here longer than anywhere", "the ancient feeling of a pattern that hasn't been maintained because it hasn't needed to be"]
+    },
+    "tundra": {
+      "terrain": ["Loom Stones exposed by retreating snowline — some never visited by mortal feet", "aurora-Threadlines that touch the ground in winter, leaving scorch-frost patterns in the snow", "cairns built by Threadwalkers who came, marked, and never returned"],
+      "sounds": ["the aurora hum — Threadlines singing overhead, too high and far for the ear but not for the chest", "wind that carries the smell of the Fray from the far north, where nobody goes"],
+      "smells": ["ozone from aurora-Threadlines", "the flat nothing-smell of pure cold", "occasionally: wet wool on the wind, the Fray's calling card"],
+      "atmosphere": ["the world's edge — the Tapestry was woven thin here on purpose, or not woven at all", "the knowledge that beyond the last Loom Stone, the Fray begins"]
+    },
+    "desert": {
+      "terrain": ["sand-scoured Loom Stones with Weaver's Marks worn smooth — the oldest stones in the world, perhaps", "Threadlines buried under sand, visible only as ripple patterns at certain sun angles", "glass formations where Threadline energy and sand fused in ancient Fray events"],
+      "sounds": ["the sub-harmonic of deep desert Threadlines — felt as vibration in the gut, not heard", "sand singing over buried Loom Stones at certain wind speeds"],
+      "smells": ["heated ozone where Threadlines surface through sand", "dry copper — the weave's scent stripped of moisture"],
+      "atmosphere": ["a place where the weave was woven tight and then dried — preserved but brittle", "the paradox of an empty landscape that is structurally dense with buried pattern"]
+    }
+  }
+}

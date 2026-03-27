@@ -191,6 +191,23 @@ export type {
 	CeremonyDefinition,
 	SeasonWeatherTable,
 	BiomeWeatherModifiers,
+	// Faction Reputation
+	FactionId,
+	ReputationTier,
+	ReputationEvent,
+	FactionReputation,
+	DialogueModifiers,
+	AccessRequirement,
+	// Player Threadcraft
+	ThreadcraftTradition,
+	PlayerThreadcraft,
+	SpellInfo,
+	// Threadcraft Crafting
+	CraftingMaterial,
+	MaterialRequirement,
+	ItemEffect,
+	ThreadcraftItem,
+	CraftResult,
 } from './game.js';
 
 export {

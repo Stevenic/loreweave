@@ -97,3 +97,32 @@ export {
 	getSeasonalModifiers,
 	getWeatherEffects,
 } from './weather.js';
+
+// Faction Reputation
+export {
+	applyReputationChange,
+	checkContentAccess,
+	createInitialReputation,
+	getDialogueModifiers,
+	getReputationTier,
+} from './faction-reputation.js';
+
+// Player Threadcraft
+export {
+	canLearnFeat,
+	castThreadcraftSpell,
+	getAvailableSpells,
+	getFrayRiskDC,
+	getTraditionSpells,
+	longRestReset,
+	rollFrayRisk,
+} from './threadcraft.js';
+
+// Threadcraft Crafting
+export {
+	attemptCraft,
+	canCraft,
+	craftingFrayRiskCasts,
+	getAvailableRecipes,
+	THREADCRAFT_ITEMS,
+} from './crafting.js';
