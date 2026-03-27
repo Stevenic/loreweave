@@ -35,5 +35,12 @@
     "footprint": "small",
     "floors": [-1, 1, 2, 3, 4, 5],
     "shape": ["cylindrical", "square_tower"]
+  },
+  "challenges": {
+    "encounters": ["animated_armor", "unbound_familiar", "golem_guardian", "summoned_creature_loose", "wizard_ghost_test"],
+    "traps": ["glyph_of_warding_on_door", "teleportation_loop", "illusory_floor", "enchanted_lock", "wild_magic_zone"],
+    "skill_checks": ["arcana_understand_experiments", "investigation_search_library", "perception_spot_illusion", "intelligence_solve_arcane_puzzle"],
+    "saving_throws": ["dexterity_save_avoid_magical_surge"],
+    "loot_tier": "high"
   }
 }

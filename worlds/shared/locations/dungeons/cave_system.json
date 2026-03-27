@@ -35,5 +35,12 @@
     "footprint": "large",
     "floors": [-1, -2, -3],
     "shape": ["branching", "winding", "layered"]
+  },
+  "challenges": {
+    "encounters": ["cave_spider_ambush", "bat_swarm_disturbed", "bear_den", "goblin_scouts", "underground_predator"],
+    "traps": ["unstable_floor", "falling_rocks", "flooded_passage", "toxic_fungal_spores"],
+    "skill_checks": ["survival_navigate_tunnels", "athletics_squeeze_through_gap", "perception_spot_unstable_ceiling", "nature_identify_fungus", "investigation_find_ore_vein"],
+    "saving_throws": [],
+    "loot_tier": "low"
   }
 }

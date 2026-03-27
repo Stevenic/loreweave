@@ -35,5 +35,12 @@
     "footprint": "medium",
     "floors": [1],
     "shape": ["circular_canopy", "natural"]
+  },
+  "challenges": {
+    "encounters": ["treant_awakened", "dryad_protector", "owl_familiar_warning", "swarm_of_territorial_birds"],
+    "traps": [],
+    "skill_checks": ["nature_commune_with_tree", "perception_find_hidden_cache_in_hollow", "history_read_carved_dates", "athletics_climb_to_canopy", "arcana_sense_natural_magic"],
+    "saving_throws": [],
+    "loot_tier": "none"
   }
 }

@@ -35,5 +35,12 @@
     "footprint": "medium",
     "floors": [-1, -2],
     "shape": ["linear_progression", "concentric_rings", "labyrinthine"]
+  },
+  "challenges": {
+    "encounters": ["skeleton_guardian_patrol", "tomb_scarab_swarm", "mummy_lord_awakened", "wraith_bound_to_chamber", "ancient_construct_activated"],
+    "traps": ["poison_needle_lock", "crushing_walls", "arrow_slit_corridor", "false_floor_pit", "cursed_gold_pile"],
+    "skill_checks": ["history_decipher_wall_murals", "arcana_detect_magical_wards", "investigation_find_puzzle_solution", "perception_spot_pressure_plates", "thieves_tools_disarm_lock"],
+    "saving_throws": [],
+    "loot_tier": "high"
   }
 }

@@ -1,0 +1,264 @@
+{
+	"tables": [
+		{
+			"id": "forest_stable",
+			"name": "Forest (Stable) — Levels 1–4",
+			"levelRange": [1, 4],
+			"dieSize": 20,
+			"entries": [
+				{
+					"minRoll": 1,
+					"maxRoll": 5,
+					"description": "No encounter",
+					"isNonCombat": true
+				},
+				{
+					"minRoll": 6,
+					"maxRoll": 8,
+					"description": "A pack of wolves emerges from the underbrush",
+					"creatures": [{ "type": "wolf", "count": "1d4", "cr": 0.25 }]
+				},
+				{
+					"minRoll": 9,
+					"maxRoll": 10,
+					"description": "A black bear rummaging through the brush",
+					"creatures": [{ "type": "black_bear", "count": "1", "cr": 0.5 }]
+				},
+				{
+					"minRoll": 11,
+					"maxRoll": 12,
+					"description": "A group of desperate bandits blocking the path",
+					"creatures": [{ "type": "bandit", "count": "2d4", "cr": 0.125 }]
+				},
+				{
+					"minRoll": 13,
+					"maxRoll": 14,
+					"description": "A bandit captain and their gang demand a toll",
+					"creatures": [
+						{ "type": "bandit_captain", "count": "1", "cr": 2 },
+						{ "type": "bandit", "count": "1d4", "cr": 0.125 }
+					]
+				},
+				{
+					"minRoll": 15,
+					"maxRoll": 16,
+					"description": "Giant rats swarm from a hollow log",
+					"creatures": [{ "type": "giant_rat", "count": "1d6", "cr": 0.125 }]
+				},
+				{
+					"minRoll": 17,
+					"maxRoll": 17,
+					"description": "An owlbear crashes through the trees",
+					"creatures": [{ "type": "owlbear", "count": "1", "cr": 3 }]
+				},
+				{
+					"minRoll": 18,
+					"maxRoll": 18,
+					"description": "A traveling merchant on the road, packs heavy with wares",
+					"isNonCombat": true
+				},
+				{
+					"minRoll": 19,
+					"maxRoll": 19,
+					"description": "A Threadwalker patrol — road-dusty, quiet, competent. They share news.",
+					"isNonCombat": true
+				},
+				{
+					"minRoll": 20,
+					"maxRoll": 20,
+					"description": "An abandoned Wardweaver camp with 1d4 thread supplies among the cold ashes",
+					"isNonCombat": true
+				}
+			]
+		},
+		{
+			"id": "forest_thinning",
+			"name": "Forest (Thinning) — Levels 1–4",
+			"levelRange": [1, 4],
+			"dieSize": 20,
+			"entries": [
+				{
+					"minRoll": 1,
+					"maxRoll": 3,
+					"description": "No encounter",
+					"isNonCombat": true
+				},
+				{
+					"minRoll": 4,
+					"maxRoll": 6,
+					"description": "Environmental anomaly — fog thickens, sounds arrive late, tree trunks spiral",
+					"isNonCombat": true,
+					"environmentalDC": 12
+				},
+				{
+					"minRoll": 7,
+					"maxRoll": 9,
+					"description": "Looselings — tangles of animate thread skitter from the undergrowth",
+					"creatures": [{ "type": "looseling", "count": "1d4", "cr": 0.25 }]
+				},
+				{
+					"minRoll": 10,
+					"maxRoll": 11,
+					"description": "A Thread-puppet scarecrow lurches to life in a field",
+					"creatures": [{ "type": "thread_puppet", "count": "1", "cr": 1 }]
+				},
+				{
+					"minRoll": 12,
+					"maxRoll": 13,
+					"description": "Wolves — one Fray-touched with glowing eyes and cold bite",
+					"creatures": [
+						{ "type": "wolf", "count": "1d4", "cr": 0.25 },
+						{ "type": "fray_wolf", "count": "1", "cr": 0.5 }
+					]
+				},
+				{
+					"minRoll": 14,
+					"maxRoll": 15,
+					"description": "Bandits, desperate and fleeing the Thinning. May negotiate.",
+					"creatures": [{ "type": "bandit", "count": "2d4", "cr": 0.125 }]
+				},
+				{
+					"minRoll": 16,
+					"maxRoll": 16,
+					"description": "A Frayed One — flickering between solid and translucent, speaking in fragments",
+					"creatures": [{ "type": "frayed_one", "count": "1", "cr": 2 }]
+				},
+				{
+					"minRoll": 17,
+					"maxRoll": 17,
+					"description": "A Thread-eater — long-limbed silhouette of dark knotted threads, hunting wards",
+					"creatures": [{ "type": "thread_eater", "count": "1", "cr": 2 }]
+				},
+				{
+					"minRoll": 18,
+					"maxRoll": 18,
+					"description": "A Fray pocket — the air tastes of copper, shadows point the wrong way",
+					"isNonCombat": true,
+					"environmentalDC": 13
+				},
+				{
+					"minRoll": 19,
+					"maxRoll": 19,
+					"description": "A Weaver's Mark carved into a standing stone, faintly glowing",
+					"isNonCombat": true
+				},
+				{
+					"minRoll": 20,
+					"maxRoll": 20,
+					"description": "A Loom Stone fragment half-buried in the earth, humming with faint warmth",
+					"isNonCombat": true
+				}
+			]
+		},
+		{
+			"id": "frayed_zone",
+			"name": "Frayed Zone — Levels 5–8",
+			"levelRange": [5, 8],
+			"dieSize": 20,
+			"entries": [
+				{
+					"minRoll": 1,
+					"maxRoll": 2,
+					"description": "No encounter — rare, the Fray is active here",
+					"isNonCombat": true
+				},
+				{
+					"minRoll": 3,
+					"maxRoll": 5,
+					"description": "Environmental hazard: gravity shift, time loop, or spatial fold",
+					"isNonCombat": true,
+					"environmentalDC": 14
+				},
+				{
+					"minRoll": 6,
+					"maxRoll": 8,
+					"description": "Looselings swarm from a crack in the air",
+					"creatures": [{ "type": "looseling", "count": "2d4", "cr": 0.25 }]
+				},
+				{
+					"minRoll": 9,
+					"maxRoll": 11,
+					"description": "Thread-eaters prowl in formation, drawn by the party's equipment",
+					"creatures": [{ "type": "thread_eater", "count": "1d4", "cr": 2 }]
+				},
+				{
+					"minRoll": 12,
+					"maxRoll": 13,
+					"description": "A Frayed One stumbles through with Looselings trailing it",
+					"creatures": [
+						{ "type": "frayed_one", "count": "1", "cr": 2 },
+						{ "type": "looseling", "count": "1d4", "cr": 0.25 }
+					]
+				},
+				{
+					"minRoll": 14,
+					"maxRoll": 15,
+					"description": "A Hollow Walker — tall, thin, limbs bending at wrong angles, moving in stop-motion",
+					"creatures": [{ "type": "hollow_walker", "count": "1", "cr": 4 }]
+				},
+				{
+					"minRoll": 16,
+					"maxRoll": 16,
+					"description": "The Unspun — a mass of raw Fray material, faces forming and dissolving in its surface",
+					"creatures": [{ "type": "unspun", "count": "1", "cr": 5 }]
+				},
+				{
+					"minRoll": 17,
+					"maxRoll": 17,
+					"description": "Fray storm — reality shudders, force damage pulses outward",
+					"isNonCombat": true,
+					"environmentalDC": 15
+				},
+				{
+					"minRoll": 18,
+					"maxRoll": 18,
+					"description": "A Hollow Court salvager team — adapted, slightly off, but willing to trade",
+					"isNonCombat": true
+				},
+				{
+					"minRoll": 19,
+					"maxRoll": 19,
+					"description": "An intact Weaver artifact rests in a pocket of calm within the chaos",
+					"isNonCombat": true
+				},
+				{
+					"minRoll": 20,
+					"maxRoll": 20,
+					"description": "A Fray breach — a portal-like tear in reality, pulling at everything nearby",
+					"isNonCombat": true,
+					"environmentalDC": 15
+				}
+			]
+		}
+	],
+	"dungeonModifiers": [
+		{
+			"dungeonType": "crypt",
+			"description": "Replace beast encounters with undead equivalents (+1 CR)"
+		},
+		{
+			"dungeonType": "tomb",
+			"description": "Replace beast encounters with undead equivalents (+1 CR)"
+		},
+		{
+			"dungeonType": "cave_system",
+			"description": "Add 25% chance of cave-specific creatures (giant spiders CR 1, piercers CR 1/2)"
+		},
+		{
+			"dungeonType": "abandoned_mine",
+			"description": "Add 25% chance of oozes (gray ooze CR 1/2, ochre jelly CR 2)"
+		},
+		{
+			"dungeonType": "bandit_hideout",
+			"description": "All humanoid encounters are bandits; increase numbers by 50%"
+		},
+		{
+			"dungeonType": "wizard_tower",
+			"description": "Replace all encounters with arcane constructs or trapped rooms"
+		},
+		{
+			"dungeonType": "haunted_manor",
+			"description": "Replace with undead + environmental horror (DC checks vs. Frightened)"
+		}
+	]
+}

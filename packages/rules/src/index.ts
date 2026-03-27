@@ -44,3 +44,42 @@ export {
 	rollInitiative,
 } from './combat.js';
 export type { AttackResult } from './combat.js';
+
+// NPC Generator
+export { generateNpc } from './npc-generator.js';
+
+// Ward System
+export {
+	applyWardEvent,
+	canCreatureBreach,
+	computeNaturalDecay,
+	getThreadcraftBonus,
+	getWardThreshold,
+} from './ward.js';
+
+// Fray Exposure
+export {
+	frayExposureSave,
+	getAllFrayEffects,
+	getExposureDC,
+	getFrayEffects,
+	isExposureImmune,
+} from './fray.js';
+export type { FrayExposureResult } from './fray.js';
+
+// Skill Challenges
+export {
+	getApplicableSkills,
+	getChallengeDC,
+	getFailureConsequence,
+	runSkillChallenge,
+} from './skill-challenge.js';
+export type { ChallengeAttempt } from './skill-challenge.js';
+
+// Encounters
+export {
+	encounterXP,
+	findEncounterTable,
+	rollEncounter,
+} from './encounter.js';
+export type { EncounterResult, ResolvedCreature } from './encounter.js';

@@ -11,6 +11,11 @@
  *
  * The LLM renders narrative FROM mechanical results — it never decides
  * mechanical outcomes. Dice rolls, combat, movement — all deterministic code.
+ *
+ * When a WorldConfig is provided, the DM becomes world-specific:
+ * - System prompt uses the DMPersona (tone, naming, constraints)
+ * - User prompt injects vocabulary tables (biome, weather, time descriptors)
+ * - Session tracks ward strengths, faction reputation, fray exposure
  */
 
 import type {
@@ -21,9 +26,11 @@ import type {
 	EntityRef,
 	GameEffect,
 	GameSession,
+	GameSessionConfig,
 	NarrativeAdapter,
 	Quest,
 	TileCoord,
+	WorldConfig,
 } from '@loreweave/types';
 import { createRng } from '@loreweave/rules';
 import { World } from '@loreweave/world';
@@ -52,6 +59,8 @@ export const DEFAULT_DM_CONFIG: DMConfig = {
 export class DungeonMaster {
 	readonly session: GameSession;
 	readonly config: DMConfig;
+	readonly worldConfig?: WorldConfig;
+	readonly sessionConfig: GameSessionConfig;
 	private adapter: NarrativeAdapter;
 	/** All characters (party + known NPCs) keyed by ID. */
 	private characters: Map<string, Character>;
@@ -62,10 +71,20 @@ export class DungeonMaster {
 		session: GameSession,
 		adapter: NarrativeAdapter,
 		config: Partial<DMConfig> = {},
+		worldConfig?: WorldConfig,
 	) {
 		this.session = session;
 		this.adapter = adapter;
 		this.config = { ...DEFAULT_DM_CONFIG, ...config };
+		this.worldConfig = worldConfig;
+
+		// Initialize session config for world-specific state
+		this.sessionConfig = {
+			worldConfig,
+			wardStrengths: new Map(),
+			factionReputation: new Map(),
+			frayExposure: new Map(),
+		};
 
 		// Build character roster from party
 		this.characters = new Map();
@@ -140,8 +159,15 @@ export class DungeonMaster {
 		// 4. Update known entities based on new position
 		this.updateKnownEntities();
 
-		// 5. Build prompts and generate narrative
-		const prompts = buildPrompts(this.session, context, parseResult, actionResult);
+		// 5. Build prompts and generate narrative (with world config)
+		const prompts = buildPrompts(
+			this.session,
+			context,
+			parseResult,
+			actionResult,
+			this.worldConfig,
+			this.sessionConfig,
+		);
 		const narrative = await this.adapter.generate(prompts.system, prompts.user);
 
 		return {
@@ -181,7 +207,14 @@ export class DungeonMaster {
 			);
 		}
 
-		const prompts = buildPrompts(this.session, context, parseResult, actionResult);
+		const prompts = buildPrompts(
+			this.session,
+			context,
+			parseResult,
+			actionResult,
+			this.worldConfig,
+			this.sessionConfig,
+		);
 		const narrative = await this.adapter.generate(prompts.system, prompts.user);
 
 		return {
@@ -194,6 +227,40 @@ export class DungeonMaster {
 			time: { ...this.session.world.time },
 		};
 	}
+
+	// ─── World State Management ───
+
+	/** Set ward strength for a settlement. */
+	setWardStrength(settlementId: string, strength: number): void {
+		this.sessionConfig.wardStrengths?.set(settlementId, Math.max(0, Math.min(100, strength)));
+	}
+
+	/** Get ward strength for a settlement. */
+	getWardStrength(settlementId: string): number {
+		return this.sessionConfig.wardStrengths?.get(settlementId) ?? 0;
+	}
+
+	/** Set faction reputation. */
+	setFactionReputation(factionId: string, reputation: number): void {
+		this.sessionConfig.factionReputation?.set(factionId, reputation);
+	}
+
+	/** Get faction reputation. */
+	getFactionReputation(factionId: string): number {
+		return this.sessionConfig.factionReputation?.get(factionId) ?? 0;
+	}
+
+	/** Set fray exposure level for a character. */
+	setFrayExposure(characterId: string, level: number): void {
+		this.sessionConfig.frayExposure?.set(characterId, Math.max(0, level));
+	}
+
+	/** Get fray exposure level for a character. */
+	getFrayExposure(characterId: string): number {
+		return this.sessionConfig.frayExposure?.get(characterId) ?? 0;
+	}
+
+	// ─── Party & Quest Management ───
 
 	/** Get the current party. */
 	getParty(): Character[] {

@@ -35,5 +35,12 @@
     "footprint": "small",
     "floors": [1],
     "shape": ["perfect_circle"]
+  },
+  "challenges": {
+    "encounters": ["pixie_tricksters", "fey_trickster_bargain", "dryad_guardian", "enchanted_dance_compulsion"],
+    "traps": ["time_dilation_inside_ring", "charm_effect_on_entry", "illusory_path_leading_deeper"],
+    "skill_checks": ["arcana_identify_fey_magic", "nature_recognize_fairy_ring_danger", "insight_see_through_fey_deception", "performance_earn_fey_favor"],
+    "saving_throws": ["wisdom_save_resist_enchantment"],
+    "loot_tier": "low"
   }
 }

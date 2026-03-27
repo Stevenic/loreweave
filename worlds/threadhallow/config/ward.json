@@ -1,0 +1,131 @@
+{
+	"thresholds": [
+		{
+			"minStrength": 100,
+			"maxStrength": 100,
+			"label": "Full strength",
+			"maxCreatureCR": 0,
+			"threadcraftDCModifier": 2,
+			"additionalEffects": [
+				"No Fray creatures can enter",
+				"Frayed zone environmental effects suppressed within ward"
+			]
+		},
+		{
+			"minStrength": 75,
+			"maxStrength": 99,
+			"label": "Strong",
+			"maxCreatureCR": 0.25,
+			"threadcraftDCModifier": 1,
+			"additionalEffects": [
+				"Minor Fray creatures (CR 1/4 and below) can slip through at night (sunset to sunrise)"
+			]
+		},
+		{
+			"minStrength": 50,
+			"maxStrength": 74,
+			"label": "Weakened",
+			"maxCreatureCR": 1,
+			"threadcraftDCModifier": 0,
+			"additionalEffects": [
+				"Moderate Fray creatures (CR 1 and below) can enter",
+				"Thin-place effects manifest at ward edges (fog, sound distortion)"
+			]
+		},
+		{
+			"minStrength": 25,
+			"maxStrength": 49,
+			"label": "Failing",
+			"maxCreatureCR": 3,
+			"threadcraftDCModifier": -1,
+			"additionalEffects": [
+				"Major Fray creatures (CR 3 and below) can enter at any time",
+				"Environmental anomalies inside the ward (time stutters, gravity shifts)"
+			]
+		},
+		{
+			"minStrength": 1,
+			"maxStrength": 24,
+			"label": "Critical",
+			"maxCreatureCR": 5,
+			"threadcraftDCModifier": -2,
+			"additionalEffects": [
+				"Ward barely functional",
+				"Settlement is effectively a thin place",
+				"Fray exposure saves required for long rests inside ward (DC 10)"
+			]
+		},
+		{
+			"minStrength": 0,
+			"maxStrength": 0,
+			"label": "Collapsed",
+			"maxCreatureCR": 99,
+			"threadcraftDCModifier": -3,
+			"additionalEffects": [
+				"No ward protection",
+				"Full Frayed zone rules apply if surrounding area is Frayed"
+			]
+		}
+	],
+	"events": [
+		{
+			"type": "ceremony_full",
+			"strengthDelta": 12,
+			"hollowingMultiplier": 2,
+			"description": "Binding ceremony performed with complete Song"
+		},
+		{
+			"type": "ceremony_partial",
+			"strengthDelta": 6,
+			"hollowingMultiplier": 2,
+			"description": "Binding ceremony performed with partial Song"
+		},
+		{
+			"type": "ceremony_failed",
+			"strengthDelta": -6,
+			"hollowingMultiplier": 2,
+			"description": "Binding ceremony failed — destabilizes the ward"
+		},
+		{
+			"type": "ceremony_missed",
+			"strengthDelta": -12,
+			"hollowingMultiplier": 2,
+			"description": "Binding ceremony missed entirely"
+		},
+		{
+			"type": "daily_maintenance",
+			"strengthDelta": 0,
+			"description": "Wardweaver performs daily maintenance — prevents natural decay"
+		},
+		{
+			"type": "no_maintenance_week",
+			"strengthDelta": -1,
+			"description": "No Wardweaver, no daily maintenance — natural decay per week"
+		},
+		{
+			"type": "wardweaver_death_month",
+			"strengthDelta": -4,
+			"description": "Wardweaver died without successor — accelerated decay per month"
+		},
+		{
+			"type": "loom_stone_restored",
+			"strengthDelta": 15,
+			"description": "Player restored a nearby Loom Stone — one-time bonus"
+		},
+		{
+			"type": "incursion_repelled",
+			"strengthDelta": 5,
+			"description": "Major Fray creature incursion repelled — ward responds to successful defense"
+		},
+		{
+			"type": "incursion_undefended",
+			"strengthDelta": -10,
+			"description": "Major Fray creature incursion went undefended"
+		},
+		{
+			"type": "major_quest_completed",
+			"strengthDelta": 10,
+			"description": "Player completed major quest in region — weave stabilizes regionally"
+		}
+	]
+}

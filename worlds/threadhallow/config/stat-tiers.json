@@ -1,0 +1,86 @@
+[
+	{
+		"tier": "commoner",
+		"crRange": [0, 0.125],
+		"hpRange": [4, 11],
+		"acRange": [10, 12],
+		"proficiencyBonus": 2,
+		"attackBonusRange": [2, 3],
+		"saveDCRange": [10, 11],
+		"abilityArrays": {
+			"physical": [12, 10, 10, 10, 10, 8],
+			"balanced": [10, 10, 10, 10, 10, 10],
+			"mental": [8, 10, 10, 10, 12, 10]
+		}
+	},
+	{
+		"tier": "skilled",
+		"crRange": [0.25, 0.5],
+		"hpRange": [13, 27],
+		"acRange": [12, 14],
+		"proficiencyBonus": 2,
+		"attackBonusRange": [3, 4],
+		"saveDCRange": [11, 12],
+		"abilityArrays": {
+			"physical": [14, 12, 12, 10, 10, 8],
+			"balanced": [12, 12, 12, 10, 10, 10],
+			"mental": [10, 10, 12, 12, 14, 10]
+		}
+	},
+	{
+		"tier": "expert",
+		"crRange": [1, 3],
+		"hpRange": [27, 65],
+		"acRange": [13, 16],
+		"proficiencyBonus": 2,
+		"attackBonusRange": [4, 6],
+		"saveDCRange": [12, 14],
+		"abilityArrays": {
+			"physical": [16, 14, 14, 10, 10, 8],
+			"balanced": [14, 12, 14, 12, 12, 10],
+			"mental": [10, 10, 14, 14, 16, 12]
+		}
+	},
+	{
+		"tier": "veteran",
+		"crRange": [4, 8],
+		"hpRange": [65, 135],
+		"acRange": [15, 18],
+		"proficiencyBonus": 3,
+		"attackBonusRange": [6, 8],
+		"saveDCRange": [14, 16],
+		"abilityArrays": {
+			"physical": [18, 16, 16, 10, 12, 8],
+			"balanced": [16, 14, 16, 12, 14, 10],
+			"mental": [10, 12, 14, 16, 18, 14]
+		}
+	},
+	{
+		"tier": "elite",
+		"crRange": [9, 12],
+		"hpRange": [135, 200],
+		"acRange": [17, 19],
+		"proficiencyBonus": 4,
+		"attackBonusRange": [8, 10],
+		"saveDCRange": [16, 17],
+		"abilityArrays": {
+			"physical": [20, 18, 16, 12, 12, 10],
+			"balanced": [18, 16, 16, 14, 14, 12],
+			"mental": [12, 12, 14, 18, 20, 16]
+		}
+	},
+	{
+		"tier": "legendary",
+		"crRange": [13, 20],
+		"hpRange": [200, 300],
+		"acRange": [18, 22],
+		"proficiencyBonus": 5,
+		"attackBonusRange": [10, 14],
+		"saveDCRange": [18, 21],
+		"abilityArrays": {
+			"physical": [22, 20, 18, 12, 14, 10],
+			"balanced": [20, 18, 18, 16, 16, 14],
+			"mental": [12, 14, 16, 20, 22, 18]
+		}
+	}
+]

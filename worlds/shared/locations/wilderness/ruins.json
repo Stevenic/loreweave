@@ -35,5 +35,12 @@
     "footprint": "large",
     "floors": [0, -1],
     "shape": ["irregular", "fragmentary"]
+  },
+  "challenges": {
+    "encounters": ["bandit_camp_in_ruins", "creature_nest_disturbed", "ghost_of_former_inhabitant", "scavenger_territorial"],
+    "traps": ["collapsing_floor", "unstable_wall", "hidden_pit_under_rubble"],
+    "skill_checks": ["investigation_search_rubble", "history_identify_original_structure", "perception_spot_hidden_basement", "arcana_detect_magical_residue", "athletics_clear_debris"],
+    "saving_throws": [],
+    "loot_tier": "low"
   }
 }

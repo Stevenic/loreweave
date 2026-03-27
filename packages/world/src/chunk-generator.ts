@@ -23,6 +23,7 @@ import { determineSurface, isWalkable } from './surface.js';
 import { determineResources, ALL_RESOURCE_TYPES } from './resources.js';
 import { determineFeatures } from './features.js';
 import { generateSpawnPoints } from './spawns.js';
+import { computeStructurePlacements, applyStructuresToTiles } from './structures.js';
 import { createNoise, octaveNoise, ridgedNoise, type NoiseGenerator } from './noise.js';
 import { positionalRandom } from './rng.js';
 
@@ -224,10 +225,45 @@ export function generateChunk(
 		}
 	}
 
-	// ── Stage 5: Structures (placeholder — structure templates not yet implemented) ──
-	// Structure placement uses a spacing grid that requires multi-chunk coordination.
-	// For now, this stage is a no-op. Structure generation will be added when
-	// the world manager layer coordinates chunk generation.
+	// ── Stage 5: Structures ──
+	// Grid-based deterministic placement. Each structure type uses a coarse spacing
+	// grid; each grid cell produces 0 or 1 structure via positional RNG.
+	// No multi-chunk coordination needed — placement is per-cell, not per-chunk.
+	const structureRefs = computeStructurePlacements(
+		worldSeed,
+		cx,
+		cy,
+		(wx, wy) => {
+			// Use tile data if within this chunk, otherwise compute from noise
+			const lx = wx - baseX;
+			const ly = wy - baseY;
+			if (lx >= 0 && lx < CHUNK_SIZE && ly >= 0 && ly < CHUNK_SIZE) {
+				return tiles[ly * CHUNK_SIZE + lx].biome;
+			}
+			const t = octaveNoise(generators.temperature, wx, wy, 4, 0.5, 0.005);
+			const m = octaveNoise(generators.moisture, wx, wy, 4, 0.5, 0.005);
+			const e = octaveNoise(generators.elevation, wx, wy, 6, 0.5, 0.005);
+			return selectBiome(t, m, e);
+		},
+		(wx, wy) => {
+			// Use tile data if within this chunk, otherwise compute from noise
+			const lx = wx - baseX;
+			const ly = wy - baseY;
+			if (lx >= 0 && lx < CHUNK_SIZE && ly >= 0 && ly < CHUNK_SIZE) {
+				return tiles[ly * CHUNK_SIZE + lx].elevation;
+			}
+			const eNoise = octaveNoise(generators.elevation, wx, wy, 6, 0.5, 0.005);
+			const biome = selectBiome(
+				octaveNoise(generators.temperature, wx, wy, 4, 0.5, 0.005),
+				octaveNoise(generators.moisture, wx, wy, 4, 0.5, 0.005),
+				eNoise,
+			);
+			return computeElevation(eNoise, biome);
+		},
+	);
+
+	// Apply structure footprints to tiles (surface changes, feature clearing)
+	applyStructuresToTiles(tiles, structureRefs, cx, cy, worldSeed);
 
 	// ── Stage 6: Features ──
 	for (let ly = 0; ly < CHUNK_SIZE; ly++) {
@@ -280,7 +316,7 @@ export function generateChunk(
 		stage: 'complete',
 		tiles,
 		spawns,
-		structureRefs: [],
+		structureRefs,
 	};
 }
 

@@ -35,5 +35,12 @@
     "footprint": "medium",
     "floors": [1],
     "shape": ["irregular", "adapted_ruins", "cave_with_additions"]
+  },
+  "challenges": {
+    "encounters": ["bandit_patrol", "bandit_captain_duel", "guard_dog_alarm", "ambush_from_lookout", "prisoner_rescue_complication"],
+    "traps": ["tripwire_alarm", "pit_at_entrance", "rigged_door", "falling_log"],
+    "skill_checks": ["stealth_approach_undetected", "perception_spot_lookout", "persuasion_negotiate_with_captain", "deception_bluff_past_guards", "investigation_find_escape_tunnel"],
+    "saving_throws": [],
+    "loot_tier": "medium"
   }
 }

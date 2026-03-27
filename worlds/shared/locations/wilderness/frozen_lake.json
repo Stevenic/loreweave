@@ -35,5 +35,12 @@
     "footprint": "large",
     "floors": [1],
     "shape": ["open_flat", "irregular_shoreline"]
+  },
+  "challenges": {
+    "encounters": ["wolf_pack_crossing_ice", "frost_spirit_manifestation", "creature_beneath_ice_breaking_through", "stranded_traveler_rescue"],
+    "traps": ["thin_ice_section", "sudden_crack_underfoot", "snowdrift_concealing_drop"],
+    "skill_checks": ["survival_test_ice_thickness", "athletics_cross_cracked_section", "perception_spot_creature_beneath", "nature_predict_ice_conditions"],
+    "saving_throws": ["constitution_save_resist_cold_exposure"],
+    "loot_tier": "low"
   }
 }

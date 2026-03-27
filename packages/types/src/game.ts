@@ -221,6 +221,12 @@ export type StructureRef = {
 	worldX: number;
 	worldY: number;
 	templateId: string;
+	/** Footprint radius in tiles from the center. */
+	radius: number;
+	/** Settlement tier (for villages/towns). */
+	settlementTier?: SettlementTier;
+	/** Deterministic unique ID for ward tracking, faction assignment, etc. */
+	settlementId?: string;
 };
 
 // ─── D&D 5e Character System ───
@@ -293,6 +299,7 @@ export type Character = {
 	ac: number;
 	proficiencyBonus: number;
 	proficientSkills: SkillName[];
+	proficientSaves?: AbilityName[];
 	conditions: Condition[];
 	inventory: InventorySlot[];
 	location: TileCoord;
@@ -583,6 +590,380 @@ export type GameSession = {
 	inCombat: boolean;
 	/** Combat initiative order (character IDs), if in combat. */
 	initiativeOrder: string[];
+};
+
+// ─── Archetype System ───
+
+/** Probability-tiered pool for archetype generation. */
+export type ProbabilityPool<T = string> = {
+	required: T[];
+	common: T[];
+	rare: T[];
+};
+
+/** Settlement size tier. */
+export type SettlementTier = 'hamlet' | 'village' | 'town' | 'city';
+
+/** Location archetype category. */
+export type LocationCategory =
+	| 'tavern'
+	| 'shop'
+	| 'temple'
+	| 'residence'
+	| 'civic'
+	| 'wilderness'
+	| 'dungeon';
+
+/** NPC archetype category. */
+export type NpcCategory =
+	| 'merchant'
+	| 'authority'
+	| 'craft'
+	| 'service'
+	| 'wanderer';
+
+/** NPC combat tier for stat block generation. */
+export type StatsTier = 'commoner' | 'skilled' | 'expert' | 'veteran' | 'elite' | 'legendary';
+
+/** Ability score array variant. */
+export type AbilityArrayType = 'physical' | 'balanced' | 'mental';
+
+/** Location archetype — loaded from worlds/shared/locations/ JSON. */
+export type LocationArchetype = {
+	id: string;
+	type: 'location';
+	category: LocationCategory;
+	name: string;
+	description: string;
+	tier: SettlementTier[];
+	biomes: (BiomeType | 'any')[];
+	features: ProbabilityPool;
+	objects: ProbabilityPool;
+	npcs: ProbabilityPool;
+	exits: ProbabilityPool;
+	atmosphere: {
+		sounds: string[];
+		smells: string[];
+		lighting: string[];
+	};
+	layout: {
+		footprint: string;
+		floors: number[];
+		shape: string[];
+	};
+	challenges?: {
+		encounters: string[];
+		traps: string[];
+		skill_checks: string[];
+		saving_throws: string[];
+		loot_tier: 'none' | 'low' | 'medium' | 'high' | 'legendary';
+	};
+};
+
+/** NPC archetype — loaded from worlds/shared/npcs/ JSON. */
+export type NpcArchetype = {
+	id: string;
+	type: 'npc';
+	category: NpcCategory;
+	name: string;
+	description: string;
+	stats_tier: StatsTier;
+	primaryAbility?: AbilityName;
+	primaryArrayType?: AbilityArrayType;
+	traits: {
+		common: string[];
+		rare: string[];
+	};
+	skills: SkillName[];
+	inventory: ProbabilityPool;
+	knowledge: {
+		always: string[];
+		sometimes: string[];
+		rarely: string[];
+	};
+	dialogue_hooks: string[];
+	voice_patterns: string[];
+	schedule?: {
+		morning: string;
+		afternoon: string;
+		evening: string;
+		night: string;
+	};
+};
+
+// ─── Stat Tier Definitions ───
+
+/** Stat tier definition — maps tier name to mechanical values. */
+export type StatTierDefinition = {
+	tier: StatsTier;
+	crRange: [min: number, max: number];
+	hpRange: [min: number, max: number];
+	acRange: [min: number, max: number];
+	proficiencyBonus: number;
+	attackBonusRange: [min: number, max: number];
+	saveDCRange: [min: number, max: number];
+	abilityArrays: Record<AbilityArrayType, number[]>;
+};
+
+// ─── Ward System ───
+
+/** Ward strength threshold — defines mechanical effects at a ward level. */
+export type WardThreshold = {
+	minStrength: number;
+	maxStrength: number;
+	label: string;
+	maxCreatureCR: number;
+	threadcraftDCModifier: number;
+	additionalEffects: string[];
+};
+
+/** Ward event that affects ward strength. */
+export type WardEventType =
+	| 'ceremony_full'
+	| 'ceremony_partial'
+	| 'ceremony_failed'
+	| 'ceremony_missed'
+	| 'daily_maintenance'
+	| 'no_maintenance_week'
+	| 'wardweaver_death_month'
+	| 'loom_stone_restored'
+	| 'incursion_repelled'
+	| 'incursion_undefended'
+	| 'major_quest_completed';
+
+/** Ward event definition — maps event type to strength delta. */
+export type WardEventDefinition = {
+	type: WardEventType;
+	strengthDelta: number;
+	hollowingMultiplier?: number;
+	description: string;
+};
+
+// ─── Fray Exposure ───
+
+/** Fray exposure level definition. */
+export type FrayExposureLevel = {
+	level: number;
+	name: string;
+	effect: string;
+	mechanicalConsequence: string;
+};
+
+/** Fray exposure source with associated save DC. */
+export type FrayExposureSource = {
+	source: string;
+	saveDC: number;
+};
+
+/** Full fray exposure configuration for a world. */
+export type FrayExposureConfig = {
+	levels: FrayExposureLevel[];
+	sources: FrayExposureSource[];
+	transformationLevel: number;
+	transformationDC: number;
+};
+
+// ─── Encounter Tables ───
+
+/** A single entry in an encounter table. */
+export type EncounterEntry = {
+	minRoll: number;
+	maxRoll: number;
+	description: string;
+	creatures?: { type: string; count: string; cr: number }[];
+	isNonCombat?: boolean;
+	environmentalDC?: number;
+};
+
+/** An encounter table for a biome/zone combination. */
+export type EncounterTable = {
+	id: string;
+	name: string;
+	levelRange: [min: number, max: number];
+	dieSize: number;
+	entries: EncounterEntry[];
+};
+
+/** Dungeon encounter modifier. */
+export type DungeonEncounterModifier = {
+	dungeonType: string;
+	description: string;
+};
+
+// ─── Skill Challenges ───
+
+/** A skill that can be used in a skill challenge. */
+export type ChallengeSkill = {
+	skill: SkillName;
+	application: string;
+	dcModifier: number;
+};
+
+/** Failure consequence in a skill challenge. */
+export type ChallengeFailure = {
+	failureNumber: number;
+	effect: string;
+	mechanicalConsequence?: string;
+};
+
+/** Skill challenge configuration — reusable framework. */
+export type SkillChallengeConfig = {
+	id: string;
+	name: string;
+	successesRequired: number;
+	failuresAllowed: number;
+	applicableSkills: ChallengeSkill[];
+	failureConsequences: ChallengeFailure[];
+	criticalSuccessBonus?: string;
+	baseDCTable?: Record<string, number>;
+};
+
+/** Result of running a skill challenge. */
+export type SkillChallengeResult = {
+	success: boolean;
+	flawless: boolean;
+	successes: number;
+	failures: number;
+	rolls: { skill: SkillName; dc: number; roll: number; success: boolean }[];
+};
+
+// ─── Creature Stat Blocks ───
+
+/** Action a creature can take. */
+export type CreatureAction = {
+	name: string;
+	description: string;
+	attackBonus?: number;
+	reach?: number;
+	damage?: string;
+	saveDC?: number;
+	saveAbility?: AbilityName;
+	recharge?: string;
+};
+
+/** Full creature stat block — loaded from world config. */
+export type CreatureStatBlock = {
+	id: string;
+	name: string;
+	size: 'Tiny' | 'Small' | 'Medium' | 'Large' | 'Huge' | 'Gargantuan';
+	type: string;
+	alignment: string;
+	cr: number;
+	ac: number;
+	hp: number;
+	hpFormula: string;
+	speed: string;
+	abilities: AbilityScores;
+	savingThrows?: Partial<Record<AbilityName, number>>;
+	skills?: Partial<Record<SkillName, number>>;
+	damageResistances?: string[];
+	damageImmunities?: string[];
+	conditionImmunities?: Condition[];
+	senses: string;
+	languages: string;
+	traits: { name: string; description: string }[];
+	actions: CreatureAction[];
+	reactions?: CreatureAction[];
+	legendaryActions?: CreatureAction[];
+	lairActions?: CreatureAction[];
+};
+
+// ─── Vocabulary Tables ───
+
+/** Sensory descriptor set for a biome, time, or condition. */
+export type SensoryDescriptors = {
+	terrain?: string[];
+	sounds?: string[];
+	smells?: string[];
+	atmosphere?: string[];
+	sky?: string[];
+	light?: string[];
+	feel?: string[];
+};
+
+/** Vocabulary table — maps keys to sensory descriptors. */
+export type VocabularyTable = Record<string, SensoryDescriptors>;
+
+// ─── DM Persona ───
+
+/** DM persona — defines how the LLM narrates for a specific world. */
+export type DMPersona = {
+	name: string;
+	worldName: string;
+	toneGuide: string[];
+	forbiddenTopics: string[];
+	namingConventions: string[];
+	narrativeStyle: string;
+	responseLength: string;
+	specialInstructions: string[];
+};
+
+// ─── World Configuration ───
+
+/**
+ * World configuration — the complete data package for a world.
+ * Loaded from worlds/<name>/config/ at runtime.
+ * All game-specific rules tables, creature data, encounter tables,
+ * and DM personality are defined here. The engine is world-agnostic;
+ * the WorldConfig makes it world-specific.
+ */
+export type WorldConfig = {
+	id: string;
+	name: string;
+	description: string;
+
+	/** DM persona for LLM narrative generation. */
+	persona: DMPersona;
+
+	/** Stat tier definitions for NPC generation. */
+	statTiers: StatTierDefinition[];
+
+	/** Ward system configuration (if the world uses wards). */
+	wardThresholds?: WardThreshold[];
+	wardEvents?: WardEventDefinition[];
+
+	/** Fray/corruption exposure system (if the world uses it). */
+	frayExposure?: FrayExposureConfig;
+
+	/** Encounter tables by zone/biome. */
+	encounterTables?: EncounterTable[];
+	dungeonModifiers?: DungeonEncounterModifier[];
+
+	/** Skill challenge templates. */
+	skillChallenges?: SkillChallengeConfig[];
+
+	/** Creature stat blocks unique to this world. */
+	creatures?: CreatureStatBlock[];
+
+	/** Vocabulary tables for narrative enrichment. */
+	vocabulary?: {
+		biomes?: VocabularyTable;
+		timeOfDay?: VocabularyTable;
+		weather?: VocabularyTable;
+		settlements?: VocabularyTable;
+		buildingStyles?: VocabularyTable;
+	};
+
+	/** Archetype-to-tier overrides (e.g., guard captain = expert in this world). */
+	tierOverrides?: Record<string, StatsTier>;
+
+	/** World-specific action types beyond the base 10. */
+	customActions?: string[];
+
+	/** Additional world-specific data (open-ended for expansions). */
+	extensions?: Record<string, unknown>;
+};
+
+/** Updated game session with world config support. */
+export type GameSessionConfig = {
+	/** The world configuration data. */
+	worldConfig?: WorldConfig;
+	/** Ward strengths per settlement. */
+	wardStrengths?: Map<string, number>;
+	/** Faction reputation scores. */
+	factionReputation?: Map<string, number>;
+	/** Fray exposure per character. */
+	frayExposure?: Map<string, number>;
 };
 
 // ─── Constants ───

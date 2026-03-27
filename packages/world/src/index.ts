@@ -32,9 +32,28 @@ export { determineFeatures } from './features.js';
 // Spawns
 export { generateSpawnPoints, SPAWN_TABLE } from './spawns.js';
 
+// Structures
+export {
+	computeStructurePlacements,
+	applyStructuresToTiles,
+	STRUCTURE_RULES,
+} from './structures.js';
+
 // Noise
 export { createNoise, octaveNoise, ridgedNoise } from './noise.js';
 export type { NoiseGenerator } from './noise.js';
 
 // RNG
 export { fnv1a, positionalRandom, positionalSeed, seedFromString } from './rng.js';
+
+// Archetype Loader
+export {
+	getLocationsByCategory,
+	getLocationsForSettlement,
+	getNpcsByCategory,
+	loadArchetypes,
+} from './archetype-loader.js';
+export type { ArchetypeRegistry } from './archetype-loader.js';
+
+// World Config Loader
+export { loadWorldConfig } from './world-config-loader.js';

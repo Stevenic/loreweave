@@ -35,5 +35,12 @@
     "footprint": "medium",
     "floors": [0],
     "shape": ["irregular", "dome"]
+  },
+  "challenges": {
+    "encounters": ["hawk_attack_near_nest", "brigand_spotter_confrontation", "ghost_sentinel"],
+    "traps": [],
+    "skill_checks": ["perception_survey_surrounding_land", "survival_read_weather_signs", "investigation_examine_old_watchtower", "history_interpret_standing_stone"],
+    "saving_throws": [],
+    "loot_tier": "none"
   }
 }

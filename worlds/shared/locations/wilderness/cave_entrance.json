@@ -35,5 +35,12 @@
     "footprint": "medium",
     "floors": [1],
     "shape": ["irregular_natural"]
+  },
+  "challenges": {
+    "encounters": ["bear_in_den", "goblin_lookout_post", "spider_web_ambush", "injured_creature_cornered"],
+    "traps": ["loose_scree_slide", "collapsing_overhang"],
+    "skill_checks": ["perception_detect_occupant", "stealth_approach_quietly", "nature_identify_tracks_at_mouth", "survival_assess_cave_depth", "athletics_climb_rocky_entrance"],
+    "saving_throws": [],
+    "loot_tier": "low"
   }
 }

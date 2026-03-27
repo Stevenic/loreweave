@@ -35,5 +35,12 @@
     "footprint": "medium",
     "floors": [0],
     "shape": ["organic", "crescent"]
+  },
+  "challenges": {
+    "encounters": ["river_creature", "bandits_at_ford", "wildlife_at_water", "smuggler_boat_arrival"],
+    "traps": [],
+    "skill_checks": ["survival_find_ford", "nature_fish_or_forage", "perception_spot_tracks_in_mud", "athletics_swim_across"],
+    "saving_throws": [],
+    "loot_tier": "none"
   }
 }

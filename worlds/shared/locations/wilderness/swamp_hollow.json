@@ -35,5 +35,12 @@
     "footprint": "medium",
     "floors": [0],
     "shape": ["irregular", "sunken"]
+  },
+  "challenges": {
+    "encounters": ["giant_frog_ambush", "snake_nest", "hag_confrontation", "will_o_wisp_lure", "undead_rising_from_mud"],
+    "traps": ["quicksand_patch", "toxic_gas_vent", "concealed_sinkhole"],
+    "skill_checks": ["survival_navigate_safe_path", "nature_identify_poisonous_growth", "perception_spot_solid_ground", "athletics_pull_free_from_mud"],
+    "saving_throws": ["constitution_save_resist_swamp_fever"],
+    "loot_tier": "low"
   }
 }

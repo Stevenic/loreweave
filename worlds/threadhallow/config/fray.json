@@ -1,0 +1,49 @@
+{
+	"levels": [
+		{
+			"level": 1,
+			"name": "Touched",
+			"effect": "Sensory shift — one sense operates 'between'",
+			"mechanicalConsequence": "Advantage on Perception checks for Fray phenomena; disadvantage on same check type in bright/crowded/normal environments"
+		},
+		{
+			"level": 2,
+			"name": "Marked",
+			"effect": "Memory gap",
+			"mechanicalConsequence": "Lose proficiency in one Knowledge skill (History, Arcana, Nature, or Religion — player's choice); gain proficiency in Survival"
+		},
+		{
+			"level": 3,
+			"name": "Altered",
+			"effect": "Temporal perception",
+			"mechanicalConsequence": "Always know the exact time; cannot be surprised; disadvantage on Initiative rolls"
+		},
+		{
+			"level": 4,
+			"name": "Changed",
+			"effect": "Physical alteration",
+			"mechanicalConsequence": "Resistance to cold damage; disadvantage on Persuasion checks with non-Fray-touched creatures; advantage with Fray-touched"
+		},
+		{
+			"level": 5,
+			"name": "Resonant",
+			"effect": "Fray resonance",
+			"mechanicalConsequence": "Detect Magic at will (Threadlines and Fray activity only, 120 ft range); immune to Frayed zone environmental damage and exposure saves"
+		},
+		{
+			"level": 6,
+			"name": "Sighted",
+			"effect": "Pattern sight",
+			"mechanicalConsequence": "True Seeing (weave structure only); DC 15 Constitution save when entering new location or be stunned until end of next turn"
+		}
+	],
+	"sources": [
+		{ "source": "thin_place_prolonged", "saveDC": 10 },
+		{ "source": "frayed_zone_entry", "saveDC": 13 },
+		{ "source": "frayed_zone_long_rest", "saveDC": 15 },
+		{ "source": "unraveled_zone_entry", "saveDC": 18 },
+		{ "source": "direct_fray_breach", "saveDC": 20 }
+	],
+	"transformationLevel": 7,
+	"transformationDC": 18
+}

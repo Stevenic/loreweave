@@ -1,0 +1,41 @@
+[
+	{
+		"id": "binding_song",
+		"name": "The Binding Song Ceremony",
+		"successesRequired": 6,
+		"failuresAllowed": 3,
+		"applicableSkills": [
+			{ "skill": "performance", "application": "Singing the Binding Song", "dcModifier": 0 },
+			{ "skill": "arcana", "application": "Understanding the weave's response, adjusting resonance", "dcModifier": 0 },
+			{ "skill": "religion", "application": "Knowledge of the ceremony's ritual structure, invoking the Loom-Born", "dcModifier": -2 },
+			{ "skill": "persuasion", "application": "Rallying participants, maintaining morale during failures", "dcModifier": -2 },
+			{ "skill": "nature", "application": "Reading Threadline response, sensing the weave's reaction", "dcModifier": 0 },
+			{ "skill": "insight", "application": "Perceiving where the Song is weak and compensating", "dcModifier": 2 },
+			{ "skill": "history", "application": "Recalling fragments of old verses, filling gaps with tradition", "dcModifier": 2 }
+		],
+		"failureConsequences": [
+			{
+				"failureNumber": 1,
+				"effect": "The ward-circle flickers. A Fray breeze passes through the village. Tension rises.",
+				"mechanicalConsequence": "No mechanical effect — narrative tension only"
+			},
+			{
+				"failureNumber": 2,
+				"effect": "A thin-place phenomenon manifests inside the ward (fog, sound distortion, temperature drop).",
+				"mechanicalConsequence": "DC 12 Wisdom save for all participants or gain Frightened condition for 1 round"
+			},
+			{
+				"failureNumber": 3,
+				"effect": "The ceremony fails. Ward strength decreases. During the Hollowing: 1d4 Looselings breach the ward.",
+				"mechanicalConsequence": "Ward strength drops per ward event table. Combat encounter may begin immediately."
+			}
+		],
+		"criticalSuccessBonus": "Flawless: ward strength +18 instead of +12 (+36 during Hollowing). All participants gain Inspiration. Brief vision of Threadlines brightening.",
+		"baseDCTable": {
+			"complete_song": 12,
+			"partial_song": 15,
+			"minimal_song": 18,
+			"no_song": 21
+		}
+	}
+]

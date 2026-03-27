@@ -35,5 +35,12 @@
     "footprint": "large",
     "floors": [1, -1],
     "shape": ["linear_crack", "winding_gorge"]
+  },
+  "challenges": {
+    "encounters": ["troll_under_bridge", "bandits_controlling_crossing", "something_climbing_up_from_below", "eagle_nest_defense"],
+    "traps": ["loose_scree_slope", "rotting_rope_bridge", "falling_rocks"],
+    "skill_checks": ["athletics_cross_rope_bridge", "acrobatics_traverse_ledge", "perception_spot_safe_path_down", "survival_find_alternate_crossing", "investigation_examine_fossil_in_wall"],
+    "saving_throws": [],
+    "loot_tier": "low"
   }
 }

@@ -35,5 +35,12 @@
     "footprint": "medium",
     "floors": [-1, -2],
     "shape": ["cruciform", "linear_corridor", "circular_chamber"]
+  },
+  "challenges": {
+    "encounters": ["skeleton_patrol", "rat_swarm_nest", "wight_guardian", "ghost_of_interred", "undead_priest_ritual"],
+    "traps": ["pressure_plate_dart", "collapsing_ceiling", "poison_gas_sarcophagus", "glyph_of_warding"],
+    "skill_checks": ["religion_identify_burial_rites", "investigation_find_hidden_reliquary", "perception_detect_undead_stirring", "athletics_move_sarcophagus_lid", "stealth_avoid_waking_guardians"],
+    "saving_throws": [],
+    "loot_tier": "medium"
   }
 }

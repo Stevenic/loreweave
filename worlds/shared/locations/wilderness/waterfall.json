@@ -35,5 +35,12 @@
     "footprint": "medium",
     "floors": [1],
     "shape": ["vertical_natural", "amphitheater"]
+  },
+  "challenges": {
+    "encounters": ["water_elemental_guardian", "territorial_druid", "fey_creature_at_pool", "predator_at_watering_hole"],
+    "traps": ["slippery_rocks_near_edge", "strong_current_in_pool"],
+    "skill_checks": ["athletics_climb_cliff_face", "perception_spot_cave_behind_falls", "nature_identify_rare_plants", "acrobatics_cross_slippery_rocks", "survival_find_safe_crossing"],
+    "saving_throws": [],
+    "loot_tier": "low"
   }
 }

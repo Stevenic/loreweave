@@ -35,5 +35,12 @@
     "footprint": "small",
     "floors": [0],
     "shape": ["linear"]
+  },
+  "challenges": {
+    "encounters": ["troll_under_bridge", "bandit_toll_ambush", "bridge_ghost_encounter", "merchant_blockade"],
+    "traps": ["weakened_section_of_bridge"],
+    "skill_checks": ["perception_check_bridge_integrity", "athletics_cross_damaged_section", "insight_assess_toll_collector", "investigation_examine_troll_scratches"],
+    "saving_throws": [],
+    "loot_tier": "none"
   }
 }

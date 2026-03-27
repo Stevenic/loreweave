@@ -35,5 +35,12 @@
     "footprint": "large",
     "floors": [-1, 1, 2, 3],
     "shape": ["rectangular", "U-shaped", "sprawling"]
+  },
+  "challenges": {
+    "encounters": ["ghost_manifestation", "poltergeist_attack", "shadow_in_corridor", "possessed_object_animation", "specter_of_family_member"],
+    "traps": ["collapsing_staircase", "locked_room_filling_with_cold", "cursed_mirror", "door_that_wont_open_from_inside"],
+    "skill_checks": ["investigation_piece_together_family_history", "perception_notice_paranormal_signs", "arcana_identify_haunting_source", "insight_communicate_with_spirit"],
+    "saving_throws": ["wisdom_save_resist_fear"],
+    "loot_tier": "medium"
   }
 }

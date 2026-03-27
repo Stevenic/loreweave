@@ -49,6 +49,7 @@ Defines the schema for location and NPC archetype files used by the world genera
     "encounters": ["bar_fight", "pickpocket", "drunken_brawl"],
     "traps": [],
     "skill_checks": ["perception_eavesdrop", "persuasion_haggle", "insight_read_crowd"],
+    "saving_throws": [],
     "loot_tier": "low"
   }
 }
@@ -81,7 +82,8 @@ Optional field for locations that have mechanical encounters. Required for `dung
 |-----------|------|-------------|
 | `encounters` | string[] | Possible encounter types (Loremaster defines CR and stat blocks separately) |
 | `traps` | string[] | Trap types present (Loremaster defines DCs and damage separately) |
-| `skill_checks` | string[] | Relevant skill check opportunities (narrative hooks for the rules engine) |
+| `skill_checks` | string[] | Relevant skill check opportunities using `skill_action` naming (e.g., `perception_eavesdrop`). **Ability checks only** — do not mix in saving throws. |
+| `saving_throws` | string[] | Saving throws the location may require, using `ability_save_description` naming (e.g., `wisdom_save_resist_enchantment`). Mechanically distinct from skill checks — different proficiency tracking and resolution. |
 | `loot_tier` | string | `"none"`, `"low"`, `"medium"`, `"high"`, `"legendary"` — Loremaster defines loot tables per tier |
 
 ### Probability Tiers

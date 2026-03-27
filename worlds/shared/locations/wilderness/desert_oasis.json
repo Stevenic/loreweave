@@ -35,5 +35,12 @@
     "footprint": "medium",
     "floors": [1],
     "shape": ["organic", "clustered_around_water"]
+  },
+  "challenges": {
+    "encounters": ["territorial_predator_at_water", "ambush_by_desert_raiders", "water_guardian_test", "caravan_dispute"],
+    "traps": ["quicksand_near_spring", "mirage_misdirection"],
+    "skill_checks": ["survival_find_oasis", "nature_assess_water_safety", "perception_spot_ambush_in_palms", "persuasion_negotiate_water_access", "medicine_treat_dehydration"],
+    "saving_throws": [],
+    "loot_tier": "low"
   }
 }

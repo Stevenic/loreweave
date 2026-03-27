@@ -35,5 +35,12 @@
     "footprint": "large",
     "floors": [-1, -2],
     "shape": ["grid", "branching", "ring"]
+  },
+  "challenges": {
+    "encounters": ["giant_rat_pack", "wererat_ambush", "otyugh_feeding", "sewer_goblin_gang", "cult_ritual_in_progress"],
+    "traps": ["slippery_walkway", "toxic_gas_pocket", "flash_flood", "hidden_pit_under_water"],
+    "skill_checks": ["stealth_move_without_echoing", "investigation_follow_thieves_cant", "survival_navigate_junctions", "perception_spot_hidden_door"],
+    "saving_throws": ["constitution_save_endure_stench"],
+    "loot_tier": "low"
   }
 }

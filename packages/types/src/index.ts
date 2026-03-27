@@ -126,6 +126,44 @@ export type {
 	GameSession,
 	NarrativeAdapter,
 	WorldAccess,
+	// Archetype System
+	ProbabilityPool,
+	SettlementTier,
+	LocationCategory,
+	NpcCategory,
+	StatsTier,
+	AbilityArrayType,
+	LocationArchetype,
+	NpcArchetype,
+	// Stat Tiers
+	StatTierDefinition,
+	// Ward System
+	WardThreshold,
+	WardEventType,
+	WardEventDefinition,
+	// Fray Exposure
+	FrayExposureLevel,
+	FrayExposureSource,
+	FrayExposureConfig,
+	// Encounter Tables
+	EncounterEntry,
+	EncounterTable,
+	DungeonEncounterModifier,
+	// Skill Challenges
+	ChallengeSkill,
+	ChallengeFailure,
+	SkillChallengeConfig,
+	SkillChallengeResult,
+	// Creature Stat Blocks
+	CreatureAction,
+	CreatureStatBlock,
+	// Vocabulary
+	SensoryDescriptors,
+	VocabularyTable,
+	// DM Persona & World Config
+	DMPersona,
+	WorldConfig,
+	GameSessionConfig,
 } from './game.js';
 
 export {

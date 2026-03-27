@@ -35,5 +35,12 @@
     "footprint": "large",
     "floors": [1],
     "shape": ["irregular_open"]
+  },
+  "challenges": {
+    "encounters": ["wolf_pack", "boar_charge", "bandit_camp", "lost_traveler_in_distress"],
+    "traps": [],
+    "skill_checks": ["nature_identify_herbs", "perception_spot_tracks", "survival_make_camp", "stealth_observe_wildlife"],
+    "saving_throws": [],
+    "loot_tier": "none"
   }
 }

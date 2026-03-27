@@ -35,5 +35,12 @@
     "footprint": "small",
     "floors": [1],
     "shape": ["cross", "T-junction", "Y-fork"]
+  },
+  "challenges": {
+    "encounters": ["bandit_toll", "merchant_caravan_in_trouble", "patrol_checkpoint", "wandering_creature"],
+    "traps": [],
+    "skill_checks": ["perception_read_signpost", "insight_assess_stranger", "survival_choose_direction", "investigation_check_for_ambush_signs"],
+    "saving_throws": [],
+    "loot_tier": "none"
   }
 }

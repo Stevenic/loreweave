@@ -1,0 +1,235 @@
+[
+	{
+		"id": "looseling",
+		"name": "Looseling",
+		"size": "Small",
+		"type": "aberration",
+		"alignment": "unaligned",
+		"cr": 0.25,
+		"ac": 12,
+		"hp": 13,
+		"hpFormula": "3d6 + 3",
+		"speed": "30 ft., climb 30 ft.",
+		"abilities": { "STR": 6, "DEX": 14, "CON": 12, "INT": 3, "WIS": 10, "CHA": 3 },
+		"skills": { "stealth": 4 },
+		"conditionImmunities": ["frightened"],
+		"damageResistances": ["force"],
+		"senses": "blindsight 30 ft. (blind beyond), passive Perception 10",
+		"languages": "None",
+		"traits": [
+			{ "name": "Fray-Born", "description": "Immune to Frightened. Resistance to force damage. When reduced to 0 HP, unravels into loose threads that dissolve in 1d4 rounds." },
+			{ "name": "Amorphous", "description": "Can move through spaces as narrow as 1 inch wide without squeezing." }
+		],
+		"actions": [
+			{
+				"name": "Thread Lash",
+				"description": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) slashing damage.",
+				"attackBonus": 4,
+				"reach": 5,
+				"damage": "1d6+2"
+			},
+			{
+				"name": "Entangle",
+				"description": "One creature within 5 ft. must succeed on a DC 12 Dexterity save or be restrained by threads until the end of its next turn.",
+				"saveDC": 12,
+				"saveAbility": "DEX",
+				"recharge": "5-6"
+			}
+		]
+	},
+	{
+		"id": "thread_puppet",
+		"name": "Thread-Puppet",
+		"size": "Medium",
+		"type": "construct",
+		"alignment": "unaligned",
+		"cr": 1,
+		"ac": 13,
+		"hp": 27,
+		"hpFormula": "5d8 + 5",
+		"speed": "25 ft.",
+		"abilities": { "STR": 14, "DEX": 10, "CON": 12, "INT": 1, "WIS": 8, "CHA": 1 },
+		"damageImmunities": ["poison"],
+		"conditionImmunities": ["charmed", "frightened", "paralyzed", "petrified", "poisoned"],
+		"senses": "blindsight 60 ft. (blind beyond), passive Perception 9",
+		"languages": "None",
+		"traits": [
+			{ "name": "Fray-Born", "description": "Immune to Frightened. Resistance to force damage. When reduced to 0 HP, unravels into loose threads that dissolve in 1d4 rounds." },
+			{ "name": "False Appearance", "description": "While motionless, indistinguishable from a normal object of its type." }
+		],
+		"actions": [
+			{
+				"name": "Slam",
+				"description": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 7 (1d10 + 2) bludgeoning damage.",
+				"attackBonus": 4,
+				"reach": 5,
+				"damage": "1d10+2"
+			}
+		]
+	},
+	{
+		"id": "thread_eater",
+		"name": "Thread-Eater",
+		"size": "Medium",
+		"type": "aberration",
+		"alignment": "unaligned",
+		"cr": 2,
+		"ac": 13,
+		"hp": 45,
+		"hpFormula": "7d8 + 14",
+		"speed": "40 ft.",
+		"abilities": { "STR": 14, "DEX": 16, "CON": 14, "INT": 6, "WIS": 12, "CHA": 5 },
+		"skills": { "perception": 3, "stealth": 5 },
+		"conditionImmunities": ["frightened"],
+		"damageResistances": ["force"],
+		"senses": "darkvision 60 ft., passive Perception 13",
+		"languages": "None",
+		"traits": [
+			{ "name": "Fray-Born", "description": "Immune to Frightened. Resistance to force damage. When reduced to 0 HP, unravels into loose threads that dissolve in 1d4 rounds." },
+			{ "name": "Magic Scent", "description": "Can detect magical auras within 120 ft." },
+			{ "name": "Weave Drain", "description": "When the Thread-eater hits a creature concentrating on a spell, the creature has disadvantage on the concentration save." }
+		],
+		"actions": [
+			{
+				"name": "Multiattack",
+				"description": "The Thread-eater makes two claw attacks."
+			},
+			{
+				"name": "Claw",
+				"description": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) slashing damage.",
+				"attackBonus": 5,
+				"reach": 5,
+				"damage": "1d8+3"
+			},
+			{
+				"name": "Consume Ward",
+				"description": "Targets a magical effect within 5 feet. The effect must succeed on a DC 13 check (1d20 + the effect's spell level) or be dispelled. The Thread-eater regains 10 HP.",
+				"saveDC": 13,
+				"recharge": "5-6"
+			}
+		]
+	},
+	{
+		"id": "frayed_one",
+		"name": "Frayed One",
+		"size": "Medium",
+		"type": "aberration (formerly humanoid)",
+		"alignment": "chaotic neutral",
+		"cr": 2,
+		"ac": 12,
+		"hp": 38,
+		"hpFormula": "7d8 + 7",
+		"speed": "30 ft.",
+		"abilities": { "STR": 10, "DEX": 14, "CON": 12, "INT": 8, "WIS": 14, "CHA": 6 },
+		"skills": { "perception": 4, "stealth": 4 },
+		"damageResistances": ["bludgeoning, piercing, slashing from nonmagical attacks", "force"],
+		"conditionImmunities": ["frightened"],
+		"senses": "darkvision 60 ft., passive Perception 14",
+		"languages": "fragments of Common",
+		"traits": [
+			{ "name": "Fray-Born", "description": "Immune to Frightened. Resistance to force damage. When reduced to 0 HP, unravels into loose threads that dissolve in 1d4 rounds." },
+			{ "name": "Incorporeal Flicker", "description": "At the start of each of its turns, can choose to become partially incorporeal until start of next turn. While flickering, can move through creatures and objects as difficult terrain. Takes 5 (1d10) force damage if it ends its turn inside an object." }
+		],
+		"actions": [
+			{
+				"name": "Fray Touch",
+				"description": "Melee Spell Attack: +4 to hit, reach 5 ft., one target. Hit: 9 (2d6 + 2) necrotic damage. Target must succeed on DC 12 Constitution save or gain 1 Fray exposure level.",
+				"attackBonus": 4,
+				"reach": 5,
+				"damage": "2d6+2",
+				"saveDC": 12,
+				"saveAbility": "CON"
+			},
+			{
+				"name": "Wail",
+				"description": "Each creature within 30 feet that can hear the Frayed One must succeed on a DC 12 Wisdom save or be Frightened for 1 minute. A frightened creature can repeat the save at end of each of its turns.",
+				"saveDC": 12,
+				"saveAbility": "WIS",
+				"recharge": "6"
+			}
+		]
+	},
+	{
+		"id": "hollow_walker",
+		"name": "Hollow Walker",
+		"size": "Large",
+		"type": "aberration",
+		"alignment": "neutral evil",
+		"cr": 4,
+		"ac": 15,
+		"hp": 75,
+		"hpFormula": "10d10 + 20",
+		"speed": "40 ft.",
+		"abilities": { "STR": 16, "DEX": 14, "CON": 14, "INT": 10, "WIS": 14, "CHA": 8 },
+		"savingThrows": { "DEX": 4, "WIS": 4 },
+		"skills": { "perception": 4, "stealth": 4 },
+		"damageResistances": ["force", "necrotic"],
+		"conditionImmunities": ["frightened"],
+		"senses": "darkvision 120 ft., passive Perception 14",
+		"languages": "understands Common but cannot speak",
+		"traits": [
+			{ "name": "Fray-Born", "description": "Immune to Frightened. Resistance to force damage. When reduced to 0 HP, unravels into loose threads that dissolve in 1d4 rounds." },
+			{ "name": "Time Stutter", "description": "Can use its bonus action to teleport up to 15 feet to an unoccupied space it can see. This movement doesn't provoke opportunity attacks." }
+		],
+		"actions": [
+			{
+				"name": "Multiattack",
+				"description": "The Hollow Walker makes three claw attacks."
+			},
+			{
+				"name": "Claw",
+				"description": "Melee Weapon Attack: +5 to hit, reach 10 ft., one target. Hit: 8 (1d10 + 3) slashing damage.",
+				"attackBonus": 5,
+				"reach": 10,
+				"damage": "1d10+3"
+			},
+			{
+				"name": "Unravel",
+				"description": "One creature within 30 feet must make a DC 14 Constitution saving throw, taking 22 (4d10) force damage on a failed save, or half on success. On failure, target's AC is reduced by 2 until end of its next turn.",
+				"saveDC": 14,
+				"saveAbility": "CON",
+				"damage": "4d10",
+				"recharge": "5-6"
+			}
+		]
+	},
+	{
+		"id": "unspun",
+		"name": "The Unspun",
+		"size": "Large",
+		"type": "aberration",
+		"alignment": "chaotic neutral",
+		"cr": 5,
+		"ac": 11,
+		"hp": 90,
+		"hpFormula": "12d10 + 24",
+		"speed": "20 ft., fly 20 ft. (hover)",
+		"abilities": { "STR": 16, "DEX": 8, "CON": 14, "INT": 6, "WIS": 12, "CHA": 14 },
+		"damageResistances": ["bludgeoning, piercing, slashing from nonmagical attacks", "force"],
+		"damageImmunities": ["necrotic", "psychic"],
+		"conditionImmunities": ["blinded", "charmed", "deafened", "frightened", "prone"],
+		"senses": "blindsight 60 ft. (blind beyond), passive Perception 11",
+		"languages": "None",
+		"traits": [
+			{ "name": "Fray-Born", "description": "Immune to Frightened. Resistance to force damage. When reduced to 0 HP, unravels into loose threads that dissolve in 1d4 rounds." },
+			{ "name": "Amorphous", "description": "Can move through spaces as narrow as 1 inch wide without squeezing." },
+			{ "name": "Weave Hunger", "description": "At the start of its turn, if a magical effect or ward is within 30 feet, the Unspun must move toward it." },
+			{ "name": "Absorb Magic", "description": "When targeted by a spell, can use its reaction to absorb the spell (spell has no effect). Regains HP equal to 5 × the spell's level." }
+		],
+		"actions": [
+			{
+				"name": "Pseudopod",
+				"description": "Melee Weapon Attack: +6 to hit, reach 10 ft., one target. Hit: 12 (2d8 + 3) bludgeoning damage plus 7 (2d6) force damage.",
+				"attackBonus": 6,
+				"reach": 10,
+				"damage": "2d8+3"
+			},
+			{
+				"name": "Engulf",
+				"description": "One Medium or smaller creature within 5 feet must succeed on a DC 14 Dexterity save or be engulfed. Engulfed creature is restrained, has total cover from outside, takes 10 (3d6) force damage at start of each Unspun's turns. Escape with DC 14 Strength check as action.",
+				"saveDC": 14,
+				"saveAbility": "DEX"
+			}
+		]
+	}
+]

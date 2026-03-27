@@ -35,5 +35,12 @@
     "footprint": "large",
     "floors": [-1, -2, -3],
     "shape": ["branching_tunnels", "spiral_descent", "grid_shafts"]
+  },
+  "challenges": {
+    "encounters": ["rat_swarm_infestation", "cave_spider_nest", "kobold_squatters", "ooze_in_flooded_shaft", "ghost_of_trapped_miner"],
+    "traps": ["collapsing_tunnel", "flooded_shaft", "rotting_ladder", "unstable_explosive_charges", "mine_cart_runaway"],
+    "skill_checks": ["investigation_read_surveyor_marks", "athletics_climb_vertical_shaft", "perception_hear_structural_groaning", "survival_assess_air_quality", "history_identify_mining_era"],
+    "saving_throws": [],
+    "loot_tier": "medium"
   }
 }
