@@ -16,6 +16,8 @@ Last compacted: 2026-03-27
 
 **Saving Throws vs Skill Checks Are Separate** — D&D 5e treats these differently. Naming convention: `ability_save_description` for saves (e.g., `wisdom_save_resist_fear`), `skill_action` for checks (e.g., `athletics_climb_vertical_shaft`). Never mix them in the same array.
 
+**Anglo-Celtic Naming Conventions** — Threadhallow uses Anglo-Celtic naming for people, places, and traditions. Keep this consistent when creating new NPCs, locations, or cultural elements. No generic fantasy names.
+
 ## Content Design Patterns
 
 **Every NPC Gets a Secret** — No throwaway mystery boxes. Every secret connects to deeper lore or another character's arc. This is what makes the world feel interconnected.
@@ -27,6 +29,10 @@ Last compacted: 2026-03-27
 **Side Quests Connect to Main Narrative** — No standalone fetch quests. Every hand-crafted side quest seeds Act IV path choices, resolves companion arcs, or reveals world lore. Procedural quests use the 15 reusable templates with weighted selection.
 
 **Companion Design: Opinionated + Autonomous** — 2-companion party cap. Companions comment, disagree, and leave if values are violated. No direct control — player suggests, companion decides. Hidden relationship tracker expressed through LLM dialogue tone, not UI numbers.
+
+**Late Acts Favor Transformation Over Introduction** — Acts IV–V reuse the existing cast with transformed roles (15 returning characters) rather than introducing many new NPCs. Only 3 new characters appear in late game. This deepens relationships instead of diluting them.
+
+**Faction Reputation Is Expressed Narratively** — 9 reputation tiers per faction, each expressed through 5 dimensions (formality, trust, access, proximity, inclusion) that vary by faction culture. Key NPCs shift behavior at tier thresholds. No visible reputation number — the LLM conveys standing through dialogue tone and NPC reactions.
 
 ## World Structure
 
@@ -51,3 +57,5 @@ Last compacted: 2026-03-27
 - **Vocabulary tables:** 7 (biome, settlement, weather, time, sensory, building_styles, weave_state)
 - **Creature archetypes:** 21 (15 generic + 6 Fray-specific)
 - **Threadhallow regions:** 7 (Thornwick, Ashenmoor, Singing Cairn, Hollowreach, Loomhearth, Threadfall Expanse, Knotwood + Weavers' Cradle)
+- **Named NPCs:** ~22 (6 Act I, 7 Act II, 3 Act III, 3 new Act IV–V + 15 returning)
+- **Companions:** 4 (Sorrel, Farweft, Wren, Wynn)
