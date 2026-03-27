@@ -55,5 +55,12 @@ export {
 } from './archetype-loader.js';
 export type { ArchetypeRegistry } from './archetype-loader.js';
 
+// Location Generator
+export {
+	generateLocation,
+	generateSettlement,
+	generateStructureLocations,
+} from './location-generator.js';
+
 // World Config Loader
 export { loadWorldConfig } from './world-config-loader.js';

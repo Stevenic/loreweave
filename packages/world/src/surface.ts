@@ -27,6 +27,16 @@ const SURFACE_RULES: SurfaceRule[] = [
 	{ biome: 'desert', minElevation: 0, maxElevation: 45, surface: 'sand' },
 	{ biome: 'taiga', minElevation: 0, maxElevation: 30, surface: 'pine_floor' },
 	{ biome: 'taiga', minElevation: 30, maxElevation: 65, surface: 'snow' },
+	// New biomes
+	{ biome: 'coast', minElevation: 0, maxElevation: 5, surface: 'sand' },
+	{ biome: 'coast', minElevation: 5, maxElevation: 15, surface: 'gravel' },
+	{ biome: 'hills', minElevation: 35, maxElevation: 50, surface: 'grass' },
+	{ biome: 'hills', minElevation: 50, maxElevation: 65, surface: 'peat' },
+	{ biome: 'cavern', minElevation: 0, maxElevation: 30, surface: 'cave_floor' },
+	{ biome: 'farmland', minElevation: 10, maxElevation: 25, surface: 'tilled_soil' },
+	{ biome: 'farmland', minElevation: 25, maxElevation: 40, surface: 'grass' },
+	{ biome: 'deep_forest', minElevation: 15, maxElevation: 35, surface: 'root_floor' },
+	{ biome: 'deep_forest', minElevation: 35, maxElevation: 55, surface: 'dirt' },
 ];
 
 /** Determine the surface type for a tile based on biome and elevation. */
@@ -49,6 +59,11 @@ const BIOME_DEFAULT_SURFACE: Record<BiomeType, SurfaceType> = {
 	tundra: 'snow',
 	desert: 'sand',
 	taiga: 'pine_floor',
+	coast: 'sand',
+	hills: 'grass',
+	cavern: 'cave_floor',
+	farmland: 'tilled_soil',
+	deep_forest: 'root_floor',
 };
 
 /** Non-walkable surface types. */

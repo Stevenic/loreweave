@@ -40,6 +40,29 @@ const BIOME_RESOURCES: Record<BiomeType, ResourceRule[]> = {
 	taiga: [
 		{ resource: 'wood', threshold: 0.2 },
 	],
+	coast: [
+		{ resource: 'fish', threshold: 0.2 },
+		{ resource: 'clay', threshold: 0.5 },
+	],
+	hills: [
+		{ resource: 'stone', threshold: 0.4 },
+		{ resource: 'peat', threshold: 0.5 },
+		{ resource: 'herb', threshold: 0.7 },
+	],
+	cavern: [
+		{ resource: 'stone', threshold: 0.2 },
+		{ resource: 'iron', threshold: 0.5 },
+		{ resource: 'crystal', threshold: 0.85 },
+	],
+	farmland: [
+		{ resource: 'herb', threshold: 0.5 },
+		{ resource: 'wood', threshold: 0.8 },
+	],
+	deep_forest: [
+		{ resource: 'wood', threshold: 0.05 },
+		{ resource: 'herb', threshold: 0.4 },
+		{ resource: 'fur', threshold: 0.7 },
+	],
 };
 
 /** River-specific resources. */

@@ -59,6 +59,41 @@ export const BIOME_TABLE: BiomeDefinition[] = [
 		elevation: [0.0, 0.5],
 		description: 'Cold coniferous forest. Pine trees, wolves.',
 	},
+	{
+		type: 'coast',
+		temperature: [0.0, 0.6],
+		moisture: [0.3, 1.0],
+		elevation: [-1.0, -0.3],
+		description: 'Shoreline. Cliffs, tide pools, sand, driftwood, seabirds.',
+	},
+	{
+		type: 'hills',
+		temperature: [-0.2, 0.5],
+		moisture: [-0.2, 0.4],
+		elevation: [0.2, 0.5],
+		description: 'Rolling moorland. Heather, gorse, exposed rock, standing stones.',
+	},
+	{
+		type: 'cavern',
+		temperature: [0.0, 0.2],
+		moisture: [0.3, 0.8],
+		elevation: [-1.0, -0.5],
+		description: 'Underground. Stalactites, underground pools, bioluminescent fungi.',
+	},
+	{
+		type: 'farmland',
+		temperature: [0.0, 0.6],
+		moisture: [0.0, 0.5],
+		elevation: [-0.3, 0.2],
+		description: 'Settled agricultural land. Crop fields, fences, orchards, pastures.',
+	},
+	{
+		type: 'deep_forest',
+		temperature: [-0.1, 0.4],
+		moisture: [0.4, 1.0],
+		elevation: [-0.1, 0.4],
+		description: 'Ancient primeval forest. Massive roots, dense canopy, thick undergrowth.',
+	},
 ];
 
 /** Compute the center of a biome's parameter space region. */
@@ -109,6 +144,11 @@ export const BIOME_ELEVATION_MODIFIERS: Record<BiomeType, number> = {
 	tundra: 0.2,
 	desert: 0.1,
 	taiga: 0.3,
+	coast: 0.0,
+	hills: 0.35,
+	cavern: 0.0,
+	farmland: 0.15,
+	deep_forest: 0.25,
 };
 
 /** Biome elevation base ranges for §5.1. */
@@ -120,6 +160,11 @@ export const BIOME_ELEVATION_RANGES: Record<BiomeType, [min: number, max: number
 	tundra: [10, 60],
 	desert: [5, 45],
 	taiga: [25, 65],
+	coast: [0, 15],
+	hills: [35, 65],
+	cavern: [0, 30],
+	farmland: [10, 40],
+	deep_forest: [15, 55],
 };
 
 /**

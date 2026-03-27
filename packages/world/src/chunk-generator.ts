@@ -14,6 +14,7 @@ import type {
 	ChunkCoord,
 	FeatureType,
 	ResourceType,
+	WeaveState,
 	WorldSeed,
 	WorldTile,
 } from '@loreweave/types';
@@ -45,6 +46,7 @@ type NoiseCache = {
 	elevation: Float64Array;
 	river: Float64Array;
 	surfaceVariation: Float64Array;
+	weaveStability: Float64Array;
 	resourceNoise: Map<ResourceType, Float64Array>;
 };
 
@@ -55,6 +57,7 @@ function createNoiseGenerators(worldSeed: WorldSeed): {
 	elevation: NoiseGenerator;
 	river: NoiseGenerator;
 	surfaceVariation: NoiseGenerator;
+	weaveStability: NoiseGenerator;
 	resourceGenerators: Map<ResourceType, NoiseGenerator>;
 } {
 	const seedNum = Number(worldSeed & 0xffffffffn);
@@ -64,6 +67,7 @@ function createNoiseGenerators(worldSeed: WorldSeed): {
 		elevation: createNoise(seedNum + 2),
 		river: createNoise(seedNum + 3),
 		surfaceVariation: createNoise(seedNum + 4),
+		weaveStability: createNoise(seedNum + 5),
 		resourceGenerators: new Map(
 			ALL_RESOURCE_TYPES.map((r, i) => [r, createNoise(seedNum + 100 + i)]),
 		),
@@ -86,6 +90,7 @@ function computeNoiseCache(
 	const elevation = new Float64Array(size * size);
 	const river = new Float64Array(size * size);
 	const surfaceVariation = new Float64Array(size * size);
+	const weaveStability = new Float64Array(size * size);
 	const resourceNoise = new Map<ResourceType, Float64Array>();
 
 	for (const r of ALL_RESOURCE_TYPES) {
@@ -103,6 +108,7 @@ function computeNoiseCache(
 			elevation[idx] = octaveNoise(generators.elevation, wx, wy, 6, 0.5, 0.005);
 			river[idx] = ridgedNoise(generators.river, wx, wy, 3, 0.5, 0.005);
 			surfaceVariation[idx] = octaveNoise(generators.surfaceVariation, wx, wy, 2, 0.6, 0.01);
+			weaveStability[idx] = octaveNoise(generators.weaveStability, wx, wy, 3, 0.5, 0.003);
 
 			for (const [r, gen] of generators.resourceGenerators.entries()) {
 				const arr = resourceNoise.get(r);
@@ -113,7 +119,7 @@ function computeNoiseCache(
 		}
 	}
 
-	return { temperature, moisture, elevation, river, surfaceVariation, resourceNoise };
+	return { temperature, moisture, elevation, river, surfaceVariation, weaveStability, resourceNoise };
 }
 
 /**
@@ -159,6 +165,7 @@ export function generateChunk(
 				features: [],
 				walkable: true,
 				river: false,
+				weaveState: 'stable',
 			};
 		}
 	}
@@ -264,6 +271,27 @@ export function generateChunk(
 
 	// Apply structure footprints to tiles (surface changes, feature clearing)
 	applyStructuresToTiles(tiles, structureRefs, cx, cy, worldSeed);
+
+	// ── Stage 5b: Weave State ──
+	// Weave stability is a continuous noise field. Tiles inside settlement wards
+	// are always stable. Distance from settlements increases fraying probability.
+	for (let ly = 0; ly < CHUNK_SIZE; ly++) {
+		for (let lx = 0; lx < CHUNK_SIZE; lx++) {
+			const idx = ly * CHUNK_SIZE + lx;
+			const tile = tiles[idx];
+
+			// Tiles inside settlements are always stable (ward protection)
+			if (tile.structures.includes('village')) {
+				tile.weaveState = 'stable';
+				continue;
+			}
+
+			// Map noise to weave state. Lower values = less stable.
+			// Noise is [-1, 1], normalize to [0, 1].
+			const stability = (noise.weaveStability[idx] + 1) / 2;
+			tile.weaveState = stabilityToWeaveState(stability);
+		}
+	}
 
 	// ── Stage 6: Features ──
 	for (let ly = 0; ly < CHUNK_SIZE; ly++) {
@@ -405,4 +433,17 @@ export function worldToLocalCoord(x: number, y: number): { lx: number; ly: numbe
 		lx: ((x % CHUNK_SIZE) + CHUNK_SIZE) % CHUNK_SIZE,
 		ly: ((y % CHUNK_SIZE) + CHUNK_SIZE) % CHUNK_SIZE,
 	};
+}
+
+/**
+ * Map a stability noise value [0, 1] to a WeaveState.
+ *
+ * Distribution: ~70% stable, ~18% thin, ~9% frayed, ~3% unraveled.
+ * These thresholds create natural patches of instability.
+ */
+function stabilityToWeaveState(stability: number): WeaveState {
+	if (stability >= 0.30) return 'stable';
+	if (stability >= 0.12) return 'thin';
+	if (stability >= 0.03) return 'frayed';
+	return 'unraveled';
 }

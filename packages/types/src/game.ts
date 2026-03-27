@@ -32,7 +32,12 @@ export type BiomeType =
 	| 'swamp'
 	| 'tundra'
 	| 'desert'
-	| 'taiga';
+	| 'taiga'
+	| 'coast'
+	| 'hills'
+	| 'cavern'
+	| 'farmland'
+	| 'deep_forest';
 
 /** Biome definition in 3D parameter space. §4.2 */
 export type BiomeDefinition = {
@@ -54,7 +59,12 @@ export type SurfaceType =
 	| 'water'
 	| 'mud'
 	| 'ice'
-	| 'pine_floor';
+	| 'pine_floor'
+	| 'gravel'
+	| 'peat'
+	| 'cave_floor'
+	| 'tilled_soil'
+	| 'root_floor';
 
 // ─── Resources ───
 
@@ -100,7 +110,41 @@ export type FeatureType =
 	// Ambient
 	| 'fog'
 	| 'snow_drift'
-	| 'heat_shimmer';
+	| 'heat_shimmer'
+	// Coast
+	| 'tide_pool'
+	| 'driftwood'
+	| 'seaweed'
+	| 'seabirds'
+	| 'salt_spray'
+	| 'sea_shell'
+	// Hills / Moorland
+	| 'heather'
+	| 'gorse'
+	| 'standing_stone'
+	| 'exposed_rock'
+	| 'low_scrub'
+	// Cavern / Underground
+	| 'stalactite'
+	| 'stalagmite'
+	| 'underground_pool'
+	| 'glowing_fungus'
+	| 'crystal_formation'
+	| 'cave_moss'
+	// Farmland
+	| 'crop_field'
+	| 'fence'
+	| 'orchard_tree'
+	| 'hay_bale'
+	| 'scarecrow'
+	| 'pasture'
+	// Deep Forest
+	| 'ancient_tree'
+	| 'massive_root'
+	| 'thick_undergrowth'
+	| 'canopy_shadow'
+	| 'hollow_trunk'
+	| 'hanging_vine';
 
 // ─── Structures ───
 
@@ -180,6 +224,9 @@ export type LootEntry = {
 
 // ─── World Tiles & Chunks ───
 
+/** Weave stability state — overlay modifier for any biome. */
+export type WeaveState = 'stable' | 'thin' | 'frayed' | 'unraveled';
+
 /** A single tile in world space. §4.1 */
 export type WorldTile = {
 	x: number;
@@ -192,6 +239,8 @@ export type WorldTile = {
 	features: FeatureType[];
 	walkable: boolean;
 	river: boolean;
+	/** Weave stability at this tile. Affects encounters, hazards, and narrative. */
+	weaveState: WeaveState;
 };
 
 /** Chunk generation stage. §3.2 */
@@ -689,6 +738,73 @@ export type NpcArchetype = {
 		evening: string;
 		night: string;
 	};
+};
+
+// ─── Location Records ───
+
+/**
+ * A concrete instantiated location within a settlement or structure.
+ * Generated from a LocationArchetype + seed. This is the runtime
+ * representation that the DM and narrative engine work with.
+ */
+export type LocationRecord = {
+	/** Unique ID for this location instance. */
+	id: string;
+	/** The archetype ID this was generated from. */
+	archetypeId: string;
+	/** Display name (generated from archetype name patterns). */
+	name: string;
+	/** Location category. */
+	category: LocationCategory;
+	/** World-space tile coordinate of this location. */
+	position: TileCoord;
+	/** The settlement this location belongs to (null for wilderness/dungeon). */
+	settlementId: string | null;
+	/** Concrete features rolled from the archetype's probability pools. */
+	features: string[];
+	/** Concrete objects rolled from the archetype's probability pools. */
+	objects: string[];
+	/** NPC archetype IDs assigned to this location. */
+	npcArchetypes: string[];
+	/** Concrete exits rolled from the archetype's probability pools. */
+	exits: string[];
+	/** Atmosphere snapshot for LLM context. */
+	atmosphere: {
+		sounds: string[];
+		smells: string[];
+		lighting: string[];
+	};
+	/** Challenge data (if any). */
+	challenges?: {
+		encounters: string[];
+		traps: string[];
+		skill_checks: string[];
+		saving_throws: string[];
+		loot_tier: 'none' | 'low' | 'medium' | 'high' | 'legendary';
+	};
+};
+
+/**
+ * A settlement — a collection of locations generated around a structure.
+ * Settlements are created from village/town/city structure refs.
+ */
+export type Settlement = {
+	/** Deterministic unique ID (matches StructureRef.settlementId). */
+	id: string;
+	/** Generated display name. */
+	name: string;
+	/** Settlement tier. */
+	tier: SettlementTier;
+	/** World-space center coordinate. */
+	center: TileCoord;
+	/** Footprint radius in tiles. */
+	radius: number;
+	/** Biome at the settlement center. */
+	biome: BiomeType;
+	/** Locations within this settlement. */
+	locations: LocationRecord[];
+	/** Ward strength (0-100). */
+	wardStrength: number;
 };
 
 // ─── Stat Tier Definitions ───

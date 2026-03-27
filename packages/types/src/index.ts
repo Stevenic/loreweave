@@ -73,6 +73,8 @@ export type {
 	NPCSpawn,
 	LootTable,
 	LootEntry,
+	// Weave State
+	WeaveState,
 	// World Tiles & Chunks
 	WorldTile,
 	ChunkStage,
@@ -135,6 +137,9 @@ export type {
 	AbilityArrayType,
 	LocationArchetype,
 	NpcArchetype,
+	// Location Records
+	LocationRecord,
+	Settlement,
 	// Stat Tiers
 	StatTierDefinition,
 	// Ward System

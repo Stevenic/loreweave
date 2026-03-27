@@ -114,6 +114,11 @@ const BIOME_DESCRIPTIONS: Record<BiomeType, string> = {
 	tundra: 'frozen tundra',
 	desert: 'arid desert',
 	taiga: 'snowy taiga',
+	coast: 'windswept coastline',
+	hills: 'rolling moorland',
+	cavern: 'dark cavern',
+	farmland: 'cultivated farmland',
+	deep_forest: 'ancient deep forest',
 };
 
 /** Summarize the party for the LLM context (no full stat blocks). */

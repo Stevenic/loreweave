@@ -94,7 +94,24 @@ export async function loadWorldConfig(
 }
 
 /**
+ * Vocabulary file definitions — maps field name to file path and data key.
+ *
+ * The JSON files have a wrapper object (e.g., `{ "id": "...", "biomes": {...} }`).
+ * The `dataKey` specifies which key contains the actual VocabularyTable data.
+ */
+const VOCABULARY_FILES = [
+	{ field: 'biomes' as const, subdir: 'atmosphere', file: 'biome_descriptors.json', dataKey: 'biomes' },
+	{ field: 'timeOfDay' as const, subdir: 'atmosphere', file: 'time_of_day.json', dataKey: 'times' },
+	{ field: 'weather' as const, subdir: 'atmosphere', file: 'weather_descriptors.json', dataKey: 'weather' },
+	{ field: 'settlements' as const, subdir: 'atmosphere', file: 'settlement_descriptors.json', dataKey: 'settlements' },
+	{ field: 'buildingStyles' as const, subdir: 'architecture', file: 'building_styles.json', dataKey: 'styles' },
+] as const;
+
+/**
  * Load vocabulary tables — shared base + world-specific overlay.
+ *
+ * Vocabulary JSON files live in subdirectories (atmosphere/, architecture/)
+ * and have a wrapper object around the actual vocabulary data.
  */
 async function loadVocabulary(
 	worldsDir: string,
@@ -105,34 +122,49 @@ async function loadVocabulary(
 
 	const result: WorldConfig['vocabulary'] = {};
 
-	// Load each vocabulary table (shared, then overlay with world-specific)
-	const tableNames = ['biome_descriptors', 'time_of_day', 'weather_descriptors', 'settlement_descriptors', 'building_styles'] as const;
-	const fieldNames = ['biomes', 'timeOfDay', 'weather', 'settlements', 'buildingStyles'] as const;
-
-	for (let i = 0; i < tableNames.length; i++) {
-		const tableName = tableNames[i];
-		const fieldName = fieldNames[i];
-
-		// Load shared
-		let table = await loadOptionalJsonFile<VocabularyTable>(
-			join(sharedVocabDir, `${tableName}.json`),
-		);
+	for (const def of VOCABULARY_FILES) {
+		// Load shared (try subdir path, then flat path as fallback)
+		let table = await loadVocabTable(join(sharedVocabDir, def.subdir, def.file), def.dataKey)
+			?? await loadVocabTable(join(sharedVocabDir, def.file), def.dataKey);
 
 		// Overlay world-specific
-		const worldTable = await loadOptionalJsonFile<VocabularyTable>(
-			join(worldVocabDir, `${tableName}.json`),
-		);
+		const worldTable = await loadVocabTable(join(worldVocabDir, def.subdir, def.file), def.dataKey)
+			?? await loadVocabTable(join(worldVocabDir, def.file), def.dataKey);
 
 		if (worldTable) {
 			table = table ? { ...table, ...worldTable } : worldTable;
 		}
 
 		if (table) {
-			result[fieldName] = table;
+			result[def.field] = table;
 		}
 	}
 
 	return Object.keys(result).length > 0 ? result : undefined;
+}
+
+/**
+ * Load a vocabulary table from a JSON file, extracting the data from a wrapper object.
+ * Returns undefined if the file doesn't exist or the data key is missing.
+ */
+async function loadVocabTable(
+	filePath: string,
+	dataKey: string,
+): Promise<VocabularyTable | undefined> {
+	try {
+		const content = await readFile(filePath, 'utf-8');
+		const data = JSON.parse(content) as Record<string, unknown>;
+		// Try the specific data key first (e.g., "biomes", "times")
+		const table = data[dataKey] as VocabularyTable | undefined;
+		if (table && typeof table === 'object') return table;
+		// Fallback: if no wrapper key, treat the whole object as a table
+		// (excluding metadata fields)
+		const { id: _id, type: _type, description: _desc, ...rest } = data;
+		if (Object.keys(rest).length > 0) return rest as VocabularyTable;
+		return undefined;
+	} catch {
+		return undefined;
+	}
 }
 
 /**
