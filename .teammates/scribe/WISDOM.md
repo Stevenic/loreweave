@@ -2,7 +2,7 @@
 
 Distilled principles. Read this first every session (after SOUL.md).
 
-Last compacted: 2026-03-26
+Last compacted: 2026-03-27
 
 ---
 
@@ -62,3 +62,21 @@ Relative scaling (`baseScale`, `scale`, `scrollFactor`) is meaningless without a
 
 ### Start focused, expand on signal
 The Pixel Format v1 revision started as a 2-feature proposal, expanded to 18, then 21, then a full rewrite — but only because stevenic explicitly signaled appetite at each step ("go for everything"). Start with the minimum viable proposal. Expand scope only when the user signals they want more. Don't self-limit, but don't over-propose either.
+
+### Three-tier cost model drives architecture
+Algorithmic generation (free, every visit) → text LLM (16-32k tokens, every visit) → pixel LLM (64k tokens, first visit only, cached). Budget allocation determines what gets generated how. Archetype libraries make location/NPC generation algorithmic and free. LLM budget is reserved for narration and novel pixel assets.
+
+### Archetype libraries eliminate generation cost
+Weighted archetype templates (location types, NPC roles, vocabulary tables) enable algorithmic generation with zero LLM cost. The world engine picks an archetype from a seed, rolls concrete data from probability tiers (required/common/rare). The library grows over time — more archetypes means more variety without more compute.
+
+### Document what's built, not what's spec'd
+Engine documentation (`docs/`) should reflect actual implementation, verified against source code. Note unbuilt systems explicitly as "not yet built." Docs that describe speculative features mislead developers and create false confidence.
+
+### Views for states, assets for identity
+Same world object in different visual states (lit/unlit, open/closed) = views of one asset. Independent world objects that attach or compose (fire effect, smoke particles) = separate assets with references. The test: does it have its own identity in the world? If yes, separate asset.
+
+### LLM generates prose live; structured data persists
+No cached descriptions. LocationRecords + event logs + vocabulary tables persist as structured data. The LLM generates fresh narrative text every visit from structured context. This aligns with the narrative engine's "state → story text" model and means descriptions naturally reflect current world state.
+
+### Consolidation scales — persist the full dataset
+When consolidating ideas, votes, or proposals from multiple sources (teammates, brainstorms), the full numbered list is the artifact. 97 ideas across 10 categories from 6 teammates was the UX brainstorm output. Always persist the complete dataset to a file, not just a summary — it becomes the reference for voting, prioritization, and decision-making.

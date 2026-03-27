@@ -2,7 +2,7 @@
 
 Distilled principles. Read this first every session (after SOUL.md).
 
-Last compacted: 2026-03-26
+Last compacted: 2026-03-27
 
 ---
 
@@ -43,10 +43,28 @@ Both loreweave_spec.md and pixel_v_1_spec.md are mature enough to code against d
 The canvas renderer accepts a `CanvasFactory` injection rather than importing browser globals. This makes renderers testable and portable (Node, browser, headless). Apply this pattern to any subsystem that depends on environment-specific APIs.
 
 ### Lazy-import optional heavy dependencies
-The pixel-explorer dynamically imports Agent SDK and Zod so that non-generate commands work without them installed. Use this pattern for any CLI command that depends on large or optional packages — keeps the core fast and the install footprint small.
-
-### Agent SDK with in-process MCP tools for generation
-Use `createSdkMcpServer()` + `tool()` to expose domain validators/previewers as MCP tools the agent calls during generation. The agent gets the full Claude Code tool loop; we just add domain-specific tools. In-process — no external server needed. Pass spec docs as system prompt context so the agent generates spec-compliant output.
+The pixel-explorer dynamically imports heavy dependencies so core commands work without them installed. Use this pattern for any CLI command that depends on large or optional packages — keeps the core fast and the install footprint small.
 
 ### Seeded PRNG for deterministic particle effects
 The emitter uses xorshift32 with a configurable seed so identical input produces identical particle output. Any system that introduces randomness (dice, particles, procedural generation) must accept a seed parameter to preserve determinism.
+
+### CLI spawn over Agent SDK on Windows
+The Agent SDK (`@anthropic-ai/claude-agent-sdk`) deadlocks on Windows due to stdio pipe contention with in-process MCP tools. Use `@loreweave/agents` CliProxyAdapter instead — spawns `claude` CLI directly, proven pattern from @teammates. The `AgentAdapter` interface abstracts over CLI spawn vs future API adapters.
+
+### Double-escape regex in template literal strings
+Regex `\s`, `\d`, `\w`, `\b` lose their backslash inside template literals (backticks). The browser receives `/s+/` instead of `/\s+/`. Always write `\\s`, `\\d`, etc. in `html.ts` and any code embedded in template strings. Silent failure — no error, just wrong behavior.
+
+### Grid hashing for cross-chunk determinism
+Structure placement uses grid hashing so each cell's output depends only on `(seed, cellX, cellY)` — no multi-chunk coordination needed. MAX_STRUCTURE_RADIUS bounds the search, keeping it O(constant) per chunk. Apply this pattern to any system that needs globally consistent placement without global state.
+
+### WorldAccess interface prevents circular dependencies
+The types package defines a `WorldAccess` interface that abstracts World class methods. Narrative and other packages depend on this interface, not the concrete World class. This breaks the types→world circular dependency that would otherwise occur.
+
+### Action resolvers return effects, not mutations
+All action resolvers in the narrative engine return `GameEffect[]` arrays. A separate `applyEffects()` function produces new state. No mutation in the resolution path — this keeps the game loop testable and replayable.
+
+### 202 Accepted + WebSocket for async generation
+The pixel-explorer uses HTTP 202 for generation requests, runs work in background, and notifies completion via WebSocket. This enables parallel generation and lets users navigate away without losing progress. Duplicate requests for the same asset/view are rejected with 409.
+
+### Root tsconfig needs outDir and empty files array
+Without `"outDir": "./dist"` and `"files": []`, an accidental `tsc` invocation against the root config compiles all `.ts` files in the tree and drops `.js` next to them — polluting `src/` dirs and causing `tsc --build` to no-op on subsequent builds. Both guards are essential.

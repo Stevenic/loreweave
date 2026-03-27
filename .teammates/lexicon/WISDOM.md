@@ -2,7 +2,7 @@
 
 Distilled principles. Read this first every session (after SOUL.md).
 
-Last compacted: 2026-03-26
+Last compacted: 2026-03-27
 
 ---
 
@@ -39,6 +39,14 @@ Lexicon previously designed prompt architecture for the `@teammates` multi-agent
 **narrationHints are authoritative input** — The rules engine attaches narrationHints to action results. These hints are pre-computed by the deterministic system and should be treated as hard constraints in the narrative prompt, not suggestions to be reinterpreted.
 
 **Scope narrative output to 2-5 sentences** — The spec defines narrative output as short, evocative descriptions. Prompts must constrain decompression to this range to prevent verbose drift.
+
+## Multiplayer Narrative
+
+**Party group actions need multi-actor prompt design** — The current spec assumes single-actor turns. Multiplayer party actions (e.g., coordinated combat, group skill checks) require narrative prompts that accept multiple actors and weave their contributions into a single scene description. This is a structural change to the prompt layout, not just a parameter tweak.
+
+**OOC and IC channels are separate prompt domains** — Player chat (out-of-character) must never bleed into narrative generation (in-character). The narrative engine only receives game state and actions — never raw player chat. Prompt architecture must enforce this boundary at the input layer.
+
+**Proximity-gated interactions are narrative opportunities** — Item transfers, container access, and other proximity-constrained actions produce two narrative paths: success (describe the exchange) and failure (explain why distance prevents it). Prompts should handle both branches with distinct tone — success is fluid, failure is environmental.
 
 ## Intent Parser
 
