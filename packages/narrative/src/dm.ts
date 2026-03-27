@@ -21,6 +21,7 @@
 import type {
 	ActionResult,
 	Character,
+	CompanionState,
 	DMConfig,
 	DMResponse,
 	EntityRef,
@@ -28,8 +29,10 @@ import type {
 	GameSession,
 	GameSessionConfig,
 	NarrativeAdapter,
+	NpcArchetype,
 	Quest,
 	TileCoord,
+	WeaveGraph,
 	WorldConfig,
 } from '@loreweave/types';
 import { createRng } from '@loreweave/rules';
@@ -39,6 +42,14 @@ import type { ParseResult } from './intent-parser.js';
 import { assembleContext, getPartyLocation } from './context-assembler.js';
 import { resolveAction, applyEffects } from './action-resolver.js';
 import { buildPrompts } from './prompt-builder.js';
+import {
+	MAX_COMPANIONS,
+	applyCompanionReaction,
+	buildDialogueContext,
+	checkCompanionInterjections,
+	evaluateCompanionValues,
+	extractDialogueTopics,
+} from './dialogue.js';
 
 /** Default DM configuration. */
 export const DEFAULT_DM_CONFIG: DMConfig = {
@@ -66,6 +77,8 @@ export class DungeonMaster {
 	private characters: Map<string, Character>;
 	/** Seed for turn-level RNG derivation. */
 	private turnSeedBase: number;
+	/** NPC archetype registry (archetype ID → archetype). */
+	private archetypeRegistry: Map<string, NpcArchetype>;
 
 	constructor(
 		session: GameSession,
@@ -86,10 +99,21 @@ export class DungeonMaster {
 			frayExposure: new Map(),
 		};
 
-		// Build character roster from party
+		// Build character roster from party + companions
 		this.characters = new Map();
 		for (const char of session.party) {
 			this.characters.set(char.id, char);
+		}
+		for (const companion of session.companions ?? []) {
+			this.characters.set(companion.character.id, companion.character);
+		}
+
+		// Initialize archetype registry
+		this.archetypeRegistry = new Map();
+
+		// Ensure session has companions array
+		if (!session.companions) {
+			session.companions = [];
 		}
 
 		// Derive turn seed from world seed
@@ -153,13 +177,39 @@ export class DungeonMaster {
 			this.session.world.advanceTime(timeCost);
 		}
 
-		// 3. Assemble narrative context (after effects are applied)
+		// 3. Process companion reactions
+		if (parseResult.action && actionResult) {
+			this.processCompanionReactions(input, actionResult);
+		}
+
+		// 4. Assemble narrative context (after effects are applied)
 		const context = assembleContext(this.session, this.config);
 
-		// 4. Update known entities based on new position
+		// 5. Inject dialogue context if talking to an NPC
+		if (parseResult.action?.type === 'talk'
+			|| parseResult.action?.type === 'persuade'
+			|| parseResult.action?.type === 'intimidate'
+			|| parseResult.action?.type === 'deceive') {
+			const targetEntity = parseResult.action.targetId
+				? this.session.knownEntities.find((e) => e.id === parseResult.action?.targetId)
+				: undefined;
+			if (targetEntity) {
+				const archetype = this.archetypeRegistry.get(targetEntity.type);
+				if (archetype) {
+					context.dialogueTarget = buildDialogueContext(
+						targetEntity.name,
+						archetype,
+						this.session.world.getTimeOfDay(),
+						targetEntity.hostile,
+					);
+				}
+			}
+		}
+
+		// 6. Update known entities based on new position
 		this.updateKnownEntities();
 
-		// 5. Build prompts and generate narrative (with world config)
+		// 7. Build prompts and generate narrative (with world config)
 		const prompts = buildPrompts(
 			this.session,
 			context,
@@ -309,7 +359,101 @@ export class DungeonMaster {
 		this.adapter = adapter;
 	}
 
+	// ─── Companion Management ───
+
+	/** Add a companion to the active party. Max 2. */
+	addCompanion(companion: CompanionState): boolean {
+		const activeCount = this.session.companions.filter((c) => c.active).length;
+		if (activeCount >= MAX_COMPANIONS) return false;
+
+		this.session.companions.push(companion);
+		this.characters.set(companion.character.id, companion.character);
+		return true;
+	}
+
+	/** Remove a companion from the active party. */
+	removeCompanion(characterId: string): CompanionState | undefined {
+		const idx = this.session.companions.findIndex((c) => c.character.id === characterId);
+		if (idx === -1) return undefined;
+
+		const companion = this.session.companions[idx];
+		companion.active = false;
+		this.characters.delete(characterId);
+		return companion;
+	}
+
+	/** Get active companions. */
+	getActiveCompanions(): CompanionState[] {
+		return this.session.companions.filter((c) => c.active);
+	}
+
+	/** Register an NPC archetype (for dialogue context building). */
+	registerArchetype(archetype: NpcArchetype): void {
+		this.archetypeRegistry.set(archetype.id, archetype);
+	}
+
+	// ─── Weave Graph ───
+
+	/** Set the weave graph on the session config. */
+	setWeaveGraph(graph: WeaveGraph): void {
+		this.sessionConfig.weaveGraph = graph;
+	}
+
+	/** Get the current weave graph. */
+	getWeaveGraph(): WeaveGraph | undefined {
+		return this.sessionConfig.weaveGraph;
+	}
+
 	// ─── Internal ───
+
+	/** Process companion reactions to a player action. */
+	private processCompanionReactions(input: string, result: ActionResult): void {
+		const topics = extractDialogueTopics(
+			input,
+			this.session.knownEntities,
+			this.session.quests.flatMap((q) => q.objectives.map((o) => o.description)),
+		);
+
+		for (let i = 0; i < this.session.companions.length; i++) {
+			const companion = this.session.companions[i];
+			if (!companion.active) continue;
+
+			// Check for topic-based interjections
+			const interjections = checkCompanionInterjections(
+				companion,
+				topics,
+				this.session.knownEntities.map((e) => e.type),
+			);
+
+			if (interjections.length > 0) {
+				this.session.companions[i] = applyCompanionReaction(
+					companion,
+					'interject',
+					interjections,
+				);
+			}
+
+			// Check for value-based reactions
+			const valueReaction = evaluateCompanionValues(
+				companion,
+				input,
+				result.success,
+			);
+
+			if (valueReaction && valueReaction.type === 'companion_reaction') {
+				this.session.companions[i] = applyCompanionReaction(
+					this.session.companions[i],
+					valueReaction.reaction,
+					topics,
+				);
+
+				// If companion leaves, remove from party
+				if (valueReaction.reaction === 'leave') {
+					this.characters.delete(companion.character.id);
+				}
+			}
+		}
+	}
 
 	/** Sync the session's party array from the character roster after effects. */
 	private syncPartyFromRoster(): void {
@@ -369,5 +513,6 @@ export function createSession(
 		knownEntities: [],
 		inCombat: false,
 		initiativeOrder: [],
+		companions: [],
 	};
 }

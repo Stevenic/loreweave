@@ -367,7 +367,14 @@ export type ActionType =
 	| 'craft'
 	| 'talk'
 	| 'rest'
-	| 'search';
+	| 'search'
+	| 'persuade'
+	| 'intimidate'
+	| 'deceive'
+	| 'ceremony';
+
+/** Social approach for dialogue-based actions. */
+export type DialogueApproach = 'persuasion' | 'intimidation' | 'deception' | 'insight';
 
 export type GameAction = {
 	type: ActionType;
@@ -376,6 +383,12 @@ export type GameAction = {
 	direction?: Direction;
 	itemId?: string;
 	stealth?: boolean;
+	/** Social skill approach for talk/persuade/intimidate/deceive actions. */
+	dialogueApproach?: DialogueApproach;
+	/** Topic keyword for talk actions (used for NPC knowledge lookup). */
+	dialogueTopic?: string;
+	/** Skill challenge config ID for ceremony actions. */
+	challengeId?: string;
 };
 
 export type Direction = 'north' | 'south' | 'east' | 'west' | 'northeast' | 'northwest' | 'southeast' | 'southwest';
@@ -399,7 +412,10 @@ export type GameEffect =
 	| { type: 'condition_added'; entityId: string; condition: Condition }
 	| { type: 'condition_removed'; entityId: string; condition: Condition }
 	| { type: 'structure_placed'; structureId: StructureID; location: TileCoord }
-	| { type: 'resource_gathered'; location: TileCoord; resource: ResourceType; quantity: number };
+	| { type: 'resource_gathered'; location: TileCoord; resource: ResourceType; quantity: number }
+	| { type: 'reputation_changed'; factionId: string; delta: number }
+	| { type: 'companion_reaction'; companionId: string; reaction: CompanionReaction; reason: string }
+	| { type: 'weave_state_changed'; location: TileCoord; from: WeaveState; to: WeaveState };
 
 // ─── Dice ───
 
@@ -428,12 +444,12 @@ export type TimeOfDay = 'dawn' | 'morning' | 'noon' | 'afternoon' | 'dusk' | 'ev
 
 export type Weather =
 	| 'clear'
-	| 'cloudy'
+	| 'overcast'
 	| 'rain'
 	| 'storm'
-	| 'snow'
 	| 'fog'
-	| 'wind';
+	| 'snow'
+	| 'blizzard';
 
 export type Season = 'spring' | 'summer' | 'autumn' | 'winter';
 
@@ -480,6 +496,24 @@ export type NarrativeContext = {
 	players: CharacterSummary[];
 	nearbyExits: ExitInfo[];
 	questHints: string[];
+	/** Weave state at the party's location. */
+	weaveState: WeaveState;
+	/** Active companion summaries for LLM narration. */
+	companions: CompanionSummary[];
+	/** Dialogue context when talking to an NPC (populated for talk actions). */
+	dialogueTarget?: DialogueContext;
+};
+
+/** Summary of a companion for LLM context. */
+export type CompanionSummary = {
+	name: string;
+	hp: number;
+	maxHp: number;
+	conditions: Condition[];
+	/** Qualitative relationship descriptor (not the raw number). */
+	relationshipTone: 'devoted' | 'warm' | 'friendly' | 'neutral' | 'cool' | 'strained' | 'hostile';
+	/** Topics the companion might interject about this turn. */
+	relevantInterjections: string[];
 };
 
 export type EntityRef = {
@@ -639,6 +673,8 @@ export type GameSession = {
 	inCombat: boolean;
 	/** Combat initiative order (character IDs), if in combat. */
 	initiativeOrder: string[];
+	/** Active companions (max 2). */
+	companions: CompanionState[];
 };
 
 // ─── Archetype System ───
@@ -1080,7 +1116,245 @@ export type GameSessionConfig = {
 	factionReputation?: Map<string, number>;
 	/** Fray exposure per character. */
 	frayExposure?: Map<string, number>;
+	/** Weave state graph (Threadlines + Loom Stones). */
+	weaveGraph?: WeaveGraph;
 };
+
+// ─── Companion System ───
+
+/** Companion reaction type — drives LLM narration of companion behavior. */
+export type CompanionReaction = 'approve' | 'disapprove' | 'interject' | 'warn' | 'leave';
+
+/** Hidden relationship state between the player and a companion. */
+export type CompanionRelationship = {
+	/** Approval score: -100 (hostile) to +100 (devoted). Starts at 0. */
+	approval: number;
+	/** Number of value-violation warnings issued. At 3, companion leaves. */
+	warnings: number;
+	/** Topics the companion has already commented on (avoids repeat interjections). */
+	discussedTopics: Set<string>;
+	/** Whether the companion's personal quest arc has been started. */
+	personalQuestStarted: boolean;
+	/** Whether the companion's personal quest arc is complete. */
+	personalQuestComplete: boolean;
+};
+
+/**
+ * Companion state — a named NPC who travels with the party.
+ * Max 2 companions at a time per the companion system design.
+ */
+export type CompanionState = {
+	/** The companion's character data (stats, HP, inventory, etc.). */
+	character: Character;
+	/** Companion's archetype ID (for dialogue hooks, voice, knowledge). */
+	archetypeId: string;
+	/** Hidden relationship tracking. */
+	relationship: CompanionRelationship;
+	/** Values that, if violated, move toward departure. */
+	values: string[];
+	/** Topics that trigger interjections from this companion. */
+	interjectionTopics: string[];
+	/** The companion's faction alignment. */
+	factionId?: string;
+	/** Whether the companion is currently in the active party. */
+	active: boolean;
+};
+
+// ─── Dialogue Context ───
+
+/**
+ * NPC dialogue context — assembled from archetype data for the LLM.
+ * This is what the LLM uses to voice an NPC in conversation.
+ */
+export type DialogueContext = {
+	/** The NPC's name. */
+	npcName: string;
+	/** NPC archetype ID. */
+	archetypeId: string;
+	/** Voice patterns (speech mannerisms, accent notes, verbal tics). */
+	voicePatterns: string[];
+	/** Dialogue hooks — topics the NPC is eager to discuss. */
+	dialogueHooks: string[];
+	/** Knowledge tiers — what the NPC knows, gated by social check results. */
+	knowledge: {
+		/** Always shared freely. */
+		always: string[];
+		/** Shared on a successful social check (DC 12). */
+		sometimes: string[];
+		/** Only shared on a hard check (DC 18) or high trust. */
+		rarely: string[];
+	};
+	/** NPC's current schedule state (what they're doing right now). */
+	currentActivity?: string;
+	/** Whether this NPC is hostile, neutral, or friendly. */
+	disposition: 'hostile' | 'wary' | 'neutral' | 'friendly' | 'allied';
+};
+
+/** Result of a social skill check during dialogue. */
+export type SocialCheckResult = {
+	skill: DialogueApproach;
+	roll: number;
+	total: number;
+	dc: number;
+	success: boolean;
+	critical: boolean;
+	/** Knowledge tier unlocked: 'always' (failed), 'sometimes' (success), 'rarely' (high success). */
+	knowledgeTier: 'always' | 'sometimes' | 'rarely';
+};
+
+// ─── Weave State Graph ───
+
+/**
+ * A Loom Stone — a node in the weave graph.
+ * Loom Stones anchor the Threadlines and maintain weave stability.
+ */
+export type LoomStone = {
+	/** Unique identifier. */
+	id: string;
+	/** Display name. */
+	name: string;
+	/** World-space position. */
+	position: TileCoord;
+	/** Current integrity (0-100). 0 = shattered, 100 = pristine. */
+	integrity: number;
+	/** Whether this stone has been discovered by the party. */
+	discovered: boolean;
+	/** Associated settlement ID (if this stone anchors a settlement's ward). */
+	settlementId?: string;
+	/** Whether this is a Keystone (critical node — Act IV target). */
+	isKeystone: boolean;
+};
+
+/**
+ * A Threadline — an edge in the weave graph connecting two Loom Stones.
+ * Threadlines carry weave stability between regions.
+ */
+export type Threadline = {
+	/** Unique identifier. */
+	id: string;
+	/** Source Loom Stone ID. */
+	fromId: string;
+	/** Target Loom Stone ID. */
+	toId: string;
+	/** Current strength (0-100). Affects weave state of tiles near the line. */
+	strength: number;
+	/** Whether this Threadline is severed (0 strength, no propagation). */
+	severed: boolean;
+	/** Influence radius — tiles within this distance are affected. */
+	influenceRadius: number;
+};
+
+/**
+ * The Weave Graph — the spatial network of Loom Stones and Threadlines.
+ * This is the mechanical backbone of the Thinning: when stones degrade
+ * or Threadlines weaken, weave state degrades in affected regions.
+ */
+export type WeaveGraph = {
+	/** All Loom Stones in the world. */
+	stones: LoomStone[];
+	/** All Threadlines connecting stones. */
+	threadlines: Threadline[];
+	/** Global weave health (0-100). Average of all stone integrities. */
+	globalHealth: number;
+};
+
+// ─── Weather & Seasons (Mechanical) ───
+
+/** Light level — determines visibility and mechanical effects. */
+export type LightLevel = 'bright' | 'dim' | 'dark';
+
+/** Result of deterministic weather generation for a watch period. */
+export type WeatherResult = {
+	/** The weather type for this watch. */
+	type: Weather;
+	/** How many watches (4-hour blocks) this weather persists (1-4). */
+	persistence: number;
+	/** True if weave state amplified the weather. */
+	amplified: boolean;
+	/** True if a Fray manifestation is mixed in (unraveled/frayed zones). */
+	frayPhenomenon: boolean;
+};
+
+/** Seasonal modifiers affecting travel, foraging, encounters, rest, and wards. */
+export type SeasonModifiers = {
+	/** Travel speed multiplier (1.0 = normal, 0.5 = half). */
+	travelSpeedMod: number;
+	/** Base foraging DC before biome/weather adjustments. */
+	forageDC: number;
+	/** Encounter frequency multiplier (1.0 = normal, 1.2 = +20%). */
+	encounterFreqMod: number;
+	/** Whether rest is impaired this season. */
+	restQuality: 'normal' | 'impaired';
+	/** Ward decay rate per week (negative number, e.g. -1 or -2). */
+	wardDecayRate: number;
+};
+
+/**
+ * Mechanical effects of a weather condition.
+ * Composed from base weather + weave state amplification.
+ */
+export type WeatherEffects = {
+	/** Visibility level. */
+	visibility: 'normal' | 'lightly_obscured' | 'heavily_obscured';
+	/** Max visibility range in feet (-1 = unlimited). */
+	visibilityRange: number;
+	/** Hearing penalty. */
+	hearingPenalty: 'none' | 'disadvantage' | 'auto_fail';
+	/** Max hearing range in feet (-1 = unlimited). */
+	hearingRange: number;
+	/** Terrain modification. */
+	terrainMod: 'normal' | 'difficult';
+	/** Fire damage reduction (non-magical). */
+	fireMod: number;
+	/** Ranged attack penalty. */
+	rangedPenalty: 'none' | 'disadvantage' | 'auto_miss_beyond_30';
+	/** Extra concentration DC (0 = no additional check). */
+	concentrationDC: number;
+	/** Cold/heat exposure save DC (0 = no check). */
+	exposureDC: number;
+	/** Minutes between exposure checks (0 = N/A). */
+	exposureInterval: number;
+	/** Travel speed multiplier from weather. */
+	travelSpeedMod: number;
+};
+
+/** Result of a Binding Song ceremony. */
+export type CeremonyResult = {
+	/** Game day the ceremony occurred. */
+	day: number;
+	/** Which ceremony in the annual cycle (0-7). */
+	ceremonyIndex: number;
+	/** Number of successes achieved. */
+	successes: number;
+	/** Number of failures accumulated. */
+	failures: number;
+	/** True if flawless (max successes, 0 failures). */
+	flawless: boolean;
+	/** True if this was the Hollowing (2x multiplier). */
+	isHollowing: boolean;
+	/** Actual ward strength change applied. */
+	wardChange: number;
+};
+
+/** Ceremony definition for the Wheel of Binding calendar. */
+export type CeremonyDefinition = {
+	/** Ceremony name. */
+	name: string;
+	/** Month when the ceremony occurs (1-12). */
+	month: number;
+	/** Season the ceremony falls in. */
+	season: Season;
+	/** Base ward strength bonus on success. */
+	wardBonus: number;
+	/** Whether this is the Hollowing (2x multiplier on success AND failure). */
+	isHollowing: boolean;
+};
+
+/** Weather probability table for a season. Maps Weather → percentage (0-100). */
+export type SeasonWeatherTable = Partial<Record<Weather, number>>;
+
+/** Biome weather modifiers — adjustments to seasonal probabilities. */
+export type BiomeWeatherModifiers = Partial<Record<Weather, number>>;
 
 // ─── Constants ───
 

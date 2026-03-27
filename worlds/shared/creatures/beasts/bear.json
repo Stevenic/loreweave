@@ -1,0 +1,28 @@
+{
+  "id": "bear",
+  "type": "creature",
+  "category": "beast",
+  "name": "Bear",
+  "description": "Solitary apex predator. Avoids people unless provoked, cornered, or hungry.",
+  "cr": "1",
+  "group_size": { "min": 1, "max": 1 },
+  "biomes": ["forest", "hills", "mountain", "taiga"],
+  "behavior": {
+    "disposition": "avoidant",
+    "triggers": ["cubs_threatened", "food_defense", "surprise", "cornered"],
+    "retreat_threshold": "half_hp"
+  },
+  "sensory": {
+    "sight": "a dark shape among the trees, larger than you expected, absolutely still",
+    "sound": "heavy breathing, the crack of a branch under something massive",
+    "smell": "musk, rotting berries, wet earth",
+    "feel": "the ground vibrates slightly with each step"
+  },
+  "encounter_hooks": [
+    "claw marks on tree trunks, eight feet up",
+    "a ransacked campsite with tooth marks on containers",
+    "a salmon stream with fresh tracks in the mud"
+  ],
+  "loot": ["bear_pelt", "bear_claws", "bear_fat"],
+  "notes": "Bears don't want to fight you. Make noise, give them an exit, and they'll take it. A mother with cubs is the exception — she fights until you're gone or dead."
+}

@@ -1,0 +1,28 @@
+{
+  "id": "cultist",
+  "type": "creature",
+  "category": "humanoid",
+  "name": "Cultist",
+  "description": "True believers in something that doesn't deserve belief. Fanatics are more dangerous than soldiers.",
+  "cr": "1/8",
+  "group_size": { "min": 3, "max": 10 },
+  "biomes": ["any"],
+  "behavior": {
+    "disposition": "fanatical",
+    "triggers": ["ritual_interrupted", "heresy_detected", "outsider_present"],
+    "retreat_threshold": "leader_commands_or_never"
+  },
+  "sensory": {
+    "sight": "matching robes, matching symbols, matching expressions of absolute certainty",
+    "sound": "chanting — low, rhythmic, and wrong in a way you can't identify",
+    "smell": "incense, something burnt, candle wax",
+    "feel": "the air is thick with belief — it presses against your skin like humidity"
+  },
+  "encounter_hooks": [
+    "symbols scratched into trees along the path, getting fresher",
+    "a clearing with a circle of stones and candle stubs, recently used",
+    "a villager's uneasy whisper about neighbors who've been 'meeting at night'"
+  ],
+  "loot": ["cult_robes", "ritual_components", "coded_journal", "religious_symbol"],
+  "notes": "Cultists are pitiable as often as they're dangerous. The question is always: what do they worship, and why? In Threadhallow, cults might worship Fray entities, forgotten Loom-Born aspects, or misinterpreted Weaver echoes."
+}

@@ -13,6 +13,8 @@ import type {
 	DMConfig,
 	GameAction,
 	GameEffect,
+	GameSessionConfig,
+	SocialCheckResult,
 	TileCoord,
 	WorldAccess,
 } from '@loreweave/types';
@@ -20,6 +22,7 @@ import { DIRECTION_OFFSETS } from '@loreweave/types';
 import { createRng, parseDiceNotation, rollDice } from '@loreweave/rules';
 import { meleeAttack, rangedAttack, applyDamage, applyHealing, passivePerception } from '@loreweave/rules';
 import { skillCheck } from '@loreweave/rules';
+import { resolveSocialCheck } from './dialogue.js';
 
 /**
  * Resolve a game action through the rules engine.
@@ -53,7 +56,13 @@ export function resolveAction(
 		case 'rest':
 			return resolveRest(actor);
 		case 'talk':
-			return resolveTalk(action, characters);
+			return resolveTalk(action, characters, rng, config);
+		case 'persuade':
+		case 'intimidate':
+		case 'deceive':
+			return resolveSocialAction(action, actor, characters, rng, config);
+		case 'ceremony':
+			return resolveCeremony(action, actor, rng, config);
 		case 'pickup':
 			return resolvePickup(action, actor, world);
 		case 'drop':
@@ -368,6 +377,8 @@ function resolveRest(actor: Character): ActionResult {
 function resolveTalk(
 	action: GameAction,
 	characters: Map<string, Character>,
+	rng: () => number,
+	config: DMConfig,
 ): ActionResult {
 	const hints: string[] = [];
 
@@ -382,8 +393,113 @@ function resolveTalk(
 		hints.push('no_target');
 	}
 
-	// Talk doesn't have mechanical effects — it's purely narrative.
-	// The LLM generates the dialogue based on the NPC context.
+	if (action.dialogueTopic) {
+		hints.push(`topic:${action.dialogueTopic}`);
+	}
+
+	// If a social approach is specified, resolve a skill check
+	if (action.dialogueApproach && action.actorId) {
+		const actor = characters.get(action.actorId);
+		if (actor) {
+			const socialResult = resolveSocialCheck(actor, action.dialogueApproach, config.defaultDC, rng);
+			hints.push(`social_check:${socialResult.skill}`);
+			hints.push(`social_roll:${socialResult.total}`);
+			hints.push(`social_dc:${socialResult.dc}`);
+			hints.push(`knowledge_tier:${socialResult.knowledgeTier}`);
+			if (socialResult.critical) hints.push('social_critical');
+		}
+	} else {
+		// Free conversation — always tier
+		hints.push('knowledge_tier:always');
+	}
+
+	return {
+		success: true,
+		action,
+		effects: [],
+		narrationHints: hints,
+	};
+}
+
+/**
+ * Resolve a social skill check action (persuade, intimidate, deceive).
+ * The mechanical result determines what knowledge tier the NPC reveals.
+ */
+function resolveSocialAction(
+	action: GameAction,
+	actor: Character,
+	characters: Map<string, Character>,
+	rng: () => number,
+	config: DMConfig,
+): ActionResult {
+	const hints: string[] = [];
+
+	if (!action.targetId) {
+		return { success: false, action, effects: [], narrationHints: ['no_target'] };
+	}
+
+	const target = characters.get(action.targetId);
+	if (target) {
+		hints.push(`talking_to:${target.name}`);
+	}
+
+	const approach = action.dialogueApproach ?? 'persuasion';
+	const socialResult = resolveSocialCheck(actor, approach, config.defaultDC, rng);
+
+	hints.push(`social_check:${socialResult.skill}`);
+	hints.push(`social_roll:${socialResult.total}`);
+	hints.push(`social_dc:${socialResult.dc}`);
+	hints.push(`social_outcome:${socialResult.success ? 'success' : 'failure'}`);
+	hints.push(`knowledge_tier:${socialResult.knowledgeTier}`);
+	if (socialResult.critical) hints.push('social_critical');
+
+	if (action.dialogueTopic) {
+		hints.push(`topic:${action.dialogueTopic}`);
+	}
+
+	return {
+		success: socialResult.success,
+		action,
+		effects: [],
+		narrationHints: hints,
+	};
+}
+
+/**
+ * Resolve a ceremony action (Binding Song, ward renewal, etc.).
+ * This triggers a skill challenge — the actual rolls are handled
+ * by the DM layer over multiple turns. Here we just validate and start.
+ */
+function resolveCeremony(
+	action: GameAction,
+	actor: Character,
+	rng: () => number,
+	config: DMConfig,
+): ActionResult {
+	const hints: string[] = ['ceremony_initiated'];
+
+	if (action.challengeId) {
+		hints.push(`challenge:${action.challengeId}`);
+	}
+
+	// Initial skill check to see if the ceremony can begin
+	const check = skillCheck(actor, 'performance', config.defaultDC, rng);
+	hints.push(`ceremony_start_roll:${check.total}`);
+	hints.push(`ceremony_start_dc:${config.defaultDC}`);
+
+	if (!check.success) {
+		hints.push('ceremony_false_start');
+		return {
+			success: false,
+			action,
+			effects: [],
+			narrationHints: hints,
+		};
+	}
+
+	hints.push('ceremony_begun');
+	if (check.critical) hints.push('ceremony_auspicious_start');
+
 	return {
 		success: true,
 		action,

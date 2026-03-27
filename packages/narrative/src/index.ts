@@ -26,3 +26,16 @@ export { resolveAction, applyEffects } from './action-resolver.js';
 // Prompt building — NarrativeContext + ActionResult → LLM prompts
 export { buildPrompts, buildSystemPrompt, buildUserPrompt } from './prompt-builder.js';
 export type { PromptPair } from './prompt-builder.js';
+
+// Dialogue system — NPC conversation context and companion management
+export {
+	buildDialogueContext,
+	resolveSocialCheck,
+	approvalToTone,
+	summarizeCompanion,
+	checkCompanionInterjections,
+	evaluateCompanionValues,
+	applyCompanionReaction,
+	extractDialogueTopics,
+	MAX_COMPANIONS,
+} from './dialogue.js';

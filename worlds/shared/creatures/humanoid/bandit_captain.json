@@ -1,0 +1,28 @@
+{
+  "id": "bandit_captain",
+  "type": "creature",
+  "category": "humanoid",
+  "name": "Bandit Captain",
+  "description": "The one who gives the orders. Better armed, better trained, and with something to prove.",
+  "cr": "2",
+  "group_size": { "min": 1, "max": 1 },
+  "biomes": ["forest", "hills", "plains", "mountain"],
+  "behavior": {
+    "disposition": "calculating",
+    "triggers": ["authority_challenged", "profit_opportunity", "cornered"],
+    "retreat_threshold": "band_broken"
+  },
+  "sensory": {
+    "sight": "better armor than the rest, a weapon that's been maintained, eyes that measure you",
+    "sound": "commands barked in a voice used to being obeyed",
+    "smell": "leather, oil, the faint sweetness of wine",
+    "feel": "this one's different — there's competence behind the threat"
+  },
+  "encounter_hooks": [
+    "a wanted poster in the last town, with a surprisingly good likeness",
+    "the bandits defer to someone who hasn't shown themselves yet",
+    "a former guard's tabard, turned inside out, worn under a stolen cloak"
+  ],
+  "loot": ["quality_weapon", "coin_purse_heavy", "stolen_map", "signet_ring"],
+  "notes": "Bandit captains have histories. Ex-soldiers, fallen merchants, disgraced guards. Their backstory is the interesting part. Some can be recruited. Some should be brought to justice."
+}

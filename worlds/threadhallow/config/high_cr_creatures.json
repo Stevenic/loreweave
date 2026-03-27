@@ -1,0 +1,392 @@
+[
+	{
+		"id": "weft_spider",
+		"name": "Weft Spider",
+		"size": "Huge",
+		"type": "aberration",
+		"alignment": "neutral evil",
+		"cr": 8,
+		"ac": 16,
+		"hp": 136,
+		"hpFormula": "16d12 + 32",
+		"speed": "40 ft., climb 40 ft.",
+		"abilities": { "STR": 18, "DEX": 16, "CON": 14, "INT": 12, "WIS": 15, "CHA": 8 },
+		"savingThrows": { "DEX": 6, "WIS": 5 },
+		"skills": { "perception": 5, "stealth": 6 },
+		"damageResistances": ["force"],
+		"damageImmunities": ["psychic"],
+		"conditionImmunities": ["frightened", "restrained"],
+		"senses": "tremorsense 60 ft., blindsight 30 ft., passive Perception 15",
+		"languages": "understands Deep Speech but can't speak",
+		"traits": [
+			{ "name": "Fray-Born", "description": "Immune to Frightened. Resistance to force damage. When reduced to 0 HP, unravels into loose threads that dissolve in 1d4 rounds." },
+			{ "name": "Threadline Web", "description": "As a bonus action (recharge 5-6), reshapes Threadline web in 120-ft radius. Area becomes difficult terrain; creatures starting turn in area must succeed DC 14 WIS save or move in a direction of the spider's choice." },
+			{ "name": "Web Sense", "description": "Knows exact location of any creature in contact with the same surface within 120 ft." },
+			{ "name": "Spider Climb", "description": "Can climb difficult surfaces, including upside down, without ability checks." }
+		],
+		"actions": [
+			{
+				"name": "Multiattack",
+				"description": "The Weft Spider makes two Threadline Fang attacks."
+			},
+			{
+				"name": "Threadline Fang",
+				"description": "Melee Weapon Attack: +7 to hit, reach 10 ft., one target. Hit: 13 (2d8 + 4) piercing plus 9 (2d8) force damage. DC 14 CON save or speed reduced by 10 ft. until end of target's next turn.",
+				"attackBonus": 7,
+				"reach": 10,
+				"damage": "2d8+4",
+				"saveDC": 14,
+				"saveAbility": "CON"
+			},
+			{
+				"name": "Weave Snare",
+				"description": "Targets one creature within 60 ft. DC 14 DEX save or restrained. Restrained creature can use action to make DC 14 STR (Athletics) check to free itself. Restrained creature takes 7 (2d6) force damage at start of each of its turns.",
+				"saveDC": 14,
+				"saveAbility": "DEX",
+				"recharge": "5-6"
+			}
+		],
+		"reactions": [
+			{
+				"name": "Thread Anchor",
+				"description": "When moved against its will, negates the movement. When hit by melee attack, can pull attacker 10 ft. closer (DC 14 STR save negates)."
+			}
+		],
+		"lairActions": [
+			{
+				"name": "Threadline Pulse",
+				"description": "Each creature in web must succeed DC 14 DEX save or be pulled 15 ft. toward the spider."
+			},
+			{
+				"name": "Reality Fold",
+				"description": "The spider teleports to any point within its web within 60 ft."
+			},
+			{
+				"name": "Web Collapse",
+				"description": "20-ft-radius area becomes void. Creatures fall 20 ft. into raw Fray (2d10 force, DC 14 DEX half), then reappear prone at the area's edge."
+			}
+		]
+	},
+	{
+		"id": "loom_ghost",
+		"name": "The Loom-Ghost",
+		"size": "Medium",
+		"type": "undead (aberration)",
+		"alignment": "chaotic neutral",
+		"cr": 10,
+		"ac": 17,
+		"hp": 150,
+		"hpFormula": "20d8 + 60",
+		"speed": "0 ft., fly 40 ft. (hover)",
+		"abilities": { "STR": 6, "DEX": 16, "CON": 16, "INT": 20, "WIS": 18, "CHA": 17 },
+		"savingThrows": { "INT": 9, "WIS": 8, "CHA": 7 },
+		"skills": { "arcana": 9, "history": 9, "insight": 8, "perception": 8 },
+		"damageResistances": ["acid", "fire", "lightning", "thunder", "bludgeoning, piercing, slashing from nonmagical attacks"],
+		"damageImmunities": ["cold", "necrotic", "poison", "force"],
+		"conditionImmunities": ["charmed", "exhaustion", "frightened", "grappled", "paralyzed", "petrified", "poisoned", "prone", "restrained"],
+		"senses": "truesight 120 ft., passive Perception 18",
+		"languages": "all; telepathy 120 ft.",
+		"traits": [
+			{ "name": "Fray-Born", "description": "Immune to Frightened. Resistance to force damage. When reduced to 0 HP, unravels into loose threads that dissolve in 1d4 rounds." },
+			{ "name": "Incorporeal Movement", "description": "Can move through creatures and objects as difficult terrain. Takes 5 (1d10) force damage if it ends its turn inside an object." },
+			{ "name": "Weaver's Memory", "description": "Can be consulted 3 times (DC 17 INT Arcana or CHA Persuasion). Success: true information. Failure: corrupted information." },
+			{ "name": "Pattern Aura", "description": "Creatures within 30 ft. starting their turn must succeed DC 16 WIS save or have disadvantage on concentration checks until start of next turn." },
+			{ "name": "Legendary Resistance (2/Day)", "description": "If the Loom-Ghost fails a saving throw, it can choose to succeed instead." }
+		],
+		"actions": [
+			{
+				"name": "Multiattack",
+				"description": "The Loom-Ghost makes two Pattern Rend attacks."
+			},
+			{
+				"name": "Pattern Rend",
+				"description": "Melee Spell Attack: +9 to hit, reach 5 ft., one target. Hit: 18 (3d8 + 5) psychic damage. DC 17 INT save or one random spell slot of 3rd level or lower is expended.",
+				"attackBonus": 9,
+				"reach": 5,
+				"damage": "3d8+5",
+				"saveDC": 17,
+				"saveAbility": "INT"
+			},
+			{
+				"name": "Binding Fragment",
+				"description": "Each creature within 30 ft. must make DC 17 WIS save. Failure: Incapacitated, speed 0, for 1 minute (repeat save end of each turn). Success: 14 (4d6) psychic damage, immune for 24 hours.",
+				"saveDC": 17,
+				"saveAbility": "WIS",
+				"recharge": "5-6"
+			},
+			{
+				"name": "Unweave Ward",
+				"description": "Ranged Spell Attack: +9 to hit, range 60 ft., one magical barrier or ward. Hit: 22 (4d10) force damage to the ward.",
+				"attackBonus": 9,
+				"damage": "4d10"
+			}
+		],
+		"legendaryActions": [
+			{
+				"name": "Phase Shift (1 Action)",
+				"description": "Teleports up to 30 ft. to an unoccupied space it can see."
+			},
+			{
+				"name": "Memory Lash (1 Action)",
+				"description": "One creature within 60 ft. must succeed DC 17 INT save or take 10 (3d6) psychic damage."
+			},
+			{
+				"name": "Corrupted Song (2 Actions)",
+				"description": "Uses Binding Fragment if available, or makes one Pattern Rend attack."
+			}
+		]
+	},
+	{
+		"id": "thread_sovereign",
+		"name": "Thread-Sovereign",
+		"size": "Large",
+		"type": "aberration",
+		"alignment": "lawful evil",
+		"cr": 12,
+		"ac": 17,
+		"hp": 189,
+		"hpFormula": "18d10 + 90",
+		"speed": "30 ft., fly 30 ft. (hover)",
+		"abilities": { "STR": 20, "DEX": 14, "CON": 20, "INT": 16, "WIS": 14, "CHA": 18 },
+		"savingThrows": { "CON": 9, "INT": 7, "CHA": 8 },
+		"skills": { "deception": 8, "insight": 6, "intimidation": 8, "perception": 6 },
+		"damageResistances": ["force", "bludgeoning, piercing, slashing from nonmagical attacks"],
+		"damageImmunities": ["psychic"],
+		"conditionImmunities": ["charmed", "frightened", "poisoned"],
+		"senses": "truesight 60 ft., passive Perception 16",
+		"languages": "Common, Deep Speech; telepathy 120 ft.",
+		"traits": [
+			{ "name": "Fray-Born", "description": "Immune to Frightened. Resistance to force damage. When reduced to 0 HP, unravels into loose threads that dissolve in 1d4 rounds." },
+			{ "name": "Consumed Memories", "description": "Can mimic any voice it has heard. Advantage on Deception and Insight checks." },
+			{ "name": "Fray Commander", "description": "All Fray creatures within 120 ft. act on its initiative and obey telepathic commands. Fray creatures within range have advantage on attack rolls." },
+			{ "name": "Ward Mantle", "description": "Resistance to radiant damage, advantage on saves against Wardweaver/cleric spells. Lost until end of next turn if it takes 30+ radiant damage in one turn." },
+			{ "name": "Legendary Resistance (3/Day)", "description": "If the Thread-Sovereign fails a saving throw, it can choose to succeed instead." }
+		],
+		"actions": [
+			{
+				"name": "Multiattack",
+				"description": "The Thread-Sovereign makes two Thread Lash attacks and one Consume Pattern attack."
+			},
+			{
+				"name": "Thread Lash",
+				"description": "Melee Weapon Attack: +9 to hit, reach 15 ft., one target. Hit: 15 (3d6 + 5) slashing plus 7 (2d6) necrotic damage.",
+				"attackBonus": 9,
+				"reach": 15,
+				"damage": "3d6+5"
+			},
+			{
+				"name": "Consume Pattern",
+				"description": "Melee Weapon Attack: +9 to hit, reach 5 ft., one creature. Hit: 14 (2d8 + 5) necrotic damage. DC 17 CON save or gain 1 level Fray Exposure. Critical hit: 2 levels.",
+				"attackBonus": 9,
+				"reach": 5,
+				"damage": "2d8+5",
+				"saveDC": 17,
+				"saveAbility": "CON"
+			},
+			{
+				"name": "Sovereignty Decree",
+				"description": "Each creature of its choice within 60 ft. must make DC 16 WIS save. Failure: Dominated until end of its next turn. Fray creatures in area take an extra action.",
+				"saveDC": 16,
+				"saveAbility": "WIS",
+				"recharge": "5-6"
+			}
+		],
+		"reactions": [
+			{
+				"name": "Unravel Spell",
+				"description": "When a creature within 60 ft. casts a spell of 4th level or lower, makes INT check (DC 10 + spell level). Success: spell fails, slot expended."
+			}
+		],
+		"legendaryActions": [
+			{
+				"name": "Command Fray (1 Action)",
+				"description": "One Fray creature within 120 ft. can move up to its speed or make one attack."
+			},
+			{
+				"name": "Thread Lash (1 Action)",
+				"description": "Makes one Thread Lash attack."
+			},
+			{
+				"name": "Consume Ward (2 Actions)",
+				"description": "Targets one magical effect or ward within 30 ft. Deals 22 (4d10) force damage. If ward destroyed, Sovereign regains 22 HP and Ward Mantle reactivates."
+			},
+			{
+				"name": "Summon Fray (3 Actions)",
+				"description": "Summons 1d4 Looselings or 1 Thread-Puppet in unoccupied spaces within 30 ft."
+			}
+		]
+	},
+	{
+		"id": "the_unweaver",
+		"name": "The Unweaver",
+		"size": "Large",
+		"type": "aberration",
+		"alignment": "neutral evil",
+		"cr": 15,
+		"ac": 19,
+		"hp": 225,
+		"hpFormula": "18d10 + 126",
+		"speed": "40 ft., fly 40 ft. (hover)",
+		"abilities": { "STR": 22, "DEX": 18, "CON": 24, "INT": 20, "WIS": 16, "CHA": 14 },
+		"savingThrows": { "STR": 11, "DEX": 9, "CON": 12, "INT": 10, "WIS": 8 },
+		"skills": { "arcana": 10, "perception": 8, "stealth": 9 },
+		"damageResistances": ["bludgeoning, piercing, slashing from nonmagical attacks"],
+		"damageImmunities": ["force", "necrotic", "poison", "psychic"],
+		"conditionImmunities": ["charmed", "exhaustion", "frightened", "grappled", "paralyzed", "petrified", "poisoned"],
+		"senses": "truesight 120 ft., passive Perception 18",
+		"languages": "all; telepathy 120 ft.",
+		"traits": [
+			{ "name": "Fray-Born", "description": "Immune to Frightened. Resistance to force damage. When reduced to 0 HP, unravels into loose threads that dissolve in 1d4 rounds." },
+			{ "name": "Erasure Aura", "description": "Creatures within 10 ft. take 7 (2d6) force damage at start of Unweaver's turn. DC 18 CON save or one nonmagical item destroyed." },
+			{ "name": "Threadline Follower", "description": "Knows direction to nearest Loom Stone, ward circle, or powerful weave magic within 1 mile. Cannot be surprised by creatures with active magical effects." },
+			{ "name": "Legendary Resistance (3/Day)", "description": "If the Unweaver fails a saving throw, it can choose to succeed instead." },
+			{ "name": "Magic Resistance", "description": "Advantage on saving throws against spells and other magical effects." },
+			{ "name": "Methodical Destruction", "description": "Attacks ignore resistance to force damage. Creatures immune to force damage instead have resistance." }
+		],
+		"actions": [
+			{
+				"name": "Multiattack",
+				"description": "The Unweaver makes three Unraveling Touch attacks."
+			},
+			{
+				"name": "Unraveling Touch",
+				"description": "Melee Weapon Attack: +11 to hit, reach 10 ft., one target. Hit: 17 (2d10 + 6) force plus 9 (2d8) necrotic damage. Concentration DC for this damage is increased by 2.",
+				"attackBonus": 11,
+				"reach": 10,
+				"damage": "2d10+6"
+			},
+			{
+				"name": "Erase Pattern",
+				"description": "30-ft cube within 120 ft. DC 18 CON save. Failure: 45 (10d8) force damage + lose highest spell slot. Success: half damage, no slot loss. Wards take 55 (10d10) force damage.",
+				"saveDC": 18,
+				"saveAbility": "CON",
+				"recharge": "5-6"
+			},
+			{
+				"name": "Void Step",
+				"description": "Bonus action: teleport 60 ft. Departure point becomes 5-ft radius difficult terrain dealing 7 (2d6) force damage on entry/start of turn for 1 minute."
+			}
+		],
+		"reactions": [
+			{
+				"name": "Unmaking",
+				"description": "When hit by spell attack or fails spell save, makes INT check (DC 10 + spell level). Success: spell countered, Unweaver regains 10 HP per spell level."
+			}
+		],
+		"legendaryActions": [
+			{
+				"name": "Void Step (1 Action)",
+				"description": "Uses Void Step ability."
+			},
+			{
+				"name": "Unraveling Touch (1 Action)",
+				"description": "Makes one Unraveling Touch attack."
+			},
+			{
+				"name": "Threadline Sever (2 Actions)",
+				"description": "Targets one creature within 60 ft. under a spell/magical effect. DC 18 CHA save or one ongoing effect ends."
+			},
+			{
+				"name": "Cascade Unravel (3 Actions)",
+				"description": "Each creature within 30 ft. DC 18 DEX save or 21 (6d6) force damage. Fray creatures healed for same amount instead."
+			}
+		],
+		"lairActions": [
+			{
+				"name": "Thread Collapse",
+				"description": "20-ft radius area within 120 ft. becomes unraveled terrain (difficult terrain, 2d6 force on entry/start of turn) for the encounter."
+			},
+			{
+				"name": "Reality Echo",
+				"description": "Illusory duplicate appears within 60 ft. AC 10, 1 HP. Can be targeted by attacks/spells until destroyed or next initiative 20."
+			},
+			{
+				"name": "Pattern Drain",
+				"description": "Each creature in lair with active spell effects: DC 18 CHA save or all active spell durations reduced by 1 minute (min 1 round)."
+			}
+		]
+	},
+	{
+		"id": "void_loom",
+		"name": "Void Loom",
+		"size": "Gargantuan",
+		"type": "aberration",
+		"alignment": "chaotic evil",
+		"cr": 17,
+		"ac": 20,
+		"hp": 280,
+		"hpFormula": "16d20 + 112",
+		"speed": "0 ft.",
+		"abilities": { "STR": 26, "DEX": 6, "CON": 24, "INT": 22, "WIS": 18, "CHA": 20 },
+		"savingThrows": { "CON": 13, "INT": 12, "WIS": 10, "CHA": 11 },
+		"skills": { "arcana": 12, "perception": 10 },
+		"damageResistances": ["bludgeoning, piercing, slashing"],
+		"damageImmunities": ["force", "necrotic", "poison", "psychic", "bludgeoning, piercing, slashing from nonmagical attacks"],
+		"conditionImmunities": ["all"],
+		"senses": "truesight 120 ft., tremorsense 60 ft., passive Perception 20",
+		"languages": "none (communicates through environmental changes)",
+		"traits": [
+			{ "name": "Fray-Born", "description": "Immune to Frightened. Resistance to force damage. When reduced to 0 HP, unravels into loose threads that dissolve in 1d4 rounds." },
+			{ "name": "Immobile", "description": "Cannot move or be moved. Occupies 60-ft radius spherical zone centered on nexus point." },
+			{ "name": "Anti-Pattern Zone", "description": "Within 60-ft zone: divination auto-fails, teleportation requires DC 19 INT save or random destination, counts as Unraveled weave, nonmagical light extinguished, magical light halved." },
+			{ "name": "Pattern Overwrite", "description": "At start of its turn, converts 10-ft radius area to anti-pattern terrain (4d6 force at start of turns, no save). Only Binding Song, Wish, or destroying the Void Loom can restore." },
+			{ "name": "Legendary Resistance (3/Day)", "description": "If the Void Loom fails a saving throw, it can choose to succeed instead." },
+			{ "name": "Magic Resistance", "description": "Advantage on saving throws against spells and other magical effects." },
+			{ "name": "Nexus Vulnerability", "description": "Nexus (corrupted Loom Stone) at center: AC 25, 80 HP (separate). If destroyed, zone shrinks 20 ft/round. Binding Song within 30 ft deals 55 (10d10) radiant per successful skill challenge round." }
+		],
+		"actions": [
+			{
+				"name": "Multiattack",
+				"description": "The Void Loom uses Fray Tendril three times and Spawn Fray once."
+			},
+			{
+				"name": "Fray Tendril",
+				"description": "Melee Weapon Attack: +14 to hit, reach 60 ft., one target. Hit: 22 (4d6 + 8) force plus 9 (2d8) necrotic. DC 19 STR save or pulled 20 ft. toward nexus.",
+				"attackBonus": 14,
+				"reach": 60,
+				"damage": "4d6+8",
+				"saveDC": 19,
+				"saveAbility": "STR"
+			},
+			{
+				"name": "Spawn Fray",
+				"description": "Creates 1d4 Looselings, or 1 Thread-Eater, or 1 Hollow Walker in unoccupied spaces within its zone."
+			},
+			{
+				"name": "Reality Inversion",
+				"description": "30-ft sphere within zone. Gravity reverses (3d6 bludgeoning), healing deals damage and damage heals Void Loom, saves at disadvantage. DC 19 WIS save negates gravity reversal.",
+				"saveDC": 19,
+				"saveAbility": "WIS",
+				"recharge": "6"
+			}
+		],
+		"legendaryActions": [
+			{
+				"name": "Fray Tendril (1 Action)",
+				"description": "Makes one Fray Tendril attack."
+			},
+			{
+				"name": "Pattern Pulse (2 Actions)",
+				"description": "Each creature within 60-ft zone DC 19 CON save or gain 1 level Fray Exposure."
+			},
+			{
+				"name": "Void Surge (3 Actions)",
+				"description": "Anti-pattern terrain expands 15 ft. from current edge. Creatures in new area: 28 (8d6) force (DC 19 DEX half), pushed to nearest edge."
+			}
+		],
+		"lairActions": [
+			{
+				"name": "Tendril Cage",
+				"description": "Up to 3 creatures in zone: DC 19 DEX save or restrained until end of their next turn."
+			},
+			{
+				"name": "Zone Shift",
+				"description": "Geography within zone rearranges. Creatures: DC 19 WIS save or disadvantage on attacks until end of next turn."
+			},
+			{
+				"name": "Absorption",
+				"description": "All magical effects in 20-ft radius area end. Void Loom regains 10 HP per spell level absorbed."
+			}
+		]
+	}
+]

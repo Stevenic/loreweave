@@ -8,6 +8,7 @@
 
 import type {
 	ActionType,
+	DialogueApproach,
 	Direction,
 	GameAction,
 	Character,
@@ -69,6 +70,14 @@ const ACTION_PATTERNS: ActionPattern[] = [
 	{ type: 'craft', keywords: ['craft', 'make', 'build', 'create', 'forge', 'brew', 'cook'], requiresItem: true },
 	// Talk — "talk to merchant", "speak with innkeeper"
 	{ type: 'talk', keywords: ['talk', 'speak', 'chat', 'ask', 'greet', 'hail', 'negotiate', 'barter', 'trade'], requiresTarget: true },
+	// Persuade — "persuade guard", "convince merchant"
+	{ type: 'persuade', keywords: ['persuade', 'convince', 'plead', 'appeal', 'request', 'entreat'], requiresTarget: true },
+	// Intimidate — "intimidate bandit", "threaten guard"
+	{ type: 'intimidate', keywords: ['intimidate', 'threaten', 'menace', 'bully', 'demand', 'coerce'], requiresTarget: true },
+	// Deceive — "lie to guard", "bluff merchant", "deceive"
+	{ type: 'deceive', keywords: ['deceive', 'lie', 'bluff', 'trick', 'mislead', 'fool'], requiresTarget: true },
+	// Ceremony — "perform ceremony", "begin binding song", "start ritual"
+	{ type: 'ceremony', keywords: ['ceremony', 'ritual', 'binding song', 'perform', 'chant', 'invoke'] },
 	// Rest — "rest", "sleep", "camp", "make camp"
 	{ type: 'rest', keywords: ['rest', 'sleep', 'camp', 'nap', 'meditate'] },
 	// Search — "search area", "search for traps", "forage"
@@ -162,6 +171,23 @@ export function parseIntent(
 			action.stealth = true;
 		}
 
+		// Set dialogue approach for social actions
+		if (pattern.type === 'persuade') {
+			action.dialogueApproach = 'persuasion';
+		} else if (pattern.type === 'intimidate') {
+			action.dialogueApproach = 'intimidation';
+		} else if (pattern.type === 'deceive') {
+			action.dialogueApproach = 'deception';
+		} else if (pattern.type === 'talk') {
+			// Infer approach from context words
+			action.dialogueApproach = inferDialogueApproach(lower);
+		}
+
+		// Extract dialogue topic from "about" clauses
+		if (pattern.type === 'talk' || pattern.type === 'persuade' || pattern.type === 'intimidate' || pattern.type === 'deceive') {
+			action.dialogueTopic = extractDialogueTopic(lower);
+		}
+
 		return { action, raw, failureHints: [] };
 	}
 
@@ -250,4 +276,40 @@ function resolveItem(
 
 	// Return raw text as item reference — resolver will handle "item not found"
 	return cleaned;
+}
+
+/**
+ * Infer dialogue approach from contextual keywords in the input.
+ * Returns undefined if no clear approach is detected (general conversation).
+ */
+function inferDialogueApproach(input: string): DialogueApproach | undefined {
+	if (input.includes('persuade') || input.includes('convince') || input.includes('plead')) {
+		return 'persuasion';
+	}
+	if (input.includes('threaten') || input.includes('intimidate') || input.includes('demand')) {
+		return 'intimidation';
+	}
+	if (input.includes('lie') || input.includes('bluff') || input.includes('deceive') || input.includes('trick')) {
+		return 'deception';
+	}
+	if (input.includes('read') || input.includes('sense') || input.includes('tell if')) {
+		return 'insight';
+	}
+	return undefined;
+}
+
+/**
+ * Extract a dialogue topic from "about" clauses in the input.
+ * E.g., "ask merchant about the missing shipment" → "the missing shipment"
+ */
+function extractDialogueTopic(input: string): string | undefined {
+	const aboutIndex = input.indexOf(' about ');
+	if (aboutIndex !== -1) {
+		return input.slice(aboutIndex + 7).trim() || undefined;
+	}
+	const ofIndex = input.indexOf(' of ');
+	if (ofIndex !== -1 && (input.includes('ask') || input.includes('inquire'))) {
+		return input.slice(ofIndex + 4).trim() || undefined;
+	}
+	return undefined;
 }

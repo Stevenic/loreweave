@@ -1,0 +1,28 @@
+{
+  "id": "deer",
+  "type": "creature",
+  "category": "beast",
+  "name": "Deer",
+  "description": "Skittish prey animal. Flees at the first sign of danger. Useful as food, not as a fight.",
+  "cr": "0",
+  "group_size": { "min": 2, "max": 8 },
+  "biomes": ["forest", "plains", "hills", "farmland", "deep_forest"],
+  "behavior": {
+    "disposition": "skittish",
+    "triggers": ["any_approach"],
+    "retreat_threshold": "any_threat"
+  },
+  "sensory": {
+    "sight": "brown shapes between trees, alert ears, the white flash of a tail as they bolt",
+    "sound": "the snap of a twig, then hoofbeats retreating through undergrowth",
+    "smell": "nothing — you smell them on the wind only if downwind",
+    "feel": "stillness, then sudden movement, then emptiness"
+  },
+  "encounter_hooks": [
+    "fresh tracks at a stream, still drinking when you round the bend",
+    "a clearing with a stag standing motionless, watching you",
+    "antler-scraped bark on the trees, marking territory"
+  ],
+  "loot": ["venison", "deer_hide", "antlers"],
+  "notes": "Deer are atmosphere, not encounters. Their presence means the forest is healthy. Their absence means something's wrong. A stag watching you from a clearing is a moment, not a fight."
+}

@@ -1,0 +1,28 @@
+{
+  "id": "giant_spider",
+  "type": "creature",
+  "category": "beast",
+  "name": "Giant Spider",
+  "description": "Ambush predator. Webs in dark places. Patient, silent, and deeply unpleasant.",
+  "cr": "1",
+  "group_size": { "min": 1, "max": 4 },
+  "biomes": ["forest", "swamp", "deep_forest", "cavern"],
+  "behavior": {
+    "disposition": "ambush",
+    "triggers": ["prey_enters_web", "vibration_in_web", "territory_intrusion"],
+    "retreat_threshold": "rarely_retreats"
+  },
+  "sensory": {
+    "sight": "a strand of silk catching the light where no spider should be that large, then the legs",
+    "sound": "silence — then a rapid clicking, then silk being drawn tight",
+    "smell": "something sweet and rotten, like fruit left too long",
+    "feel": "a sticky resistance when you reach for a doorframe or branch"
+  },
+  "encounter_hooks": [
+    "webbing across the path, thick as rope",
+    "a wrapped bundle hanging from a branch — animal-sized, or larger",
+    "a deer carcass, drained, suspended in silk twenty feet up"
+  ],
+  "loot": ["spider_silk", "spider_venom_sac"],
+  "notes": "Giant spiders are ambush predators — the fight starts when they want it to. The web is the weapon. A spider without its web is half the threat."
+}

@@ -78,8 +78,22 @@ export type { ChallengeAttempt } from './skill-challenge.js';
 
 // Encounters
 export {
+	applyWeaveModifiers,
 	encounterXP,
 	findEncounterTable,
 	rollEncounter,
+	rollEncounterWithWeave,
 } from './encounter.js';
-export type { EncounterResult, ResolvedCreature } from './encounter.js';
+export type { EncounterResult, ResolvedCreature, WeaveEncounterModifiers } from './encounter.js';
+
+// Weather & Seasons
+export {
+	advanceCeremonyCalendar,
+	computeCeremonyWardChange,
+	generateWeather,
+	getCeremonySchedule,
+	getForageDC,
+	getLightLevel,
+	getSeasonalModifiers,
+	getWeatherEffects,
+} from './weather.js';

@@ -1,0 +1,28 @@
+{
+  "id": "boar",
+  "type": "creature",
+  "category": "beast",
+  "name": "Wild Boar",
+  "description": "Aggressive when startled. Charges first, thinks never.",
+  "cr": "1/4",
+  "group_size": { "min": 1, "max": 4 },
+  "biomes": ["forest", "plains", "hills", "farmland"],
+  "behavior": {
+    "disposition": "aggressive_when_surprised",
+    "triggers": ["surprise", "territory_defense", "piglets_threatened"],
+    "retreat_threshold": "half_hp"
+  },
+  "sensory": {
+    "sight": "a low, dark shape crashing through undergrowth, tusks catching the light",
+    "sound": "grunting, then the thunder of hooves on packed earth",
+    "smell": "mud, musk, something sour",
+    "feel": "the ground shakes when it charges"
+  },
+  "encounter_hooks": [
+    "churned-up earth where something rooted for food",
+    "tusk marks on tree trunks at knee height",
+    "a farmer complaining about destroyed fences"
+  ],
+  "loot": ["boar_hide", "boar_tusks", "boar_meat"],
+  "notes": "Boars are unpredictable. They might ignore you or they might charge at full speed because you stepped on a twig. Farmers hate them. Hunters respect them."
+}

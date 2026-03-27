@@ -79,6 +79,61 @@
         "fog": ["thick between trunks", "trees appearing and vanishing", "disorienting"],
         "snow": ["heavy on boughs", "sudden dumps when branches release", "deep drifts between trees"]
       }
+    },
+    "coast": {
+      "terrain": ["rocky cliffs", "tide pools", "sand beach", "driftwood line", "sea stacks", "salt-bleached grass"],
+      "sounds": ["waves breaking", "seabird cries", "wind off the water", "shingle shifting", "distant bell buoy", "surf roar"],
+      "smells": ["salt", "seaweed", "fish", "brine", "wet sand", "ozone before a storm"],
+      "atmosphere": ["windswept", "vast", "restless", "salt-stung", "liminal", "horizon-bound"],
+      "weather_mods": {
+        "rain": ["horizontal rain off the sea", "salt spray indistinguishable from rain", "rocks slick and treacherous"],
+        "fog": ["sea fog rolling in like a wall", "foghorns", "the world ending twenty feet away"],
+        "snow": ["snow on sand is surreal", "frozen spray on cliff faces", "ice in the tide pools"]
+      }
+    },
+    "hills": {
+      "terrain": ["rolling heath", "exposed rock", "heather and gorse", "peat bog", "standing stones", "sheep trails"],
+      "sounds": ["constant wind", "skylarks", "sheep bleating in distance", "your own breathing amplified by openness", "grass hissing"],
+      "smells": ["heather", "peat", "wet earth", "sheep", "wind carrying distant smoke", "gorse flowers"],
+      "atmosphere": ["open", "windswept", "lonely", "ancient", "melancholy", "beautiful in a bleak way"],
+      "weather_mods": {
+        "rain": ["rain comes sideways here", "no shelter for miles", "streams appearing from nowhere"],
+        "fog": ["the moor vanishes", "walking blind", "standing stones appearing suddenly"],
+        "snow": ["snow on heather is purple-white", "drifts against stone walls", "frozen peat crunches"]
+      }
+    },
+    "farmland": {
+      "terrain": ["tended fields", "stone walls", "hedgerows", "orchard rows", "hay meadows", "cart tracks"],
+      "sounds": ["roosters crowing", "cowbell", "scythe in grass", "cart wheels on packed earth", "children playing", "dog barking"],
+      "smells": ["turned earth", "manure", "hay", "baking bread from a distant chimney", "apple blossom", "woodsmoke"],
+      "atmosphere": ["pastoral", "settled", "productive", "warm", "human-shaped", "vulnerable"],
+      "weather_mods": {
+        "rain": ["crops drinking", "muddy tracks", "farmers retreating indoors", "smell of wet hay"],
+        "fog": ["scarecrows looming from the mist", "fence posts marching into nothing", "intimate"],
+        "snow": ["stubble fields under white", "tracks from barn to house", "chimney smoke the only vertical"]
+      }
+    },
+    "cavern": {
+      "terrain": ["stalactites", "underground pools", "narrow passages", "vast chambers", "flowstone formations", "crystal veins"],
+      "sounds": ["dripping water echoing", "your own footsteps amplified", "distant rumble", "silence that hums", "underground stream"],
+      "smells": ["wet stone", "mineral tang", "bat guano", "stale air", "something ancient and undisturbed"],
+      "atmosphere": ["enclosed", "timeless", "alien", "cathedral-vast or suffocatingly narrow", "dark", "secret"],
+      "weather_mods": {
+        "rain": ["water cascading down entrance shaft", "rising pool levels", "new streams appearing"],
+        "fog": ["warm cave breath meeting cold air at the entrance", "condensation on every surface"],
+        "snow": ["ice formations at the entrance", "cave warmer than outside", "refuge"]
+      }
+    },
+    "deep_forest": {
+      "terrain": ["massive root systems", "dense canopy blocking sky", "bioluminescent moss", "fungal shelves", "impossibly large trees", "undergrowth thick as walls"],
+      "sounds": ["the deep creak of ancient wood", "dripping from the canopy", "birdsong that harmonizes", "your heartbeat", "something large moving slowly"],
+      "smells": ["earth and growth at overwhelming density", "sap", "decay feeding new life", "warm stone from deep roots", "fungal sweetness"],
+      "atmosphere": ["primeval", "alive", "watching", "cathedral", "humid", "the world before people"],
+      "weather_mods": {
+        "rain": ["you don't feel rain — the canopy catches it all, releasing it hours later as dripping"],
+        "fog": ["fog doesn't form here — the air is always thick enough", "mist clings to root systems"],
+        "snow": ["snow never reaches the ground", "the canopy holds it", "the interior temperature doesn't change"]
+      }
     }
   }
 }

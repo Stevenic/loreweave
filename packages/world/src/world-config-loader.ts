@@ -60,6 +60,12 @@ export async function loadWorldConfig(
 	const creatures = await loadOptionalJsonFile<CreatureStatBlock[]>(
 		join(configDir, 'creatures.json'),
 	);
+	const highCrCreatures = await loadOptionalJsonFile<CreatureStatBlock[]>(
+		join(configDir, 'high_cr_creatures.json'),
+	);
+	const allCreatures = creatures || highCrCreatures
+		? [...(creatures ?? []), ...(highCrCreatures ?? [])]
+		: undefined;
 	const skillChallenges = await loadOptionalJsonFile<SkillChallengeConfig[]>(
 		join(configDir, 'skill-challenges.json'),
 	);
@@ -87,7 +93,7 @@ export async function loadWorldConfig(
 		encounterTables: encounterData?.tables,
 		dungeonModifiers: encounterData?.dungeonModifiers,
 		skillChallenges,
-		creatures,
+		creatures: allCreatures,
 		vocabulary,
 		tierOverrides,
 	};

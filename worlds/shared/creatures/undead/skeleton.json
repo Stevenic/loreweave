@@ -1,0 +1,28 @@
+{
+  "id": "skeleton",
+  "type": "creature",
+  "category": "undead",
+  "name": "Skeleton",
+  "description": "Animated bones. No will, no personality, just whatever command set them walking.",
+  "cr": "1/4",
+  "group_size": { "min": 2, "max": 8 },
+  "biomes": ["any"],
+  "behavior": {
+    "disposition": "programmatic",
+    "triggers": ["proximity", "command", "ward_breach"],
+    "retreat_threshold": "never"
+  },
+  "sensory": {
+    "sight": "the wrong kind of movement — too smooth, too steady, the joints don't work the way living joints work",
+    "sound": "the click of bone on stone, rhythmic and relentless, like a broken clock",
+    "smell": "dust, old earth, nothing organic",
+    "feel": "cold air, and the wrongness of something that should be still but isn't"
+  },
+  "encounter_hooks": [
+    "a burial ground with disturbed earth and empty graves",
+    "scratching sounds from behind a sealed tomb door",
+    "a single skeletal hand protruding from the ground, fingers twitching"
+  ],
+  "loot": ["old_weapon", "tarnished_armor", "bone_fragments"],
+  "notes": "Skeletons are creepy but mechanical. They follow orders until destroyed. The real question is: who gave the order? In Threadhallow, skeletons might be weave-animated — the Tapestry replaying a death, not necromancy."
+}

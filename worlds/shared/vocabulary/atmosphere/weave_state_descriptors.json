@@ -1,0 +1,78 @@
+{
+  "id": "weave_state_descriptors",
+  "type": "vocabulary",
+  "description": "Sensory modifiers for each weave state (stable/thin/frayed/unraveled) applied as overlays to biome descriptors. The LLM combines base biome vocabulary with these modifiers to produce weave-state-aware narration.",
+  "weave_states": {
+    "stable": {
+      "description": "The weave is intact. Reality works as expected. This is the baseline — no modifications needed.",
+      "universal": {
+        "visual": ["colors are true", "shadows fall correctly", "the world looks right"],
+        "auditory": ["sounds carry normally", "nothing out of place"],
+        "olfactory": ["smells are clean and expected"],
+        "tactile": ["the ground is solid", "the air is comfortable", "temperature is predictable"]
+      },
+      "biome_mods": {}
+    },
+    "thin": {
+      "description": "The weave is weakening. Reality is mostly correct but something is subtly wrong. The first sign of the Thinning.",
+      "universal": {
+        "visual": ["shadows are slightly too long", "colors are a half-tone off", "peripheral vision catches things that aren't there", "your reflection in water lags by a heartbeat"],
+        "auditory": ["sounds carry wrong — conversations from further away than they should", "occasional dissonant hum below hearing threshold", "echoes where there shouldn't be echoes", "birdsong stops for too long, then resumes"],
+        "olfactory": ["faint metallic tang underneath normal smells", "the smell of wet wool with no source", "ozone after clear skies"],
+        "tactile": ["the air has a slight static charge", "a prickling on exposed skin", "temperature fluctuates without cause", "the ground feels less solid — not unsafe, just uncertain"]
+      },
+      "biome_mods": {
+        "forest": ["trees grow in slight spirals", "fog that doesn't lift by midday", "the path you came in on looks different looking back", "mushrooms growing in perfect circles"],
+        "plains": ["the grass ripples against the wind direction", "a distant shape on the horizon that's never closer, never further", "your shadow points the wrong way for five minutes, then corrects"],
+        "mountain": ["echoes come back different from what you said", "the ridge line seems to shift when you're not looking", "stones are warm where they should be cold"],
+        "swamp": ["the water reflects a different sky", "sounds of footsteps in the mud when no one else is walking", "lights deep underwater"],
+        "hills": ["standing stones hum at frequencies you feel in your teeth", "heather blooming out of season", "the wind changes direction mid-sentence"],
+        "farmland": ["crops growing unevenly — one row lush, the next withered, no pattern", "scarecrows seem to have turned since you last looked", "the farmer's dog won't cross a specific field boundary"],
+        "coast": ["waves break at inconsistent intervals", "tide pools reflect stars that aren't in the sky", "seabirds avoid a specific stretch of shore"],
+        "cavern": ["dripping water falls upward for a heartbeat", "the darkness feels thicker than absence of light", "crystal formations hum at the edge of hearing"],
+        "deep_forest": ["the canopy shifts when you're not watching", "bioluminescence pulses in rhythms that feel like breathing", "the trees lean toward you, then away"],
+        "taiga": ["pine needles fall in spirals", "frost forms in patterns that look deliberate", "the gap between trees seems to narrow behind you"],
+        "tundra": ["ice cracks in patterns that look like writing", "the aurora has colors that don't have names", "your breath freezes in shapes that persist too long"],
+        "desert": ["heat shimmer forms shapes — buildings, figures — that are too consistent to be mirages", "sand moves in circles around specific points", "the sun seems to pause for a moment"]
+      }
+    },
+    "frayed": {
+      "description": "The weave is failing. Reality is visibly broken. The Fray is present. Environmental hazards, Fray creatures, and active danger.",
+      "universal": {
+        "visual": ["gravity shifts — light objects drift upward briefly", "time stutters — a bird frozen mid-flight, then it's ten feet further", "colors bleed at edges", "spatial loops — you see yourself walking fifty yards ahead", "the sky has seams"],
+        "auditory": ["sounds from the future — you hear a branch break before it does", "voices in languages that don't exist", "the sound of weaving — a rhythmic shuttle-thump with no source", "silence that presses against your eardrums"],
+        "olfactory": ["ozone, heavy and persistent", "the smell of burning without fire", "something sweet and wrong, like fruit that's fermented inside its skin", "wet wool drenched in copper"],
+        "tactile": ["the air has resistance — walking feels like pushing through water", "temperature drops twenty degrees in two steps, then returns", "static discharge from touching anything", "the ground gives slightly, like a drum skin"]
+      },
+      "biome_mods": {
+        "forest": ["trees growing through each other at impossible angles", "clearings that weren't here an hour ago", "the canopy showing a different time of day than the ground", "mushrooms the size of furniture, luminous and pulsing"],
+        "plains": ["the grass is glass — rigid, transparent, chiming when the wind blows", "the horizon is closer on one side than the other", "footprints fill themselves in immediately", "sections of ground float six inches above the rest"],
+        "mountain": ["the rock face breathes — expanding and contracting visibly", "stone formations that weren't here yesterday and won't be here tomorrow", "waterfalls flowing upward", "the summit changes position"],
+        "swamp": ["the water is solid and the ground is liquid in patches", "trees growing upside down, roots in air, branches in mud", "will-o-wisps that speak", "fish swimming through air"],
+        "hills": ["standing stones have moved — the circle is wrong", "peat fires burning without fuel, cold to the touch", "the landscape mirrors itself — walk east for an hour, arrive where you started heading west"],
+        "farmland": ["crops growing and dying in minutes, cycling", "fences that lead to nowhere — they connect fields that don't exist", "scarecrows walking, slowly, with no one inside them", "rain falling in a perfect circle around one field"],
+        "coast": ["the tide is frozen mid-wave", "the beach is two beaches overlapping — sand and shingle occupying the same space", "the sea is glass to the horizon, then violent waves start from nothing", "shells that whisper"],
+        "cavern": ["the cave is bigger inside than outside by orders of magnitude", "stalactites dripping upward", "passages that exist in one direction but not the return", "your shadow moves independently"],
+        "deep_forest": ["the forest is singing — not birdsong, the wood itself", "paths that lead to places that aren't on this continent", "the canopy opens to show stars at noon", "trees that are also Threadlines, visibly"],
+        "taiga": ["every tree is identical", "snow falls from a clear sky", "your footprints in the snow are someone else's boots", "the dark between trees is absolute — lanternlight stops at the edge"],
+        "tundra": ["the permafrost has become transparent — you can see down into the earth", "aurora touching the ground", "ice formations that are clearly architectural", "the horizon is vertical"],
+        "desert": ["the sand is different colors in layers — geological time visible in a surface", "oases that don't exist until you look at them", "the sun is in two places", "sandstorm that moves in a perfect straight line"]
+      }
+    },
+    "unraveled": {
+      "description": "The weave has failed. Reality is dissolving. This is the Fray raw. Only the Fray-touched can function here. Everyone else takes constant exposure damage.",
+      "universal": {
+        "visual": ["reality is layered — you see through the world to what's underneath", "geometry doesn't work — parallel lines converge, right angles are wrong", "faces appear in surfaces and dissolve", "light comes from no direction and casts no shadows"],
+        "auditory": ["the sound of the world being unmade — a constant low tearing, like cloth", "voices of people who haven't been born yet", "your own voice, saying things you haven't said", "the Weavers — fragmentary, confused, pleading"],
+        "olfactory": ["nothing smells like anything — smell has stopped working as a sense", "then everything smells like everything at once", "then the metallic taste that is the Fray's signature"],
+        "tactile": ["your body doesn't trust itself — proprioception is unreliable", "touching surfaces is like touching a thought", "temperature is a concept, not a sensation", "the air is thick enough to leave fingerprints in"]
+      },
+      "biome_mods": {
+        "forest": ["the trees are made of Threadline material — visible weave where bark should be", "the forest exists in all four seasons simultaneously", "the ground is a tapestry you can read if you survive long enough"],
+        "plains": ["the grass is Threadlines — millions of them, hair-thin, reaching from the ground to the sky", "walking through the Threadline-grass shows you memories — not yours", "the horizon doesn't exist — the field goes up"],
+        "mountain": ["the mountain is transparent — you can see the Threadlines inside it, the skeleton of reality", "the Loom is visible — the metaphysical framework that holds the world together", "this is where the Weavers worked"],
+        "default": ["the biome has dissolved into raw weave material — no terrain, no features, just the underlying pattern of reality, visible and failing"]
+      }
+    }
+  }
+}

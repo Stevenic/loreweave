@@ -1,0 +1,28 @@
+{
+  "id": "zombie",
+  "type": "creature",
+  "category": "undead",
+  "name": "Zombie",
+  "description": "A body that doesn't know it's dead. Slow, relentless, and deeply upsetting because it used to be someone.",
+  "cr": "1/4",
+  "group_size": { "min": 1, "max": 6 },
+  "biomes": ["any"],
+  "behavior": {
+    "disposition": "relentless",
+    "triggers": ["living_creatures_detected", "sound", "light"],
+    "retreat_threshold": "never"
+  },
+  "sensory": {
+    "sight": "a person walking wrong — limbs at bad angles, head tilted, but still moving, still coming",
+    "sound": "a groan that isn't pain or speech, just air being pushed through a throat that doesn't breathe",
+    "smell": "decay — sweet, heavy, unmistakable",
+    "feel": "dread, not because it's fast (it isn't) but because it doesn't stop"
+  },
+  "encounter_hooks": [
+    "a figure stumbling along the road at night, not responding to calls",
+    "a villager who died last week, standing in their own field",
+    "scratching at a barred door, patient and endless"
+  ],
+  "loot": ["tattered_clothing", "personal_effects"],
+  "notes": "Zombies are tragic. Somebody loved this person. In Threadhallow, zombies might be Fray-animated corpses (the weave trying to repair death) or weave-memories with just enough pattern to move a body."
+}

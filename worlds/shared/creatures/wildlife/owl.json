@@ -1,0 +1,28 @@
+{
+  "id": "owl",
+  "type": "creature",
+  "category": "beast",
+  "name": "Owl",
+  "description": "Nocturnal hunter. Silent, watchful, and deeply associated with wisdom and death in folklore.",
+  "cr": "0",
+  "group_size": { "min": 1, "max": 1 },
+  "biomes": ["forest", "deep_forest", "hills", "plains"],
+  "behavior": {
+    "disposition": "observant",
+    "triggers": ["nightfall", "prey_movement"],
+    "retreat_threshold": "any_approach"
+  },
+  "sensory": {
+    "sight": "two enormous eyes catching firelight from a branch you didn't check, then gone",
+    "sound": "nothing — owls are silent in flight. Then a hoot, close, from a direction you can't place",
+    "smell": "nothing",
+    "feel": "the sensation of being watched in the dark by something that sees perfectly"
+  },
+  "encounter_hooks": [
+    "pellets on the forest floor — bones and fur, neatly packaged",
+    "a hoot that sounds like a question, repeated three times",
+    "a shadow passing across the moon, wingspan wider than your arms"
+  ],
+  "loot": ["owl_feather"],
+  "notes": "Owls are mood. A hoot at night while the party camps is atmosphere. In Threadhallow, owls are associated with Morrith Hollowdark (death/liminal) — hearing one near a ward-circle is considered an omen."
+}

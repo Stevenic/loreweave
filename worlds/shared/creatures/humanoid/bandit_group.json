@@ -1,0 +1,28 @@
+{
+  "id": "bandit_group",
+  "type": "creature",
+  "category": "humanoid",
+  "name": "Bandit Group",
+  "description": "Desperate people with weapons. Some are cruel, most are hungry. All are dangerous in numbers.",
+  "cr": "1/8",
+  "group_size": { "min": 3, "max": 8 },
+  "biomes": ["forest", "hills", "plains", "mountain"],
+  "behavior": {
+    "disposition": "opportunistic",
+    "triggers": ["easy_target", "valuable_cargo", "lone_traveler"],
+    "retreat_threshold": "leader_down_or_half_lost"
+  },
+  "sensory": {
+    "sight": "figures stepping onto the road from both sides, too coordinated to be travelers",
+    "sound": "a whistle signal, then boots on gravel, then a voice saying 'your purse or your life'",
+    "smell": "unwashed bodies, campfire smoke, leather",
+    "feel": "the sudden awareness that you're surrounded"
+  },
+  "encounter_hooks": [
+    "a fallen tree blocking the road — too clean a cut to be natural",
+    "a traveler stumbling toward you, robbed and beaten, pointing back down the road",
+    "a camp visible off the trail, with lookouts who've spotted you first"
+  ],
+  "loot": ["coin_purse", "stolen_goods", "crude_weapons", "camp_supplies"],
+  "notes": "Bandits are people. Some can be talked down. Some can be bribed. Some have reasons. The leader matters — kill or capture the leader and the rest scatter or surrender."
+}

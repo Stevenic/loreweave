@@ -1,0 +1,28 @@
+{
+  "id": "giant_rat",
+  "type": "creature",
+  "category": "beast",
+  "name": "Giant Rat",
+  "description": "Swarm pest. Individually trivial, dangerous in numbers. Found wherever food rots.",
+  "cr": "1/8",
+  "group_size": { "min": 4, "max": 12 },
+  "biomes": ["any"],
+  "behavior": {
+    "disposition": "cowardly",
+    "triggers": ["food_scent", "cornered", "swarm_confidence"],
+    "retreat_threshold": "third_swarm_lost"
+  },
+  "sensory": {
+    "sight": "eyes like wet beads in the dark, too many of them, at knee height",
+    "sound": "scratching, squeaking, the patter of small feet on stone",
+    "smell": "rot, urine, something sweetly decomposing",
+    "feel": "something brushes your ankle and it isn't a draft"
+  },
+  "encounter_hooks": [
+    "gnaw marks on stored food, too large for normal rats",
+    "a cellar that the innkeeper won't go into anymore",
+    "droppings the size of acorns along the walls"
+  ],
+  "loot": ["rat_pelt"],
+  "notes": "Giant rats are the cockroaches of fantasy. They're everywhere. They're a nuisance quest for level 1 parties and a cellar hazard for everyone else."
+}

@@ -19,6 +19,8 @@ import type {
 	ActionResult,
 	BiomeType,
 	CharacterSummary,
+	CompanionSummary,
+	DialogueContext,
 	DMPersona,
 	ExitInfo,
 	GameEffect,
@@ -27,6 +29,8 @@ import type {
 	NarrativeContext,
 	SensoryDescriptors,
 	VocabularyTable,
+	WeaveGraph,
+	WeaveState,
 	WorldConfig,
 	WorldEvent,
 } from '@loreweave/types';
@@ -95,12 +99,25 @@ export function buildUserPrompt(
 		if (worldState) sections.push(worldState);
 	}
 
+	// Weave State
+	sections.push(buildWeaveStateSection(context.weaveState, sessionConfig?.weaveGraph));
+
 	// Party State
 	sections.push(buildPartySection(context.players, sessionConfig));
+
+	// Companions
+	if (context.companions.length > 0) {
+		sections.push(buildCompanionSection(context.companions));
+	}
 
 	// Nearby Entities
 	if (context.visibleEntities.length > 0) {
 		sections.push(buildEntitiesSection(context));
+	}
+
+	// Dialogue Target (when talking to an NPC)
+	if (context.dialogueTarget) {
+		sections.push(buildDialogueSection(context.dialogueTarget));
 	}
 
 	// Exits
@@ -182,6 +199,20 @@ function buildPersonaPrompt(persona: DMPersona, session: GameSession): string[] 
 		'- If the player tries something not covered by the action system, narrate it as flavor',
 		'- If combat results are provided, narrate them dramatically but accurately',
 		'- End descriptions with a subtle prompt for what the player might do next',
+		'',
+		'## Companion Rules',
+		'- Voice companions as distinct people with their own speech patterns and opinions',
+		'- Companions may interject when listed topics are relevant — work interjections naturally into the narrative',
+		'- If a companion\'s mood is "cool" or "strained", their dialogue should reflect distance or tension',
+		'- NEVER show relationship numbers or approval scores — the player reads the tone, not a meter',
+		'- Companions act autonomously in combat — player can suggest, companion decides',
+		'',
+		'## Weave & Dialogue Rules',
+		'- In thin/frayed areas, describe subtle sensory wrongness (wet wool smell, shadow lag, sound distortion)',
+		'- In dialogue, only reveal NPC knowledge at the tier indicated by the social check result',
+		'- If knowledge_tier is "always", only share freely-given information',
+		'- If knowledge_tier is "sometimes", the NPC opens up about guarded topics',
+		'- If knowledge_tier is "rarely", the NPC shares secrets — present this as a meaningful moment',
 	);
 
 	if (persona.forbiddenTopics.length > 0) {
@@ -443,6 +474,80 @@ function buildActionSection(
 	return lines.join('\n');
 }
 
+function buildWeaveStateSection(
+	weaveState: WeaveState,
+	weaveGraph?: WeaveGraph,
+): string {
+	const lines = ['## Weave State'];
+	lines.push(`Local stability: ${weaveState}`);
+
+	const descriptions: Record<WeaveState, string> = {
+		stable: 'The weave is intact here. Reality feels solid and normal.',
+		thin: 'The weave is thinning. Subtle wrongness: sounds carry strangely, shadows move independently, the air tastes of wet wool.',
+		frayed: 'The weave is fraying. Visible distortions: gravity stutters, time hiccups, spatial loops. Fray creatures may be present.',
+		unraveled: 'The weave is unraveled. Reality is dissolving. Raw Fray is visible. Constant danger.',
+	};
+	lines.push(descriptions[weaveState]);
+
+	if (weaveGraph) {
+		lines.push(`Global weave health: ${weaveGraph.globalHealth}%`);
+		const discoveredStones = weaveGraph.stones.filter((s) => s.discovered);
+		if (discoveredStones.length > 0) {
+			lines.push('Known Loom Stones:');
+			for (const stone of discoveredStones) {
+				const status = stone.integrity >= 70 ? 'intact'
+					: stone.integrity >= 40 ? 'weakened'
+						: stone.integrity >= 10 ? 'damaged'
+							: 'shattered';
+				lines.push(`  - ${stone.name}: ${status} (${stone.integrity}%)`);
+			}
+		}
+	}
+
+	return lines.join('\n');
+}
+
+function buildCompanionSection(companions: CompanionSummary[]): string {
+	const lines = ['## Companions'];
+	for (const c of companions) {
+		const conditions = c.conditions.length > 0 ? ` [${c.conditions.join(', ')}]` : '';
+		lines.push(`- ${c.name}: ${c.hp}/${c.maxHp} HP${conditions} — mood: ${c.relationshipTone}`);
+		if (c.relevantInterjections.length > 0) {
+			lines.push(`  May comment on: ${c.relevantInterjections.join(', ')}`);
+		}
+	}
+	lines.push('');
+	lines.push('Companion behavior: Companions act on their own initiative in combat (player suggests, they decide). In dialogue, they may interject on topics listed above. Voice them as distinct personalities.');
+	return lines.join('\n');
+}
+
+function buildDialogueSection(dialogue: DialogueContext): string {
+	const lines = ['## Dialogue Target'];
+	lines.push(`NPC: ${dialogue.npcName}`);
+	lines.push(`Disposition: ${dialogue.disposition}`);
+
+	if (dialogue.currentActivity) {
+		lines.push(`Currently: ${dialogue.currentActivity}`);
+	}
+
+	if (dialogue.voicePatterns.length > 0) {
+		lines.push(`Voice: ${dialogue.voicePatterns.join('; ')}`);
+	}
+
+	if (dialogue.dialogueHooks.length > 0) {
+		lines.push(`Eager to discuss: ${dialogue.dialogueHooks.join(', ')}`);
+	}
+
+	// Knowledge is gated by the social check result in the action section
+	lines.push('');
+	lines.push('Free knowledge (always shares):');
+	for (const k of dialogue.knowledge.always) {
+		lines.push(`  - ${k}`);
+	}
+
+	return lines.join('\n');
+}
+
 // ─── Helpers ───
 
 /** Append sensory descriptors as bullet points. */
@@ -477,5 +582,11 @@ function describeEffect(effect: GameEffect): string {
 			return `Structure ${effect.structureId} placed at (${effect.location.x},${effect.location.y})`;
 		case 'resource_gathered':
 			return `Gathered ${effect.quantity}× ${effect.resource} at (${effect.location.x},${effect.location.y})`;
+		case 'reputation_changed':
+			return `Reputation with ${effect.factionId} changed by ${effect.delta > 0 ? '+' : ''}${effect.delta}`;
+		case 'companion_reaction':
+			return `Companion ${effect.companionId} reacted: ${effect.reaction} (${effect.reason})`;
+		case 'weave_state_changed':
+			return `Weave state at (${effect.location.x},${effect.location.y}) changed from ${effect.from} to ${effect.to}`;
 	}
 }

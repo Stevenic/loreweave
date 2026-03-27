@@ -1,0 +1,28 @@
+{
+  "id": "smuggler_crew",
+  "type": "creature",
+  "category": "humanoid",
+  "name": "Smuggler Crew",
+  "description": "Professionals who move illegal goods. Prefer evasion over violence but aren't helpless.",
+  "cr": "1/4",
+  "group_size": { "min": 2, "max": 5 },
+  "biomes": ["forest", "coast", "plains", "hills"],
+  "behavior": {
+    "disposition": "evasive",
+    "triggers": ["discovered", "cargo_threatened", "cornered"],
+    "retreat_threshold": "escape_route_available"
+  },
+  "sensory": {
+    "sight": "a lantern signal on a dark road, answered by another from the treeline",
+    "sound": "wagon wheels muffled with cloth, whispered directions",
+    "smell": "exotic spices, or something chemical, seeping through crate slats",
+    "feel": "the tension of people doing something they shouldn't, efficiently"
+  },
+  "encounter_hooks": [
+    "wagon tracks that veer off the road into the forest, then vanish",
+    "a merchant selling goods far too cheaply, with no questions about provenance",
+    "a coded message found on a captured bandit, addressed to nobody"
+  ],
+  "loot": ["contraband_goods", "coded_messages", "coin_purse", "forged_documents"],
+  "notes": "Smugglers are often more useful alive than dead. They know routes, contacts, and secrets. In Threadhallow, smugglers might traffic wardthread, Fray-touched materials, or restricted Archive texts."
+}

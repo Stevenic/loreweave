@@ -1,0 +1,28 @@
+{
+  "id": "crow_flock",
+  "type": "creature",
+  "category": "beast",
+  "name": "Crow Flock",
+  "description": "Intelligent scavengers. Not a threat — an omen. Where crows gather, something's dead or dying.",
+  "cr": "0",
+  "group_size": { "min": 6, "max": 30 },
+  "biomes": ["any"],
+  "behavior": {
+    "disposition": "observant",
+    "triggers": ["carrion", "battle_aftermath", "settlement_activity"],
+    "retreat_threshold": "aggressive_approach"
+  },
+  "sensory": {
+    "sight": "black shapes against grey sky, circling, circling, landing in a tree to watch",
+    "sound": "cawing — conversational, argumentative, occasionally mimicking human sounds",
+    "smell": "nothing from the crows — but follow them and you'll find what they're eating",
+    "feel": "the unsettling awareness that they're watching you specifically"
+  },
+  "encounter_hooks": [
+    "a column of crows rising from behind a hill — something's there",
+    "a single crow following the party, hopping from tree to tree",
+    "crows abandoning an area suddenly — whatever scared them is worse than you"
+  ],
+  "loot": [],
+  "notes": "Crows are living atmosphere. They signal death, danger, and carrion. A flock circling overhead is a navigation tool — follow them to find bodies, battlefields, or Fray-touched areas where animals have died. In Threadhallow, crows avoid Frayed zones (they can sense the weave instability)."
+}

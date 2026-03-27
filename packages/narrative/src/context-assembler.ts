@@ -10,6 +10,7 @@ import type {
 	BiomeType,
 	Character,
 	CharacterSummary,
+	CompanionSummary,
 	DMConfig,
 	Direction,
 	EntityRef,
@@ -22,6 +23,7 @@ import type {
 	WorldTile,
 } from '@loreweave/types';
 import { DIRECTION_OFFSETS } from '@loreweave/types';
+import { summarizeCompanion } from './dialogue.js';
 
 /**
  * Assemble the full narrative context for the LLM.
@@ -41,6 +43,15 @@ export function assembleContext(
 	const players = summarizeParty(session.party);
 	const questHints = gatherQuestHints(session.quests, tile, session.knownEntities);
 
+	// Build companion summaries with interjection topics
+	const currentTopics = questHints.concat(
+		session.knownEntities.map((e) => e.type),
+		tile.features.map((f) => f),
+	);
+	const companions: CompanionSummary[] = (session.companions ?? [])
+		.filter((c) => c.active)
+		.map((c) => summarizeCompanion(c, currentTopics));
+
 	return {
 		location: tile,
 		visibleEntities: session.knownEntities,
@@ -51,6 +62,8 @@ export function assembleContext(
 		players,
 		nearbyExits,
 		questHints,
+		weaveState: tile.weaveState,
+		companions,
 	};
 }
 

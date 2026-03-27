@@ -1,0 +1,28 @@
+{
+  "id": "dire_wolf",
+  "type": "creature",
+  "category": "beast",
+  "name": "Dire Wolf",
+  "description": "Bigger, smarter, meaner. The wolf that other wolves follow.",
+  "cr": "1",
+  "group_size": { "min": 1, "max": 3 },
+  "biomes": ["forest", "taiga", "tundra", "deep_forest"],
+  "behavior": {
+    "disposition": "alpha_predator",
+    "triggers": ["hunger", "pack_threatened", "territorial_intrusion"],
+    "retreat_threshold": "rarely_retreats"
+  },
+  "sensory": {
+    "sight": "shoulder-height to a horse, grey-black, with eyes that track you like a person's would",
+    "sound": "a growl that vibrates in your chest before you hear it with your ears",
+    "smell": "musk, blood, pine",
+    "feel": "the ground impact of something very heavy running very fast"
+  },
+  "encounter_hooks": [
+    "wolf tracks twice the size of normal, in a straight line — hunting, not wandering",
+    "a horse skeleton, stripped clean, with bite marks through bone",
+    "the regular wolves gave this territory up — whatever moved in is bigger"
+  ],
+  "loot": ["dire_wolf_pelt", "dire_wolf_teeth", "dire_wolf_claws"],
+  "notes": "Dire wolves are wolves that evolution pushed too far. They're smart enough to set up ambushes and patient enough to follow prey for days."
+}

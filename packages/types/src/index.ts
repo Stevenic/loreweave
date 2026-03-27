@@ -169,6 +169,28 @@ export type {
 	DMPersona,
 	WorldConfig,
 	GameSessionConfig,
+	// Companion System
+	CompanionReaction,
+	CompanionRelationship,
+	CompanionState,
+	CompanionSummary,
+	// Dialogue
+	DialogueApproach,
+	DialogueContext,
+	SocialCheckResult,
+	// Weave State Graph
+	LoomStone,
+	Threadline,
+	WeaveGraph,
+	// Weather & Seasons (Mechanical)
+	LightLevel,
+	WeatherResult,
+	SeasonModifiers,
+	WeatherEffects,
+	CeremonyResult,
+	CeremonyDefinition,
+	SeasonWeatherTable,
+	BiomeWeatherModifiers,
 } from './game.js';
 
 export {

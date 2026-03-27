@@ -1,0 +1,28 @@
+{
+  "id": "highway_robber",
+  "type": "creature",
+  "category": "humanoid",
+  "name": "Highway Robber",
+  "description": "Solitary or paired ambush predator. Relies on surprise and intimidation over numbers.",
+  "cr": "1/2",
+  "group_size": { "min": 1, "max": 2 },
+  "biomes": ["forest", "hills", "plains"],
+  "behavior": {
+    "disposition": "ambush",
+    "triggers": ["lone_target", "merchant_wagon", "distracted_traveler"],
+    "retreat_threshold": "any_real_resistance"
+  },
+  "sensory": {
+    "sight": "a figure in the road, hooded, hand on a weapon, blocking the path",
+    "sound": "the click of a crossbow being cocked from the treeline",
+    "smell": "nothing — they picked this spot carefully",
+    "feel": "the sudden certainty that the empty stretch of road isn't empty"
+  },
+  "encounter_hooks": [
+    "a cart with a broken wheel, conveniently blocking the road, with no driver in sight",
+    "a friendly voice calling for help from just off the path",
+    "coin scattered on the road — bait"
+  ],
+  "loot": ["coin_purse", "crossbow", "stolen_jewelry"],
+  "notes": "Highway robbers are pragmatists. If you look like too much trouble, they let you pass. They survive by picking fights they can win."
+}

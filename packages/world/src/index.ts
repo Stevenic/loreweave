@@ -64,3 +64,16 @@ export {
 
 // World Config Loader
 export { loadWorldConfig } from './world-config-loader.js';
+
+// Weave State Graph
+export {
+	createWeaveGraph,
+	getGraphWeaveState,
+	getConnectedThreadlines,
+	getNeighborStone,
+	damageStone,
+	restoreStone,
+	discoverStone,
+	severThreadline,
+	applyWeaveDecay,
+} from './weave-graph.js';

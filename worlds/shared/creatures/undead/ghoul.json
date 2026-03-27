@@ -1,0 +1,28 @@
+{
+  "id": "ghoul",
+  "type": "creature",
+  "category": "undead",
+  "name": "Ghoul",
+  "description": "Hungry dead. Faster than zombies, smarter than skeletons, and driven by a need to feed.",
+  "cr": "1",
+  "group_size": { "min": 1, "max": 4 },
+  "biomes": ["any"],
+  "behavior": {
+    "disposition": "predatory",
+    "triggers": ["fresh_corpse", "living_prey", "hunger"],
+    "retreat_threshold": "outmatched_significantly"
+  },
+  "sensory": {
+    "sight": "hunched, grey-skinned, too fast for something dead — it moves like a spider wearing a person",
+    "sound": "a wet, eager chittering, claws scraping stone",
+    "smell": "grave earth and meat, overwhelmingly",
+    "feel": "cold paralysis spreading from where its claws touch skin"
+  },
+  "encounter_hooks": [
+    "a graveyard with chewed bones scattered outside the fence",
+    "livestock found half-eaten, in a way no animal would leave",
+    "a sickly sweet smell rising from a cellar or cave entrance"
+  ],
+  "loot": ["bone_fragments", "coins_from_graves", "partially_digested_trinkets"],
+  "notes": "Ghouls are the first undead that feel actively evil rather than mechanically animated. Their paralytic touch makes them disproportionately dangerous for their CR. In Threadhallow, ghouls might be what happens when a Frayed One loses the last shred of its humanity."
+}
