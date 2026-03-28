@@ -1,0 +1,57 @@
+{
+  "id": "behavioral_template_aggressive",
+  "name": "Aggressive",
+  "description": "Charges into battle, targeting the weakest enemies first. Prioritizes damage output over self-preservation.",
+  "type": "behavioral_template",
+  "version": "1.0.0",
+
+  "priority_list": [
+    {
+      "priority": 1,
+      "condition": "self.hp_percent <= retreat_threshold",
+      "action": "retreat",
+      "description": "Disengage and move to safety when HP drops below retreat threshold"
+    },
+    {
+      "priority": 2,
+      "condition": "enemies_in_range('melee') && has_ability('highest_damage')",
+      "action": "use_ability",
+      "target": "enemy_lowest_hp",
+      "description": "Use highest-damage ability against the most wounded enemy"
+    },
+    {
+      "priority": 3,
+      "condition": "enemies_in_range('melee')",
+      "action": "attack",
+      "target": "enemy_lowest_hp",
+      "description": "Basic melee attack against the most wounded enemy"
+    },
+    {
+      "priority": 4,
+      "condition": "enemies_in_range('ranged')",
+      "action": "attack_ranged",
+      "target": "enemy_lowest_hp",
+      "description": "Ranged attack if no melee targets available"
+    },
+    {
+      "priority": 5,
+      "condition": "!enemies_in_range('melee')",
+      "action": "move",
+      "target": "enemy_nearest",
+      "description": "Close distance to nearest enemy"
+    }
+  ],
+
+  "defaults": {
+    "retreat_threshold": 25,
+    "position_preference": "frontline",
+    "resource_usage": "liberal",
+    "combat_role_affinity": ["frontline"]
+  },
+
+  "narration_hints": {
+    "attack_verbs": ["charges", "lunges", "strikes", "drives", "slashes"],
+    "mood": "fierce",
+    "retreat_flavor": "grudgingly falls back, snarling"
+  }
+}

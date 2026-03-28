@@ -6,6 +6,8 @@
  * World Generation spec (world_generation_spec.md).
  */
 
+import type { WorldSettings } from './multiplayer.js';
+
 // ─── Seeds & Coordinates ───
 
 /** 64-bit world seed. All generation derives from this. */
@@ -618,6 +620,24 @@ export type NarrativeAdapter = {
 	generate(systemPrompt: string, userPrompt: string): Promise<string>;
 };
 
+/** A chunk of streaming narrative output. */
+export type NarrativeChunk = {
+	/** The type of chunk. */
+	type: 'text' | 'done' | 'error';
+	/** Text content for 'text' chunks. */
+	text?: string;
+	/** Error message for 'error' chunks. */
+	error?: string;
+	/** Token usage stats, available on 'done' chunks. */
+	usage?: { inputTokens: number; outputTokens: number };
+};
+
+/** Extended adapter interface that supports streaming output. */
+export type StreamingNarrativeAdapter = NarrativeAdapter & {
+	/** Stream narrative text as an async iterable of chunks. */
+	stream(systemPrompt: string, userPrompt: string): AsyncIterable<NarrativeChunk>;
+};
+
 /** The result of the DM processing a player's turn. */
 export type DMResponse = {
 	/** The narrative text describing what happened. */
@@ -634,6 +654,24 @@ export type DMResponse = {
 	party: Character[];
 	/** Game time after this turn. */
 	time: GameTime;
+};
+
+/** A streaming DM response — mechanical results emitted immediately, narrative streamed. */
+export type StreamingDMResponse = {
+	/** The parsed action (null if input couldn't be parsed). */
+	action: GameAction | null;
+	/** The mechanical result of the action (null if no action or look/talk). */
+	result: ActionResult | null;
+	/** All game effects applied this turn. */
+	effects: GameEffect[];
+	/** The narrative context that was assembled for the LLM. */
+	context: NarrativeContext;
+	/** Updated party state after effects. */
+	party: Character[];
+	/** Game time after this turn. */
+	time: GameTime;
+	/** Async iterable of narrative chunks — consume to stream the DM's output. */
+	narrative: AsyncIterable<NarrativeChunk>;
 };
 
 /**
@@ -1493,6 +1531,728 @@ export type CraftResult = {
 	frayExposure: boolean;
 	toolRoll: number;
 	infusionRoll: number;
+};
+
+// ─── Character Creation ───
+
+/** Player character class (v1 — 4 classes). */
+export type CharacterClass = 'fighter' | 'rogue' | 'cleric' | 'wizard';
+
+/** Player ancestry (v1 — 4 ancestries). */
+export type Ancestry = 'human' | 'elf' | 'dwarf' | 'halfling';
+
+/** Player background — determines starting skills, gear flavor, and arrival hook. */
+export type Background = 'wanderer' | 'scholar' | 'merchant' | 'soldier' | 'outcast' | 'healer';
+
+/** Fighter fighting style (chosen at creation). */
+export type FightingStyle = 'defense' | 'dueling' | 'great_weapon';
+
+/** Ability score generation method. */
+export type AbilityScoreMethod = 'standard_array' | 'rolled';
+
+/**
+ * Character creation data — the choices made during the 4-step wizard.
+ * Combined with Character to form the full PlayerCharacter.
+ */
+export type CharacterCreationData = {
+	/** Chosen class. */
+	class: CharacterClass;
+	/** Chosen ancestry. */
+	ancestry: Ancestry;
+	/** Chosen background. */
+	background: Background;
+	/** Free-text appearance description (max 500 chars). */
+	appearance: string;
+	/** Pixel asset ID for the generated portrait. */
+	portraitAssetId: string;
+	/** Hit die size (d6/d8/d10 depending on class). */
+	hitDie: number;
+	/** Armor proficiencies granted by class. */
+	armorProficiencies: string[];
+	/** Weapon proficiencies granted by class. */
+	weaponProficiencies: string[];
+	/** Fighter-only fighting style selection. */
+	fightingStyle?: FightingStyle;
+	/** Languages known. */
+	languages: string[];
+	/** Darkvision range in feet (0 for human/halfling). */
+	darkvision: number;
+	/** Class feature names (e.g., "Sneak Attack", "Spellcasting"). */
+	classFeatures: string[];
+	/** Spell slots by level (index 0 = 1st level). Cleric/Wizard only. */
+	spellSlots?: number[];
+	/** Known/prepared spells. Wizard: spellbook. Cleric: full list. */
+	spellbook?: string[];
+	/** Currently prepared spells (subset of spellbook). */
+	preparedSpells?: string[];
+	/** How ability scores were generated. */
+	abilityScoreMethod: AbilityScoreMethod;
+	/** Background-granted NPC disposition modifier (e.g., +5 to merchants). */
+	dispositionModifiers?: Record<string, number>;
+};
+
+/**
+ * Full player character — Character base stats + creation choices.
+ * This is the complete runtime representation of a player's character.
+ */
+export type PlayerCharacter = Character & CharacterCreationData;
+
+/** Starting equipment choice for a class. */
+export type EquipmentChoice = {
+	/** Description of the choice (e.g., "a longsword or two shortswords"). */
+	description: string;
+	/** Available options — each option is a list of item IDs + quantities. */
+	options: { itemId: string; quantity: number }[][];
+};
+
+/** Class definition for character creation — loaded from config. */
+export type ClassDefinition = {
+	id: CharacterClass;
+	name: string;
+	hitDie: number;
+	primaryAbilities: AbilityName[];
+	savingThrows: AbilityName[];
+	armorProficiencies: string[];
+	weaponProficiencies: string[];
+	skillChoices: { pick: number; from: SkillName[] };
+	features: string[];
+	equipment: EquipmentChoice[];
+	fightingStyles?: FightingStyle[];
+	spellcasting?: {
+		ability: AbilityName;
+		cantripsKnown: number;
+		spellsKnown: number;
+		spellSlots: number[];
+		cantrips: string[];
+		spells: string[];
+	};
+};
+
+/** Ancestry definition for character creation — loaded from config. */
+export type AncestryDefinition = {
+	id: Ancestry;
+	name: string;
+	abilityBonuses: Partial<AbilityScores>;
+	speed: number;
+	darkvision: number;
+	traits: string[];
+	languages: string[];
+	extraSkills?: number;
+	extraLanguages?: number;
+};
+
+/** Background definition for character creation — loaded from config. */
+export type BackgroundDefinition = {
+	id: Background;
+	name: string;
+	description: string;
+	skillProficiencies: SkillName[];
+	gearFlavor: string;
+	arrivalHook: string;
+	dispositionModifiers: Record<string, number>;
+};
+
+// ─── NPC System ───
+
+/**
+ * NPC tier — determines persistence, memory, and LLM cost.
+ * See npc_system_spec.md §1.
+ */
+export type NPCTier = 'creature' | 'resident' | 'named';
+
+/**
+ * NPC disposition label — derived from numeric disposition score.
+ * See npc_system_spec.md §11.2.
+ */
+export type DispositionLabel = 'hostile' | 'wary' | 'neutral' | 'friendly' | 'allied';
+
+/** Schedule entry — where the NPC is and what they're doing at a time of day. */
+export type ScheduleEntry = {
+	location: string;
+	activity: string;
+};
+
+/** NPC daily schedule — 4 phases. */
+export type NPCSchedule = {
+	morning: ScheduleEntry;
+	afternoon: ScheduleEntry;
+	evening: ScheduleEntry;
+	night: ScheduleEntry;
+};
+
+/**
+ * Unified NPC data structure for all 3 tiers.
+ * Fields are progressively populated based on tier.
+ * See npc_system_spec.md §5.
+ */
+export type NPCRecord = {
+	// ── Identity (all tiers) ──
+	id: string;
+	name: string;
+	tier: NPCTier;
+	/** Archetype ID (Tier 2-3 only). */
+	archetypeId?: string;
+
+	// ── Appearance & Role ──
+	/** Functional role description (e.g., "blacksmith", "village elder"). */
+	role: string;
+	/** Archetype category. */
+	category?: NpcCategory;
+
+	// ── Mechanical ──
+	statsTier: StatsTier;
+	/** Full stat block if generated (combat-capable NPCs). */
+	stats?: CreatureStatBlock;
+
+	// ── Personality (Tier 2-3) ──
+	/** Rolled from archetype probability tiers. */
+	traits?: string[];
+	/** Speech style guides for LLM voice. */
+	voicePatterns?: string[];
+	/** Conversation starters. */
+	dialogueHooks?: string[];
+
+	// ── Knowledge (Tier 2-3) ──
+	knowledge?: {
+		always: string[];
+		sometimes: string[];
+		rarely: string[];
+	};
+
+	// ── Schedule (Tier 2-3) ──
+	schedule?: NPCSchedule;
+
+	// ── Persistent State (Tier 2-3) ──
+	/** Per-player disposition: Player ID → attitude (-100 to +100). */
+	disposition?: Record<string, number>;
+	/** Permanent disposition modifiers exempt from drift (e.g., murder). */
+	dispositionPermanent?: Record<string, number>;
+	/** Current inventory/stock. */
+	inventory?: Item[];
+	/** Which knowledge items revealed to which players (resets between sessions). */
+	knowledgeRevealed?: Record<string, string[]>;
+	/** Whether the NPC is alive. Dead residents are not replaced. */
+	alive?: boolean;
+	/** Current location ID, derived from schedule + time of day. */
+	location?: string;
+
+	// ── Promotion Tracking (Tier 2, system-managed) ──
+	/** Total interactions across all players. */
+	interactionCount?: number;
+	/** Player IDs who have interacted with this NPC. */
+	uniquePlayersInteracted?: string[];
+	/** Brief log entries for significant moments (quest involvement, etc.). */
+	notableEvents?: string[];
+	/** ISO timestamp of most recent interaction. */
+	lastInteractionDate?: string;
+
+	// ── Named Character Only (Tier 3) ──
+	/** Full authored backstory (not shown to players directly). */
+	backstory?: string;
+	/** Hidden information discoverable through play. */
+	secret?: string;
+	/** What drives this character's actions. */
+	motivation?: string;
+	/** Internal contradictions that humanize the character. */
+	tensions?: string[];
+	/** Compressed summaries of past player interactions. */
+	interactionHistory?: InteractionSummary[];
+	/** Opinions about other Named Characters: NPC ID → relationship. */
+	relationships?: Record<string, NPCRelationship>;
+	/** IDs of quests this NPC is involved in. */
+	questConnections?: string[];
+	/** Current narrative arc state (e.g., "trusts_party", "suspicious"). */
+	arc?: string;
+	/** Present if promoted from Tier 2. */
+	promotedFrom?: 'resident';
+	/** ISO date of promotion. */
+	promotionDate?: string;
+};
+
+/**
+ * Compressed memory of a Named Character interaction.
+ * Generated by the narrative engine after each conversation ends.
+ * See npc_system_spec.md §4.3.1.
+ */
+export type InteractionSummary = {
+	/** ISO date of the interaction. */
+	timestamp: string;
+	/** Player who interacted. */
+	playerId: string;
+	/** LLM-generated compressed memory of what happened. */
+	summary: string;
+	/** Emotional shift description (e.g., "trust increased"). */
+	emotionalShift?: string;
+	/** Commitments from either party. */
+	promisesMade?: NPCPromise[];
+	/** New facts the NPC learned about the player. */
+	factsLearned?: string[];
+	/** Knowledge/secrets the NPC shared with the player. */
+	factsRevealed?: string[];
+};
+
+/**
+ * NPC promise — tracks commitments between player and NPC.
+ * Named NPCPromise to avoid conflict with JS built-in Promise.
+ * See npc_system_spec.md §11.5.
+ */
+export type NPCPromise = {
+	/** What was promised. */
+	description: string;
+	/** Who made the promise. */
+	madeBy: 'player' | 'npc';
+	/** In-game day by which it should be fulfilled (default: 7 days from creation). */
+	dueByDay?: number;
+	/** Current status. */
+	status: 'pending' | 'fulfilled' | 'broken';
+	/** True if the broken-promise disposition penalty has fired. */
+	penaltyApplied?: boolean;
+};
+
+/**
+ * Directional NPC-to-NPC relationship.
+ * Named Characters only — Residents do not have relationships.
+ * See npc_system_spec.md §4.4.
+ */
+export type NPCRelationship = {
+	/** The other NPC's ID. */
+	targetId: string;
+	/** Attitude score: -100 to +100. */
+	attitude: number;
+	/** Relationship tags (e.g., "family", "rival", "mentor"). */
+	tags: string[];
+	/** What this NPC believes about the other (may be unreliable). */
+	knownFacts: string[];
+	/** How the relationship evolved — gives LLM nuance beyond a static score. */
+	history?: string;
+};
+
+/** Promotion trigger configuration — thresholds for Tier 2 → 3 promotion. */
+export type PromotionConfig = {
+	/** Minimum interaction count to trigger evaluation (default: 5). */
+	interactionThreshold: number;
+	/** Minimum unique players interacted (default: 3). */
+	uniquePlayerThreshold: number;
+	/** Disposition extreme that triggers evaluation (default: 75). */
+	dispositionExtreme: number;
+	/** Notable events count threshold (default: 2). */
+	notableEventThreshold: number;
+};
+
+/** Disposition drift configuration. */
+export type DispositionConfig = {
+	/** Default starting disposition for Residents (default: 0). */
+	defaultDisposition: number;
+	/** Drift rate toward neutral per in-game day (default: 1). */
+	driftRate: number;
+	/** Positive disposition floor (drift stops here, default: 50). */
+	positiveDriftFloor: number;
+	/** Default broken promise penalty (default: -15). */
+	brokenPromisePenalty: number;
+	/** Default promise due days (default: 7). */
+	defaultPromiseDueDays: number;
+	/** Partial recovery for fulfilling a broken promise (default: +10). */
+	brokenPromiseRecovery: number;
+};
+
+// ─── Companion System (Updated) ───
+
+/** Companion tier — maps to NPC tier system. */
+export type CompanionTier = 'hireling' | 'follower' | 'companion';
+
+/** Companion source — NPC or offline player. */
+export type CompanionSource = 'npc' | 'offline_player';
+
+/** Behavioral template ID — drives deterministic combat decisions. */
+export type BehavioralTemplateId = 'aggressive' | 'defensive' | 'supportive' | 'cautious';
+
+/**
+ * Companion restrictions — what the companion is/isn't allowed to do.
+ * Offline players have strict restrictions; NPC companions may not.
+ */
+export type CompanionRestrictions = {
+	canDie: boolean;
+	canSpendConsumables: boolean;
+	canMakePermanentChoices: boolean;
+	canLoseItems: boolean;
+	canInitiateDialogue: boolean;
+};
+
+/** Pact duration — how long the companion agreement lasts. */
+export type PactDuration =
+	| { type: 'quest'; questId: string }
+	| { type: 'time'; days: number }
+	| { type: 'location'; locationId: string }
+	| { type: 'indefinite' };
+
+/** Pact obligation — a recurring or one-time duty. */
+export type PactObligation = {
+	description: string;
+	frequency: 'once' | 'daily' | 'on_completion';
+	fulfilled: boolean;
+};
+
+/**
+ * Companion pact — the negotiated terms for Tier 3 companions.
+ * Built on the NPC Promise system (npc_system_spec.md §11.5).
+ */
+export type CompanionPact = {
+	terms: string[];
+	redLines: string[];
+	duration: PactDuration;
+	obligations: PactObligation[];
+};
+
+/**
+ * Standing orders — offline player's pre-set behavior preferences.
+ * Applied when the player disconnects and their character enters Follower mode.
+ */
+export type StandingOrders = {
+	combatStance: BehavioralTemplateId;
+	/** Risk tolerance 0-100 (0 = flee immediately, 100 = fight to the death). */
+	riskTolerance: number;
+	/** Actions the AI must never take. */
+	redLines: string[];
+	/** Resource spending policy. */
+	resourceSpending: 'none' | 'healing_only';
+};
+
+/**
+ * Full companion state — overlays on NPCRecord.
+ * Replaces the earlier CompanionState that was character-based.
+ * See companion_system.md.
+ */
+export type CompanionInstance = {
+	/** The NPC record this companion is based on. */
+	npcId: string;
+	/** Whether this is an NPC companion or an offline player. */
+	source: CompanionSource;
+	/** Current companion tier. */
+	tier: CompanionTier;
+	/** Active behavioral template for combat. */
+	combatTemplate: BehavioralTemplateId;
+	/** What this companion can/cannot do. */
+	restrictions: CompanionRestrictions;
+	/** Pact terms (Tier 3 only). */
+	pact?: CompanionPact;
+	/** Offline player standing orders. */
+	standingOrders?: StandingOrders;
+	/** Loyalty score 0-100 (replaces disposition while in party). */
+	loyaltyScore: number;
+	/** In-game day the companion joined. */
+	joinedAt: number;
+	/** ISO timestamp deadline for offline player grace period (24h). */
+	graceDeadline?: string;
+	/** Whether this companion is currently active in the party. */
+	active: boolean;
+};
+
+// ─── Behavioral Templates ───
+
+/** Priority condition for a behavioral template decision tree. */
+export type BehavioralPriority = {
+	/** Priority order (1 = highest). */
+	priority: number;
+	/** Condition that must be true to fire this action. */
+	condition: string;
+	/** Action to take. */
+	action: string;
+	/** Target selection rule (optional). */
+	target?: string;
+	/** Human-readable description. */
+	description: string;
+};
+
+/** Behavioral template defaults — retreat, position, resource usage. */
+export type BehavioralDefaults = {
+	/** HP percentage at which to retreat (e.g., 25). */
+	retreat_threshold: number;
+	/** Preferred combat position. */
+	position_preference: 'frontline' | 'support' | 'ranged';
+	/** Resource usage policy. */
+	resource_usage: 'liberal' | 'moderate' | 'conservative' | 'minimal';
+	/** Combat role affinity. */
+	combat_role_affinity: string;
+};
+
+/** Narration hints for a behavioral template — used by LLM. */
+export type BehavioralNarrationHints = {
+	attack_verbs: string[];
+	mood: string;
+	retreat_flavor: string;
+};
+
+/** Behavioral template — loaded from worlds/shared/companions/ JSON. */
+export type BehavioralTemplate = {
+	id: string;
+	name: string;
+	description: string;
+	type: 'behavioral_template';
+	version: string;
+	priority_list: BehavioralPriority[];
+	defaults: BehavioralDefaults;
+	narration_hints: BehavioralNarrationHints;
+};
+
+// ─── Creature Archetypes ───
+
+/** Creature category for archetype classification. */
+export type CreatureCategory = 'beast' | 'humanoid' | 'undead' | 'monstrosity' | 'fey' | 'construct' | 'wildlife';
+
+/** Creature behavior definition — how the creature reacts. */
+export type CreatureBehavior = {
+	/** Default disposition toward players. */
+	disposition: string;
+	/** Events that trigger combat or flight. */
+	triggers: string[];
+	/** HP percentage or condition at which the creature flees. */
+	retreat_threshold: string;
+};
+
+/** Creature sensory descriptors — for LLM narration. */
+export type CreatureSensory = {
+	sight: string;
+	sound: string;
+	smell: string;
+	feel?: string;
+};
+
+/** Loot entry for a creature archetype. */
+export type CreatureLootEntry = {
+	item: string;
+	chance: number;
+	quantity?: string;
+};
+
+/**
+ * Creature archetype — loaded from worlds/shared/creatures/ JSON.
+ * Defines a creature type that can be spawned in encounters.
+ */
+export type CreatureArchetype = {
+	id: string;
+	type: 'creature';
+	category: CreatureCategory;
+	name: string;
+	description: string;
+	/** Challenge rating as string (e.g., "1/4", "1", "0"). */
+	cr: string;
+	/** Min/max group size for encounters. */
+	group_size: { min: number; max: number };
+	/** Biomes where this creature is found. */
+	biomes: (BiomeType | 'any')[];
+	/** Behavioral description. */
+	behavior: CreatureBehavior;
+	/** Sensory descriptors for LLM narration. */
+	sensory: CreatureSensory;
+	/** Encounter hook descriptions. */
+	encounter_hooks: string[];
+	/** Possible loot drops. */
+	loot: CreatureLootEntry[];
+	/** Additional notes (e.g., special abilities). */
+	notes?: string;
+};
+
+// ─── Quest Templates ───
+
+/** Quest template tag for categorization. */
+export type QuestTag = 'exploration' | 'combat' | 'social' | 'mystery' | 'faction' | 'craft' | 'variable';
+
+/** Quest template tier for scaling. */
+export type QuestTier = 'any' | 'hamlet' | 'village' | 'town' | 'city';
+
+/** Quest scaling parameters by level range. */
+export type QuestScaling = {
+	levelRange: [min: number, max: number];
+	crRange: [min: string, max: string];
+	dcRange: [min: number, max: number];
+	rewardTier: 'low' | 'medium' | 'medium_high' | 'high' | 'legendary';
+};
+
+/** NPC role slot in a quest template — filled from local NPC roster. */
+export type QuestRole = {
+	/** Role identifier (e.g., "quest_giver", "target", "witness"). */
+	role: string;
+	/** Archetype categories that can fill this role. */
+	validCategories: NpcCategory[];
+	/** Whether this role must be filled for the quest to activate. */
+	required: boolean;
+};
+
+/** Quest stage — a step in the quest progression. */
+export type QuestStage = {
+	id: string;
+	description: string;
+	/** Stage type (e.g., "investigate", "confront", "resolve"). */
+	type: string;
+	/** Possible branches from this stage. */
+	branches?: { condition: string; nextStageId: string }[];
+	/** Default next stage if no branch condition is met. */
+	defaultNext?: string;
+};
+
+/** Quest resolution — one possible outcome. */
+export type QuestResolution = {
+	id: string;
+	description: string;
+	/** Disposition changes to quest-involved NPCs. */
+	dispositionEffects?: Record<string, number>;
+	/** Faction reputation effects. */
+	reputationEffects?: Record<string, number>;
+	/** Reward modifiers (e.g., bonus loot for optimal resolution). */
+	rewardModifier?: number;
+};
+
+/**
+ * Side quest template — loaded from worlds/shared/quests/.
+ * Templates are reusable across settlements; role slots are filled dynamically.
+ * See side_quest_templates.md.
+ */
+export type SideQuestTemplate = {
+	id: string;
+	name: string;
+	description: string;
+	tags: QuestTag[];
+	tier: QuestTier;
+	/** Base selection weight for quest generation. */
+	weight: number;
+	/** Trigger condition description. */
+	trigger: string;
+	/** NPC role slots that need to be filled. */
+	roles: QuestRole[];
+	/** Ordered stages of the quest. */
+	stages: QuestStage[];
+	/** Possible resolutions. */
+	resolutions: QuestResolution[];
+	/** Scaling parameters by level range. */
+	scaling: QuestScaling[];
+};
+
+/** An active quest instance — a template with filled roles and state. */
+export type QuestInstance = {
+	id: string;
+	templateId: string;
+	name: string;
+	/** Filled role assignments: role ID → NPC ID. */
+	roleAssignments: Record<string, string>;
+	/** Current stage ID. */
+	currentStageId: string;
+	/** Whether the quest is active, completed, or failed. */
+	status: 'active' | 'completed' | 'failed';
+	/** In-game day the quest was started. */
+	startedDay: number;
+	/** Resolution ID if completed/failed. */
+	resolutionId?: string;
+	/** Player IDs involved. */
+	involvedPlayers: string[];
+};
+
+// ─── Starting Settlement Generation ───
+
+/** Named NPC slot for the starting settlement. */
+export type NamedNPCSlot =
+	| 'leader'
+	| 'innkeeper'
+	| 'artisan'
+	| 'healer'
+	| 'farmer'
+	| 'outsider'
+	| 'troublemaker'
+	| 'secret_keeper';
+
+/** Ambient NPC category for population generation. */
+export type AmbientNPCType = 'guard' | 'farmer' | 'child' | 'villager' | 'wanderer';
+
+/** Settlement ring — concentric danger zones around the starting settlement. */
+export type SettlementRing = {
+	/** Ring number (1-3). */
+	ring: 1 | 2 | 3;
+	/** Description (e.g., "safe exploration zone"). */
+	description: string;
+	/** Travel time from settlement. */
+	travelTime: string;
+	/** Danger level. */
+	danger: 'safe' | 'unsettled' | 'dangerous';
+	/** CR range for encounters in this ring. */
+	crRange: [min: string, max: string];
+	/** Location archetype IDs appropriate for this ring. */
+	locationArchetypes: string[];
+};
+
+/**
+ * Starting settlement configuration.
+ * Drives the 10-step generation algorithm (starting_settlement_spec.md).
+ */
+export type StartingSettlementConfig = {
+	/** Settlement tier — scales building count, NPC count, etc. */
+	tier: SettlementTier;
+	/** Required building archetype IDs (6 minimum). */
+	requiredBuildings: string[];
+	/** Recommended building archetype IDs (pick 2-3). */
+	recommendedBuildings: string[];
+	/** Named NPC slots to fill. */
+	namedNPCSlots: NamedNPCSlot[];
+	/** Ambient NPC population range. */
+	ambientNPCRange: { min: number; max: number };
+	/** Ambient NPC distribution. */
+	ambientNPCDistribution: Record<AmbientNPCType, { min: number; max: number }>;
+	/** Surrounding ring definitions. */
+	rings: SettlementRing[];
+	/** Ward strength at game start (0-100). */
+	initialWardStrength: number;
+	/** Ceremony time pressure description. */
+	timePressure: string;
+};
+
+/**
+ * Scaling rules for starting settlement based on player cap.
+ * See starting_settlement_spec.md §Multiplayer Considerations.
+ */
+export type SettlementScaling = {
+	/** Player range this scaling applies to. */
+	playerRange: [min: number, max: number];
+	/** Settlement tier at this player count. */
+	tier: SettlementTier;
+	/** Building count range. */
+	buildingRange: [min: number, max: number];
+	/** Inn rooms = player cap. */
+	innRooms: number;
+};
+
+// ─── World Instance ───
+
+/**
+ * Complete world instance — everything needed to run a game.
+ * This is the top-level state object persisted to storage.
+ */
+export type WorldInstance = {
+	/** World settings (multiplayer config, tone, difficulty, etc.). */
+	settings: WorldSettings;
+	/** World content config (persona, rules, vocabulary, creatures). */
+	config: WorldConfig;
+	/** The starting settlement. */
+	startingSettlement: Settlement;
+	/** All NPCs in the world, keyed by NPC ID. */
+	npcs: Record<string, NPCRecord>;
+	/** Active quest instances. */
+	quests: QuestInstance[];
+	/** Player characters, keyed by player ID. */
+	players: Record<string, PlayerCharacter>;
+	/** Active companions in the party. */
+	companions: CompanionInstance[];
+	/** Current world state (time, weather, chunks, events). */
+	worldState: WorldState;
+	/** Game session config (ward strengths, faction rep, weave graph). */
+	sessionConfig: GameSessionConfig;
+	/** Promotion thresholds for NPC Tier 2 → 3. */
+	promotionConfig: PromotionConfig;
+	/** Disposition drift and promise settings. */
+	dispositionConfig: DispositionConfig;
+	/** Loaded behavioral templates for companion combat. */
+	behavioralTemplates: Record<BehavioralTemplateId, BehavioralTemplate>;
+	/** Creature archetypes available in this world. */
+	creatureArchetypes: Record<string, CreatureArchetype>;
+	/** Side quest templates available for generation. */
+	questTemplates: SideQuestTemplate[];
 };
 
 // ─── Constants ───

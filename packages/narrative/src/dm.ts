@@ -29,8 +29,11 @@ import type {
 	GameSession,
 	GameSessionConfig,
 	NarrativeAdapter,
+	NarrativeChunk,
 	NpcArchetype,
 	Quest,
+	StreamingDMResponse,
+	StreamingNarrativeAdapter,
 	TileCoord,
 	WeaveGraph,
 	WorldConfig,
@@ -278,6 +281,168 @@ export class DungeonMaster {
 		};
 	}
 
+	/**
+	 * Process a player's turn with streaming narrative output.
+	 *
+	 * Returns mechanical results immediately (action, effects, party state)
+	 * along with an async iterable of narrative chunks for the client to consume.
+	 *
+	 * Requires a StreamingNarrativeAdapter. Falls back to non-streaming if
+	 * the adapter doesn't support streaming.
+	 */
+	async processStreamingTurn(input: string, actorId?: string): Promise<StreamingDMResponse> {
+		const actor = actorId
+			? this.characters.get(actorId)
+			: this.session.party[0];
+
+		if (!actor) {
+			throw new Error(`Actor not found: ${actorId ?? 'no party members'}`);
+		}
+
+		// Increment turn counter
+		this.session.turnCount++;
+
+		// Derive deterministic seed for this turn
+		const turnSeed = this.turnSeedBase ^ this.session.turnCount;
+
+		// 1. Parse intent
+		const inventoryNames = actor.inventory.map((s) => s.item.name);
+		const parseResult = parseIntent(
+			input,
+			actor.id,
+			this.session.knownEntities,
+			inventoryNames,
+		);
+
+		// 2. Resolve action through rules engine (if parseable)
+		let actionResult: ActionResult | null = null;
+		if (parseResult.action) {
+			actionResult = resolveAction(
+				parseResult.action,
+				actor,
+				this.session.world,
+				this.characters,
+				this.config,
+				turnSeed,
+			);
+
+			// Apply effects to character state
+			if (actionResult.effects.length > 0) {
+				this.characters = applyEffects(this.characters, actionResult.effects);
+				this.syncPartyFromRoster();
+				this.applyWorldEffects(actionResult.effects, actor.location);
+			}
+
+			// Advance game time
+			const timeCost = parseResult.action.type === 'rest'
+				? this.config.restTimeMinutes
+				: this.config.actionTimeMinutes;
+			this.session.world.advanceTime(timeCost);
+		}
+
+		// 3. Process companion reactions
+		if (parseResult.action && actionResult) {
+			this.processCompanionReactions(input, actionResult);
+		}
+
+		// 4. Assemble narrative context (after effects are applied)
+		const context = assembleContext(this.session, this.config);
+
+		// 5. Inject dialogue context if talking to an NPC
+		if (parseResult.action?.type === 'talk'
+			|| parseResult.action?.type === 'persuade'
+			|| parseResult.action?.type === 'intimidate'
+			|| parseResult.action?.type === 'deceive') {
+			const targetEntity = parseResult.action.targetId
+				? this.session.knownEntities.find((e) => e.id === parseResult.action?.targetId)
+				: undefined;
+			if (targetEntity) {
+				const archetype = this.archetypeRegistry.get(targetEntity.type);
+				if (archetype) {
+					context.dialogueTarget = buildDialogueContext(
+						targetEntity.name,
+						archetype,
+						this.session.world.getTimeOfDay(),
+						targetEntity.hostile,
+					);
+				}
+			}
+		}
+
+		// 6. Update known entities based on new position
+		this.updateKnownEntities();
+
+		// 7. Build prompts
+		const prompts = buildPrompts(
+			this.session,
+			context,
+			parseResult,
+			actionResult,
+			this.worldConfig,
+			this.sessionConfig,
+		);
+
+		// 8. Stream or fall back to generate
+		const narrative = this.createNarrativeStream(prompts.system, prompts.user);
+
+		return {
+			action: parseResult.action,
+			result: actionResult,
+			effects: actionResult?.effects ?? [],
+			context,
+			party: [...this.session.party],
+			time: { ...this.session.world.time },
+			narrative,
+		};
+	}
+
+	/**
+	 * Describe the current scene with streaming narrative output.
+	 */
+	async describeStreamingSurroundings(): Promise<StreamingDMResponse> {
+		const context = assembleContext(this.session, this.config);
+
+		const parseResult: ParseResult = {
+			action: { type: 'look', actorId: this.session.party[0]?.id ?? 'unknown' },
+			raw: '',
+			failureHints: [],
+		};
+
+		const actor = this.session.party[0];
+		let actionResult: ActionResult | null = null;
+		if (actor) {
+			actionResult = resolveAction(
+				parseResult.action!,
+				actor,
+				this.session.world,
+				this.characters,
+				this.config,
+				this.turnSeedBase,
+			);
+		}
+
+		const prompts = buildPrompts(
+			this.session,
+			context,
+			parseResult,
+			actionResult,
+			this.worldConfig,
+			this.sessionConfig,
+		);
+
+		const narrative = this.createNarrativeStream(prompts.system, prompts.user);
+
+		return {
+			action: parseResult.action,
+			result: actionResult,
+			effects: [],
+			context,
+			party: [...this.session.party],
+			time: { ...this.session.world.time },
+			narrative,
+		};
+	}
+
 	// ─── World State Management ───
 
 	/** Set ward strength for a settlement. */
@@ -406,6 +571,24 @@ export class DungeonMaster {
 
 	// ─── Internal ───
 
+	/**
+	 * Create a narrative stream from prompts.
+	 * Uses streaming if the adapter supports it, otherwise wraps generate() output.
+	 */
+	private createNarrativeStream(systemPrompt: string, userPrompt: string): AsyncIterable<NarrativeChunk> {
+		const adapter = this.adapter;
+		if (isStreamingAdapter(adapter)) {
+			return adapter.stream(systemPrompt, userPrompt);
+		}
+
+		// Fallback: wrap non-streaming generate() into a single text chunk + done
+		return (async function* () {
+			const text = await adapter.generate(systemPrompt, userPrompt);
+			yield { type: 'text' as const, text };
+			yield { type: 'done' as const };
+		})();
+	}
+
 	/** Process companion reactions to a player action. */
 	private processCompanionReactions(input: string, result: ActionResult): void {
 		const topics = extractDialogueTopics(
@@ -490,6 +673,27 @@ export class DungeonMaster {
 			return dx <= this.config.viewRadius && dy <= this.config.viewRadius;
 		});
 	}
+}
+
+/** Type guard: check if an adapter supports streaming. */
+function isStreamingAdapter(adapter: NarrativeAdapter): adapter is StreamingNarrativeAdapter {
+	return typeof (adapter as StreamingNarrativeAdapter).stream === 'function';
+}
+
+/**
+ * Collect a narrative stream into a single string.
+ * Useful for callers that want streaming-compatible code but don't need chunk-by-chunk delivery.
+ */
+export async function collectNarrativeStream(stream: AsyncIterable<NarrativeChunk>): Promise<string> {
+	const parts: string[] = [];
+	for await (const chunk of stream) {
+		if (chunk.type === 'text' && chunk.text) {
+			parts.push(chunk.text);
+		} else if (chunk.type === 'error') {
+			throw new Error(chunk.error ?? 'Narrative stream error');
+		}
+	}
+	return parts.join('');
 }
 
 /**

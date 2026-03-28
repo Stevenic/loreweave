@@ -11,11 +11,14 @@
  */
 
 // DM — the orchestrator
-export { DungeonMaster, createSession, DEFAULT_DM_CONFIG } from './dm.js';
+export { DungeonMaster, createSession, collectNarrativeStream, DEFAULT_DM_CONFIG } from './dm.js';
 
 // Intent parsing — player text → GameAction
 export { parseIntent } from './intent-parser.js';
 export type { ParseResult } from './intent-parser.js';
+
+// Intent parsing with LLM fallback (§4.3)
+export { parseIntentWithFallback } from './intent-fallback.js';
 
 // Context assembly — world state → NarrativeContext
 export { assembleContext, getPartyLocation, scanExits, summarizeParty, gatherQuestHints } from './context-assembler.js';

@@ -1,0 +1,59 @@
+{
+  "id": "behavioral_template_supportive",
+  "name": "Supportive",
+  "description": "Focuses on keeping allies alive and buffed. Heals the wounded, buffs the strongest, attacks only when no one needs help.",
+  "type": "behavioral_template",
+  "version": "1.0.0",
+
+  "priority_list": [
+    {
+      "priority": 1,
+      "condition": "self.hp_percent <= retreat_threshold",
+      "action": "retreat",
+      "description": "Disengage and move to safety when HP drops below retreat threshold"
+    },
+    {
+      "priority": 2,
+      "condition": "ally_lowest_hp.hp_percent < 50 && has_ability('heal')",
+      "action": "use_ability",
+      "ability_type": "heal",
+      "target": "ally_lowest_hp",
+      "description": "Heal the most wounded ally"
+    },
+    {
+      "priority": 3,
+      "condition": "has_ability('buff') && !ally_strongest.has_buff",
+      "action": "use_ability",
+      "ability_type": "buff",
+      "target": "ally_strongest",
+      "description": "Buff the strongest ally if not already buffed"
+    },
+    {
+      "priority": 4,
+      "condition": "enemies_in_range('ranged')",
+      "action": "attack_ranged",
+      "target": "enemy_nearest",
+      "description": "Ranged attack against nearest enemy when no allies need support"
+    },
+    {
+      "priority": 5,
+      "condition": "true",
+      "action": "move",
+      "target": "ally_lowest_hp",
+      "description": "Move toward the most wounded ally to stay in healing range"
+    }
+  ],
+
+  "defaults": {
+    "retreat_threshold": 25,
+    "position_preference": "support",
+    "resource_usage": "moderate",
+    "combat_role_affinity": ["support"]
+  },
+
+  "narration_hints": {
+    "attack_verbs": ["calls out encouragement", "mends", "bolsters", "tends to", "channels"],
+    "mood": "focused",
+    "retreat_flavor": "pulls back, clutching their healing supplies"
+  }
+}

@@ -2,7 +2,7 @@
 
 Distilled principles. Read this first every session (after SOUL.md).
 
-Last compacted: 2026-03-27
+Last compacted: 2026-03-28
 
 ---
 
@@ -34,10 +34,16 @@ For LoreWeave, Pixel Format v1 JSON assets (sprites, tilesets, scenes, palettes)
 Use `actions/checkout@v4`, never `@latest`. Reproducible builds require pinned versions at every level — actions, Node.js, dependencies.
 
 **Monorepo build order is explicit.**
-`tsc --build` in root `package.json` specifies the full dependency chain: `packages/types → rules → pixel → world → narrative`, then `services/game → pixel-explorer`. CI must use `npm run build` (not per-workspace builds) to respect this order.
+`tsc --build` in root `package.json` specifies the full dependency chain: `packages/types → rules → agents → llm → pixel → world → narrative → multiplayer`, then `services/game → pixel-explorer`. CI must use `npm run build` (not per-workspace builds) to respect this order.
 
 **Root scripts are the CI interface.**
 Root `package.json` has `build`, `test`, `lint`, `typecheck`, and `clean` scripts that fan out to workspaces. CI should call these directly — don't reinvent workspace iteration in the workflow.
 
 **GitHub App > PAT for auth UX.**
 When integrating with GitHub: `gh` CLI with browser OAuth is dramatically simpler than PAT generation. Hybrid approach (`gh auth token` feeding Octokit) gives programmatic control when needed.
+
+**Server-side invariants over prompt instructions.**
+Safety constraints (companion restrictions, protection flags, slot caps) must be enforced in code, not LLM prompts. Code constraints are deterministic, testable in CI, and immune to prompt injection. This applies to any system where an LLM controls game state.
+
+**Favor deterministic architectures for testability.**
+Pure-function controllers with typed inputs/outputs and templated (not LLM-generated) behavior are trivially testable in CI. When designing game systems, prefer deterministic approaches for v1 — they produce predictable, assertable results without mocking LLM responses.

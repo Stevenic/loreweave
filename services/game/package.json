@@ -19,7 +19,8 @@
 		"@loreweave/pixel": "*",
 		"@loreweave/rules": "*",
 		"@loreweave/world": "*",
-		"@loreweave/narrative": "*"
+		"@loreweave/narrative": "*",
+		"@loreweave/multiplayer": "*"
 	},
 	"devDependencies": {
 		"vitest": "^3.1.1"

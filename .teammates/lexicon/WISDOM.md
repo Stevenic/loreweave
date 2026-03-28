@@ -2,7 +2,7 @@
 
 Distilled principles. Read this first every session (after SOUL.md).
 
-Last compacted: 2026-03-27
+Last compacted: 2026-03-28
 
 ---
 
@@ -40,6 +40,8 @@ Lexicon previously designed prompt architecture for the `@teammates` multi-agent
 
 **Scope narrative output to 2-5 sentences** — The spec defines narrative output as short, evocative descriptions. Prompts must constrain decompression to this range to prevent verbose drift.
 
+**Single DM persona simplifies prompt architecture** — One narrative voice (the DM) means one tone profile, one system prompt, and no persona-switching logic. Multi-persona narration would require per-persona prompt variants and turn-level persona routing. Keep single-DM as an architectural assumption unless explicitly overridden.
+
 ## Multiplayer Narrative
 
 **Party group actions need multi-actor prompt design** — The current spec assumes single-actor turns. Multiplayer party actions (e.g., coordinated combat, group skill checks) require narrative prompts that accept multiple actors and weave their contributions into a single scene description. This is a structural change to the prompt layout, not just a parameter tweak.
@@ -48,6 +50,18 @@ Lexicon previously designed prompt architecture for the `@teammates` multi-agent
 
 **Proximity-gated interactions are narrative opportunities** — Item transfers, container access, and other proximity-constrained actions produce two narrative paths: success (describe the exchange) and failure (explain why distance prevents it). Prompts should handle both branches with distinct tone — success is fluid, failure is environmental.
 
+**Session recaps are a compression-then-decompression problem** — Generating "last time on..." recaps requires compressing a full session's event log into key beats, then decompressing into narrative prose. This is a two-stage prompt chain: extract (what happened, who was involved, what changed) then narrate (evocative summary in DM voice). Async play makes recaps critical since players rejoin after gaps.
+
+## Companion System
+
+**Tier-gated prompt templates for companions** — The Pact-Gated Autonomy Dial uses one narrative prompt template with conditional output slots gated by autonomy tier (passive/follower/full). This avoids separate templates per companion type and keeps the prompt architecture composable.
+
+**Deterministic companion combat costs zero LLM tokens** — Companion combat actions resolve via stance-based decision trees in the rules engine. The LLM only narrates the outcomes. This is a hard architectural constraint: the narrative prompt receives resolved actions, never generates them.
+
+**Unified system for offline players and NPC companions** — Same CompanionState overlay, same controller, same prompt template. Restriction overlay handles differences: NPC companions get richer agency (refusals, goals, permadeath); offline players get simpler behavior (reliable, flat, capped at follower tier, no permadeath). One narrative path, not two.
+
 ## Intent Parser
 
 **Intent Parser uses constrained output schema** — The parser is a rule-based + LLM hybrid. The LLM portion must output to a strict schema (action type, target, parameters). Force discrete classifications — never allow free-text reasoning in parser output.
+
+**Chat-to-intent extraction is a compression stage** — Player chat in natural language must be compressed into structured action intents before reaching the rules engine. This is distinct from the narrative pipeline — it flows in the opposite direction (player text -> structured data, not structured data -> narrative text). Design it as a separate compression prompt, not a branch of the narration chain.

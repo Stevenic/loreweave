@@ -2,7 +2,7 @@
 
 Distilled principles. Read this first every session (after SOUL.md).
 
-Last compacted: 2026-03-27
+Last compacted: 2026-03-28
 
 ---
 
@@ -42,8 +42,8 @@ Both loreweave_spec.md and pixel_v_1_spec.md are mature enough to code against d
 ### Inject factories, don't assume globals
 The canvas renderer accepts a `CanvasFactory` injection rather than importing browser globals. This makes renderers testable and portable (Node, browser, headless). Apply this pattern to any subsystem that depends on environment-specific APIs.
 
-### Lazy-import optional heavy dependencies
-The pixel-explorer dynamically imports heavy dependencies so core commands work without them installed. Use this pattern for any CLI command that depends on large or optional packages — keeps the core fast and the install footprint small.
+### Lazy-import optional cloud SDKs
+Azure SDK (`@azure/storage-blob`), Agent SDK, and other heavy optional dependencies are dynamically imported at point of use. This keeps the core packages installable and testable without cloud credentials. Apply to any dependency that not all consumers need.
 
 ### Seeded PRNG for deterministic randomness
 Any system that introduces randomness (dice, particles, procedural generation, weather, name generation) must accept a seed parameter to preserve determinism. The emitter uses xorshift32; the world uses a seeded RNG class. Identical seed = identical output, always.
@@ -78,11 +78,23 @@ Users never specify pixel dimensions directly. The sizing system infers a sprite
 ### Progressive palette supersets for render-time remapping
 Palettes form a strict superset chain (fantasy16 → 32 → 64 → 72). Any asset authored at a lower palette depth can be rendered with a higher palette unchanged. Render-time remapping via `targetPalette` option maps colors to the nearest match in the target palette using color distance.
 
-### WorldConfig: per-world JSON data files
-Each world has a `worlds/<name>/config/` directory with JSON files (world, persona, encounters, creatures, stat-tiers, etc.) loaded by `loadWorldConfig()`. This separates world-specific data from engine code, making worlds swappable without code changes.
+### WorldConfig vs WorldSettings: two config objects
+`WorldConfig` = game content (persona, stat tiers, creatures, vocabulary) loaded from `worlds/<name>/config/` JSON files. `WorldSettings` = multiplayer shell (tone, difficulty, player cap, house rules) created via World Creation Wizard. Both coexist — WorldSettings wraps the multiplayer session, WorldConfig drives the game engine inside it.
 
 ### Noise-based overlay layers for semantic terrain state
 The Weave overlay demonstrates adding a semantic state layer (stable/thin/frayed/unraveled) on top of terrain using noise thresholds. Structures can force-override values (villages → stable). This pattern generalizes to any per-tile state that varies spatially — corruption, temperature, political control.
 
 ### Loader functions merge multiple config sources
 The creature loader merges `creatures.json` + `high_cr_creatures.json`; the vocab loader reads subdirectories with wrapper object handling. When config grows beyond a single file, split by domain and merge in the loader — keeps individual files manageable and domain-focused.
+
+### Interface-first design with pluggable backends
+Define interfaces (`WorldStore`, `MessageBroker`, `ChatStore`) in the types package, then provide multiple implementations (Azure for prod, in-memory for dev/test). Consumers import the interface, never a concrete backend. This lets the full game server run locally without cloud credentials via `createGameServer()` with memory adapters.
+
+### Budget-gated LLM fallback for deterministic parsers
+The intent parser uses keyword matching first (deterministic, free). Only when keywords fail with no hints does the LLM fallback fire. This preserves the "LLM renders narrative, not logic" principle while handling natural language edge cases. Gate expensive calls behind a clear failure condition, not as a default path.
+
+### Turn coordination modes share one resolver pipeline
+Exploration (all submit → resolve in DEX order), combat (initiative turns, timeout → Dodge), and group checks all feed into the same action resolver and effect pipeline. The TurnCoordinator only decides *when* and *in what order* actions resolve — it doesn't duplicate resolution logic.
+
+### Graceful disconnect preserves game state
+On disconnect: preserve pending actions, mark character absent (not removed), start a timeout for safe-location relocation. On reconnect: deliver missed turns + LLM-generated recap. Never lose player state due to network issues — the reconnect flow should feel seamless.

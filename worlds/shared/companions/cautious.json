@@ -1,0 +1,55 @@
+{
+  "id": "behavioral_template_cautious",
+  "name": "Cautious",
+  "description": "Maintains distance, conserves resources, and avoids direct confrontation. Attacks from range and retreats if threatened in melee.",
+  "type": "behavioral_template",
+  "version": "1.0.0",
+
+  "priority_list": [
+    {
+      "priority": 1,
+      "condition": "self.hp_percent <= retreat_threshold",
+      "action": "retreat",
+      "description": "Disengage and move to safety when HP drops below retreat threshold"
+    },
+    {
+      "priority": 2,
+      "condition": "enemies_in_range('melee')",
+      "action": "disengage",
+      "description": "Disengage and move away from melee threats"
+    },
+    {
+      "priority": 3,
+      "condition": "enemies_in_range('ranged')",
+      "action": "attack_ranged",
+      "target": "enemy_nearest",
+      "description": "Ranged attack from a safe distance"
+    },
+    {
+      "priority": 4,
+      "condition": "!at_max_range(enemy_nearest)",
+      "action": "move",
+      "target": "away_from(enemy_nearest)",
+      "description": "Maximize distance from nearest enemy"
+    },
+    {
+      "priority": 5,
+      "condition": "true",
+      "action": "dodge",
+      "description": "Take the Dodge action when nothing else applies"
+    }
+  ],
+
+  "defaults": {
+    "retreat_threshold": 40,
+    "position_preference": "ranged",
+    "resource_usage": "minimal",
+    "combat_role_affinity": ["ranged"]
+  },
+
+  "narration_hints": {
+    "attack_verbs": ["takes careful aim", "fires from cover", "picks off", "harries", "peppers"],
+    "mood": "calculating",
+    "retreat_flavor": "slips away before anyone notices"
+  }
+}

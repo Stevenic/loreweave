@@ -20,6 +20,12 @@ worlds/shared/
 │   ├── craft/          # Artisan and skilled labor roles
 │   ├── service/        # Hospitality and service roles
 │   └── wanderers/      # Traveling and itinerant roles
+├── character_creation_spec.md  # Character creation flow & rules
+├── companions/         # Companion behavioral templates
+│   ├── aggressive.json # Charge-and-damage combat template
+│   ├── defensive.json  # Protect-allies combat template
+│   ├── supportive.json # Heal-and-buff combat template
+│   └── cautious.json   # Range-and-retreat combat template
 └── vocabulary/         # Descriptor pools for narrative generation
     ├── atmosphere/     # Mood, sound, smell descriptors by context
     └── architecture/   # Building material and style descriptors by biome
@@ -36,6 +42,10 @@ Archetypes are **not** world-specific lore. They define:
 - What exits and interior layout patterns exist
 
 World-specific flavor (naming conventions, cultural variants, faction ties) comes from the world's own content layered on top.
+
+## Companion System
+
+See `companion_system.md` for the full companion & offline player system design. Behavioral templates in `companions/` define deterministic combat AI — each is a priority-ordered decision tree that the `CompanionController` evaluates per turn. Templates are Phase 2 content; Phase 1 (Campfire Circle) ships companions as non-combat contributors only.
 
 ## File Format
 

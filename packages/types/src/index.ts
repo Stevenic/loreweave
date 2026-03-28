@@ -125,8 +125,11 @@ export type {
 	// Dungeon Master
 	DMConfig,
 	DMResponse,
+	StreamingDMResponse,
 	GameSession,
 	NarrativeAdapter,
+	NarrativeChunk,
+	StreamingNarrativeAdapter,
 	WorldAccess,
 	// Archetype System
 	ProbabilityPool,
@@ -208,6 +211,67 @@ export type {
 	ItemEffect,
 	ThreadcraftItem,
 	CraftResult,
+	// Character Creation
+	CharacterClass,
+	Ancestry,
+	Background,
+	FightingStyle,
+	AbilityScoreMethod,
+	CharacterCreationData,
+	PlayerCharacter,
+	EquipmentChoice,
+	ClassDefinition,
+	AncestryDefinition,
+	BackgroundDefinition,
+	// NPC System
+	NPCTier,
+	DispositionLabel,
+	ScheduleEntry,
+	NPCSchedule,
+	NPCRecord,
+	InteractionSummary,
+	NPCPromise,
+	NPCRelationship,
+	PromotionConfig,
+	DispositionConfig,
+	// Companion System (Updated)
+	CompanionTier,
+	CompanionSource,
+	BehavioralTemplateId,
+	CompanionRestrictions,
+	PactDuration,
+	PactObligation,
+	CompanionPact,
+	StandingOrders,
+	CompanionInstance,
+	// Behavioral Templates
+	BehavioralPriority,
+	BehavioralDefaults,
+	BehavioralNarrationHints,
+	BehavioralTemplate,
+	// Creature Archetypes
+	CreatureCategory,
+	CreatureBehavior,
+	CreatureSensory,
+	CreatureLootEntry,
+	CreatureArchetype,
+	// Quest Templates
+	QuestTag,
+	QuestTier,
+	QuestScaling,
+	QuestRole,
+	QuestStage,
+	QuestResolution,
+	SideQuestTemplate,
+	QuestInstance,
+	// Starting Settlement Generation
+	NamedNPCSlot,
+	AmbientNPCType,
+	SettlementRing,
+	StartingSettlementConfig,
+	SettlementScaling,
+	// World Instance
+	WorldInstance,
 } from './game.js';
 
 export {
@@ -215,3 +279,61 @@ export {
 	DIRECTION_OFFSETS,
 	SKILL_ABILITIES,
 } from './game.js';
+
+export type {
+	// Connection Lifecycle
+	ConnectionState,
+	// SignalR
+	SignalRMessage,
+	HubName,
+	// Chat
+	ChatChannel,
+	ChatScope,
+	ChatMessage,
+	// Presence
+	PlayerPresence,
+	HeartbeatPayload,
+	// World Settings (Multiplayer)
+	WorldTone,
+	DifficultyTier,
+	PlayMode,
+	FrayIntensity,
+	HouseRules,
+	WorldSettings,
+	// Player Session
+	PlayerSession,
+	PendingAction,
+	// Containers
+	ContainerType,
+	Container,
+	ContainerItem,
+	// Party System
+	PartyDecisionModel,
+	Party,
+	PartyVote,
+	// Trading
+	TradeProposal,
+	// Turn Coordination (Wave 2)
+	TurnPhase,
+	TurnState,
+	TurnResult,
+	TurnActionResult,
+	// Graceful Disconnect (Wave 2)
+	DisconnectEvent,
+	ReconnectResult,
+	// Session Recap (Wave 2)
+	RecapContext,
+	SessionRecap,
+	// Chat-to-Intent LLM Fallback (Wave 2)
+	IntentExtractionContext,
+	IntentExtractionResult,
+	// World Event Log (Wave 2)
+	WorldEventLogEntry,
+	// Narrative Modes
+	VerbosityMode,
+	// Storage
+	BlobPath,
+	WorldStore,
+	MessageBroker,
+	ChatStore,
+} from './multiplayer.js';

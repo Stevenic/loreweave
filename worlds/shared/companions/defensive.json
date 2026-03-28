@@ -1,0 +1,56 @@
+{
+  "id": "behavioral_template_defensive",
+  "name": "Defensive",
+  "description": "Positions between enemies and the most vulnerable ally. Prioritizes protection and threat management over damage.",
+  "type": "behavioral_template",
+  "version": "1.0.0",
+
+  "priority_list": [
+    {
+      "priority": 1,
+      "condition": "self.hp_percent <= retreat_threshold",
+      "action": "retreat",
+      "description": "Disengage and move to safety when HP drops below retreat threshold"
+    },
+    {
+      "priority": 2,
+      "condition": "ally_lowest_hp.hp_percent < 50 && !self.between(enemies, ally_lowest_hp)",
+      "action": "move",
+      "target": "between(enemies, ally_lowest_hp)",
+      "description": "Reposition between enemies and the most wounded ally"
+    },
+    {
+      "priority": 3,
+      "condition": "has_ability('taunt') || has_ability('shield')",
+      "action": "use_ability",
+      "target": "enemy_nearest_to_ally_lowest_hp",
+      "description": "Use taunt or shield ability to draw attention from vulnerable allies"
+    },
+    {
+      "priority": 4,
+      "condition": "enemies_in_range('melee')",
+      "action": "attack",
+      "target": "enemy_nearest",
+      "description": "Attack the nearest enemy to maintain threat"
+    },
+    {
+      "priority": 5,
+      "condition": "true",
+      "action": "dodge",
+      "description": "Take the Dodge action if no better option"
+    }
+  ],
+
+  "defaults": {
+    "retreat_threshold": 25,
+    "position_preference": "frontline",
+    "resource_usage": "conservative",
+    "combat_role_affinity": ["frontline"]
+  },
+
+  "narration_hints": {
+    "attack_verbs": ["blocks", "deflects", "interposes", "shields", "parries"],
+    "mood": "stalwart",
+    "retreat_flavor": "backs away steadily, shield raised"
+  }
+}

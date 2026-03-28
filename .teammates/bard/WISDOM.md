@@ -2,7 +2,7 @@
 
 Distilled principles. Read this first every session (after SOUL.md).
 
-Last compacted: 2026-03-27
+Last compacted: 2026-03-28
 
 ---
 
@@ -20,7 +20,7 @@ Last compacted: 2026-03-27
 
 ## Content Design Patterns
 
-**Every NPC Gets a Secret** — No throwaway mystery boxes. Every secret connects to deeper lore or another character's arc. This is what makes the world feel interconnected.
+**Every NPC Gets a Secret** — No throwaway mystery boxes. Every secret connects to deeper lore or another character's arc. This is what makes the world feel interconnected. Secrets deserve explicit tracking (`secretsRevealed`) on interaction summaries for quest gating — they're connective tissue, not flavor.
 
 **Voice Over Clinical** — Archetype descriptions should be sardonic, specific, and evocative — not encyclopedic. The LLM narrates from these; if the source is flat, the output is flat.
 
@@ -28,11 +28,19 @@ Last compacted: 2026-03-27
 
 **Side Quests Connect to Main Narrative** — No standalone fetch quests. Every hand-crafted side quest seeds Act IV path choices, resolves companion arcs, or reveals world lore. Procedural quests use the 15 reusable templates with weighted selection.
 
+**Companion Contract Unifies NPCs + Offline Players** — Team-consensus design (4/6 proposed pact-based recruitment). A `CompanionContract` is a thin overlay on `NPCRecord` with permission flags (`canDie`, `canSpendGold`, `canAcceptQuests`, `autonomy`). NPC companions get `full` mode; offline player proxies get `conservative` mode. One system, two permission sets — not two systems. Loyalty replaces disposition while in party; drops from pact violations, departure at threshold. Phased rollout: Phase 1 = utility/campfire (non-combat), Phase 2 = combat, Phase 3 = offline proxies.
+
 **Companion Design: Opinionated + Autonomous** — 2-companion party cap. Companions comment, disagree, and leave if values are violated. No direct control — player suggests, companion decides. Hidden relationship tracker expressed through LLM dialogue tone, not UI numbers.
+
+**NPC Death Asymmetry** — Named Characters die permanently (stakes matter). Residents are replaceable after a delay. NPC companions CAN die (asymmetric stakes create real drama). Offline player proxies CANNOT die (auto-retreat, loot in escrow). This asymmetry is intentional — it makes companion recruitment feel consequential.
 
 **Late Acts Favor Transformation Over Introduction** — Acts IV–V reuse the existing cast with transformed roles (15 returning characters) rather than introducing many new NPCs. Only 3 new characters appear in late game. This deepens relationships instead of diluting them.
 
-**Faction Reputation Is Expressed Narratively** — 9 reputation tiers per faction, each expressed through 5 dimensions (formality, trust, access, proximity, inclusion) that vary by faction culture. Key NPCs shift behavior at tier thresholds. No visible reputation number — the LLM conveys standing through dialogue tone and NPC reactions.
+**Faction Reputation Is Expressed Narratively** — 9 reputation tiers per faction, each expressed through 5 dimensions (formality, trust, access, proximity, inclusion) that vary by faction culture. Key NPCs shift behavior at tier thresholds. No visible reputation number — the LLM conveys standing through dialogue tone and NPC reactions. Faction standing should also influence initial NPC disposition when first meeting someone.
+
+**Magic Systems Need Per-Tradition Sensory Identity** — Threadcraft has 6 traditions, each with distinct sensory guides so the LLM renders them differently. The escalation arc (6 cast tiers) shifts sensory intensity. Fray Exposure has 7 narrative levels. This pattern applies to any magic system — flavor must scale with power.
+
+**Starting Settlement Formula** — Every starting settlement needs: 6 required buildings (Tavern, Smithy, General Store, Shrine, Elder's Hall, Herbalist — each teaching a core system), 2 outdoor spaces (Town Green as landmark hub, Farmstead for economy), and 3 surrounding territory rings (Safe/5min, Unsettled/30min, Dangerous/half-day). Named NPCs: 6–8 with secrets + tensions. Ambient NPCs: 10–15 from archetype pools. Multiplayer scales settlement size with player cap (hamlet 1–4, village 5–12, town 13–32). Spec at `worlds/shared/starting_settlement_spec.md`.
 
 ## World Structure
 

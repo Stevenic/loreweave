@@ -2,7 +2,7 @@
 
 Distilled principles. Read this first every session (after SOUL.md).
 
-Last compacted: 2026-03-27
+Last compacted: 2026-03-28
 
 ---
 
@@ -30,6 +30,8 @@ Last compacted: 2026-03-27
 
 **Companion Quest Auto-Successes** — For epic skill challenges (like The First Song at 8/4), completed companion quests grant up to 4 auto-successes. This rewards thorough play and makes side content mechanically meaningful in finales.
 
+**Companions Change Encounter Math** — Any combat-capable companion increases party damage output by 10-25%. Ship non-combat (Campfire) companions first; graduate into combat tiers only when the encounter engine can rebalance. CR adjustment formula for companion parties: effective party size ≈ players + (companions × 0.75).
+
 ## Creature Design
 
 **CR Verification is Non-Negotiable** — Every custom stat block must be verified against 2024 Free Rules offensive/defensive CR calculations. Target ±1 CR of design intent. Document the math.
@@ -56,6 +58,12 @@ Last compacted: 2026-03-27
 
 **Crafting Uses Two-Check Resolution** — Threadcraft crafting requires Tool DC (artisan skill) + Infusion DC (CON-based Threadcraft). Two failure points make crafting feel risky and skill-dependent. Materials have real costs: Thread-Iron requires Frayed zones, Ward Crystals reduce ward strength, Fray Essence degrades in 7 days.
 
+**Unified Companion/Offline-Player System** — NPC companions and offline players use the same `CompanionState` overlay on `NPCRecord`. Same mechanical resolution (combat AI, skill checks, movement), different permission flags. Offline players get a hard restriction: no death, no permanent resource loss, no binding narrative decisions. One code path, two permission models. Cap: 2 companion slots per party (NPC + offline combined).
+
+**NPC Trading Follows D&D Pricing** — Buy at list price (2024 FR equipment tables), sell at half. Persuasion DC 15 haggle for 10-20% adjustment. Allied NPCs sell at 65% cap (not 75% — too generous). Diminishing returns apply to repeated same-type reputation actions with merchants.
+
+**Tag Mechanically Significant NPC Memories** — Promises, debts, and skill check results must be tagged to survive memory compression. Tier 2 Named NPCs persist these even if narrative memory resets between interactions. "Session" boundary for memory decay needs explicit definition in the engine.
+
 ## Content Patterns
 
 **Bard Writes Narrative, Loremaster Adds Mechanics** — Bard's archetypes need mechanical backfill: stat tiers for NPCs, challenge arrays for locations, DCs for traps, CR for creatures. Review Bard's output for narrative quality (usually strong) and flag mechanical gaps.
@@ -65,6 +73,8 @@ Last compacted: 2026-03-27
 **12 Biomes Cover Threadhallow** — forest, plains, mountain, swamp, tundra, desert, taiga, coast, hills, cavern, farmland, deep_forest. The original 7 missed coast, hills, cavern, farmland, and the ancient/dense forest variant.
 
 **Weather Amplifies Weave, Not Vice Versa** — Weave state is a weather amplifier, not a weather type. 7 weather types map to 2024 FR environmental hazards. 4-season modifiers shift probabilities. Weave instability escalates existing weather effects rather than creating new weather categories.
+
+**Settlement Population Scales by Type** — Village: 3-5 Named / 8-12 Residents. Town: 5-10 Named / 15-25 Residents. City: 10-20 Named / 30-50 Residents. The hard constraint is LLM context budget, not gameplay — too many NPCs degrades narrative quality.
 
 ## Engine Review Patterns
 

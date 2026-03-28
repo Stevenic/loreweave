@@ -2,7 +2,7 @@
 
 Distilled principles. Read this first every session (after SOUL.md).
 
-Last compacted: 2026-03-27
+Last compacted: 2026-03-28
 
 ---
 
@@ -83,3 +83,21 @@ When consolidating ideas, votes, or proposals from multiple sources (teammates, 
 
 ### Tier entities by persistence and authoring cost
 Ephemeral entities (creatures) cost nothing — generated per-encounter, no state. Persistent entities (residents) cost an archetype lookup — generated once from templates, maintain state. Authored entities (named characters) cost hand-writing time — unique identity, full backstory. This three-tier model (ephemeral → persistent → authored) applies to NPCs, items, and locations alike. Match entity investment to narrative importance.
+
+### Aggregate from source files, not from logs or memory
+When tallying multi-source data (votes, ideas, decisions), always read from the persisted source artifacts — not from compressed logs or conversation memory. Compressed logs lose low-priority allocations silently. Re-tallying the UX brainstorm from vote files recovered 143/150 points vs ~129 from compressed logs. The source file is the record of truth; logs are summaries.
+
+### Consensus favors infrastructure; differentiation hides at the bottom
+In team voting, consensus gravitates toward obvious infrastructure (chat, auth, persistence) while the features that differentiate the product (tapestry map, adaptive verbosity, presence-as-location) cluster at the bottom. Actively advocate for low-ranked differentiators during prioritization — they're often cheap relative to brand impact and get overlooked because they lack a clear technical dependency chain.
+
+### One type with progressive enrichment, not parallel hierarchies
+When entity tiers share the same identity (e.g., NPCs at Tier 2 and Tier 3), use one unified type where higher tiers fill in deeper fields. Promotion enriches an existing record rather than migrating to a new type. stevenic's framing: "a Tier 2 NPC is just a dynamically generated Tier 3 NPC." This avoids type migration bugs and keeps queries simple.
+
+### Overlay existing types, don't fork new ones
+When adding a new behavior mode (companions, offline players), add a state overlay field to the existing type rather than creating a parallel entity type. CompanionState is a field on NPCRecord, not a CompanionNPC type. Offline players use the same system with different permission flags. One code path, differentiated by configuration.
+
+### Phase features by balance impact
+Ship features in order of increasing system disruption. The companion system ships as Advisor (zero combat impact) → Follower (moderate, reaction-based) → Full (needs CR adjustment). Each phase validates assumptions before the next adds complexity. This defers the hardest design work (encounter rebalancing) until the foundation is proven.
+
+### Resolve design disagreements with asymmetric rules
+When the team splits on a binary choice, check whether different entity types warrant different answers. "Should companions die?" → NPC companions yes (real stakes), offline players no (absent player protection). "Should dispositions carry over?" → Yes, but surfaced at reconnect so the returning player isn't blindsided. Both sides were right — for their context.
