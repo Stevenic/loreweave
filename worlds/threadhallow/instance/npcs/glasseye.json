@@ -5,7 +5,7 @@
 	"archetypeId": "hermit",
 	"role": "Salvager with Pattern Sight",
 	"category": "wanderer",
-	"statsTier": "skilled",
+	"statsTier": "expert",
 	"traits": ["quiet", "precise", "poetic", "observant"],
 	"voicePatterns": [
 		"quiet — not shy, just economical with words",

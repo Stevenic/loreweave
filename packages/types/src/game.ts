@@ -457,6 +457,13 @@ export type Season = 'spring' | 'summer' | 'autumn' | 'winter';
 
 // ─── World State ───
 
+export type WorldNarrativeHook = {
+	id: string;
+	description: string;
+	deadlineDay: number;
+	resolved: boolean;
+};
+
 export type WorldState = {
 	seed: WorldSeed;
 	time: GameTime;
@@ -465,6 +472,7 @@ export type WorldState = {
 	characters: Map<string, Character>;
 	loadedChunks: Map<string, Chunk>;
 	events: WorldEvent[];
+	narrativeHooks?: WorldNarrativeHook[];
 };
 
 export type WorldEvent = {

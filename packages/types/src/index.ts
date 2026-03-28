@@ -105,6 +105,7 @@ export type {
 	Weather,
 	Season,
 	// World State
+	WorldNarrativeHook,
 	WorldState,
 	WorldEvent,
 	WorldEventType,

@@ -57,5 +57,5 @@
 		}
 	],
 	"initialWardStrength": 62,
-	"timePressure": "The Hollowing ceremony is 6 weeks away. Without a Wardweaver to lead the Binding Song, the ward-circle will fail. Ward strength decays ~2% per week without maintenance. Below 40%, Fray creatures begin appearing inside the settlement boundary."
+	"timePressure": "The Hollowing ceremony is 6 weeks away. Without a Wardweaver to lead the Binding Song, the ward-circle will fail. Ward strength decays ~1 per week without maintenance (~2 in winter). Below 40%, Fray creatures begin appearing inside the settlement boundary."
 }

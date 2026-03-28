@@ -5,7 +5,7 @@
 	"archetypeId": "village_elder",
 	"role": "Thornwick's Voice at the Table",
 	"category": "authority",
-	"statsTier": "commoner",
+	"statsTier": "skilled",
 	"traits": ["earnest", "overwhelmed", "practical", "growing"],
 	"voicePatterns": [
 		"young voice in rooms full of old authority — slightly too fast",

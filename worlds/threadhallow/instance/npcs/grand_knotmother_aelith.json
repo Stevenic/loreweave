@@ -5,7 +5,7 @@
 	"archetypeId": "magistrate",
 	"role": "Head of All Wardweaver Guilds",
 	"category": "authority",
-	"statsTier": "veteran",
+	"statsTier": "elite",
 	"traits": ["pragmatist", "commanding", "weary", "decisive"],
 	"voicePatterns": [
 		"formal with 'we' — drops the royal 'we' when being honest",
