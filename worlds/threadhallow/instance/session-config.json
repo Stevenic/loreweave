@@ -1,0 +1,176 @@
+{
+	"wardStrengths": {
+		"thornwick": 62
+	},
+	"factionReputation": {
+		"wardweavers": 0,
+		"threadwalkers": 0,
+		"rememberers": 0,
+		"hollow_court": 0,
+		"common_folk": 10
+	},
+	"frayExposure": {},
+	"weaveGraph": {
+		"stones": [
+			{
+				"id": "loom_stone_thornwick",
+				"name": "Thornwick Hearthstone",
+				"position": { "x": 518, "y": 518 },
+				"integrity": 58,
+				"discovered": false,
+				"settlementId": "thornwick",
+				"isKeystone": false
+			},
+			{
+				"id": "loom_stone_singing_cairn",
+				"name": "The Singing Stone",
+				"position": { "x": 640, "y": 384 },
+				"integrity": 72,
+				"discovered": false,
+				"isKeystone": false
+			},
+			{
+				"id": "loom_stone_loomhearth",
+				"name": "Loomhearth Anchor",
+				"position": { "x": 768, "y": 512 },
+				"integrity": 85,
+				"discovered": false,
+				"settlementId": "loomhearth",
+				"isKeystone": false
+			},
+			{
+				"id": "loom_stone_ashenmoor",
+				"name": "Ashenmoor Deepstone",
+				"position": { "x": 384, "y": 640 },
+				"integrity": 31,
+				"discovered": false,
+				"isKeystone": false
+			},
+			{
+				"id": "loom_stone_hollowreach",
+				"name": "Hollowreach Shard",
+				"position": { "x": 256, "y": 512 },
+				"integrity": 12,
+				"discovered": false,
+				"settlementId": "hollowreach",
+				"isKeystone": false
+			},
+			{
+				"id": "loom_stone_knotwood",
+				"name": "Knotwood Heart",
+				"position": { "x": 448, "y": 320 },
+				"integrity": 90,
+				"discovered": false,
+				"isKeystone": false
+			},
+			{
+				"id": "loom_stone_threadfall",
+				"name": "Threadfall Nexus",
+				"position": { "x": 640, "y": 640 },
+				"integrity": 95,
+				"discovered": false,
+				"isKeystone": false
+			},
+			{
+				"id": "loom_stone_weavers_cradle",
+				"name": "The First Loom Stone",
+				"position": { "x": 512, "y": 256 },
+				"integrity": 100,
+				"discovered": false,
+				"isKeystone": true
+			},
+			{
+				"id": "loom_stone_stitchford",
+				"name": "Stitchford Pillar",
+				"position": { "x": 896, "y": 384 },
+				"integrity": 88,
+				"discovered": false,
+				"settlementId": "stitchford",
+				"isKeystone": false
+			}
+		],
+		"threadlines": [
+			{
+				"id": "tl_thornwick_loomhearth",
+				"fromId": "loom_stone_thornwick",
+				"toId": "loom_stone_loomhearth",
+				"strength": 45,
+				"severed": false,
+				"influenceRadius": 32
+			},
+			{
+				"id": "tl_thornwick_knotwood",
+				"fromId": "loom_stone_thornwick",
+				"toId": "loom_stone_knotwood",
+				"strength": 55,
+				"severed": false,
+				"influenceRadius": 28
+			},
+			{
+				"id": "tl_thornwick_ashenmoor",
+				"fromId": "loom_stone_thornwick",
+				"toId": "loom_stone_ashenmoor",
+				"strength": 20,
+				"severed": false,
+				"influenceRadius": 24
+			},
+			{
+				"id": "tl_loomhearth_singing_cairn",
+				"fromId": "loom_stone_loomhearth",
+				"toId": "loom_stone_singing_cairn",
+				"strength": 70,
+				"severed": false,
+				"influenceRadius": 36
+			},
+			{
+				"id": "tl_loomhearth_stitchford",
+				"fromId": "loom_stone_loomhearth",
+				"toId": "loom_stone_stitchford",
+				"strength": 80,
+				"severed": false,
+				"influenceRadius": 40
+			},
+			{
+				"id": "tl_knotwood_weavers_cradle",
+				"fromId": "loom_stone_knotwood",
+				"toId": "loom_stone_weavers_cradle",
+				"strength": 85,
+				"severed": false,
+				"influenceRadius": 36
+			},
+			{
+				"id": "tl_singing_cairn_weavers_cradle",
+				"fromId": "loom_stone_singing_cairn",
+				"toId": "loom_stone_weavers_cradle",
+				"strength": 75,
+				"severed": false,
+				"influenceRadius": 32
+			},
+			{
+				"id": "tl_threadfall_loomhearth",
+				"fromId": "loom_stone_threadfall",
+				"toId": "loom_stone_loomhearth",
+				"strength": 90,
+				"severed": false,
+				"influenceRadius": 44
+			},
+			{
+				"id": "tl_hollowreach_ashenmoor",
+				"fromId": "loom_stone_hollowreach",
+				"toId": "loom_stone_ashenmoor",
+				"strength": 8,
+				"severed": false,
+				"influenceRadius": 16
+			},
+			{
+				"id": "tl_hollowreach_thornwick",
+				"fromId": "loom_stone_hollowreach",
+				"toId": "loom_stone_thornwick",
+				"strength": 15,
+				"severed": false,
+				"influenceRadius": 20
+			}
+		],
+		"globalHealth": 64
+	}
+}

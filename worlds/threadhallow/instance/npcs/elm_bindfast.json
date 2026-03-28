@@ -1,0 +1,70 @@
+{
+	"id": "elm_bindfast",
+	"name": "Elm Bindfast",
+	"tier": "named",
+	"archetypeId": "herbalist",
+	"role": "Wardweaver Reformist",
+	"category": "craft",
+	"statsTier": "skilled",
+	"traits": ["quiet", "meticulous", "calculating", "courageous"],
+	"voicePatterns": [
+		"quiet voice that asks uncomfortable questions",
+		"documents everything — speaks in data points and observations",
+		"rolls up sleeves — carries tools, not a ceremonial staff",
+		"careful word choice that makes conclusions seem inevitable"
+	],
+	"dialogueHooks": [
+		"sharing ward-anomaly data that contradicts guild doctrine",
+		"offering practical Threadcraft assistance without guild bureaucracy",
+		"questioning whether the current maintenance approach is sustainable",
+		"providing insider perspective on guild politics and reform possibilities"
+	],
+	"knowledge": {
+		"always": [
+			"ward maintenance techniques — practical, field-tested",
+			"Loomhearth ward-pattern schedules and standard procedures",
+			"guild hierarchy and who has authority over what",
+			"basic Threadcraft diagnosis — reading ward health"
+		],
+		"sometimes": [
+			"three-year anomalies in Loomhearth ward patterns he's documented privately",
+			"which guild members sympathize with reform",
+			"specific ward failures that were covered up in official reports"
+		],
+		"rarely": [
+			"his private journal is more comprehensive than anyone knows — cross-referenced with trade records, weather, and ceremony schedules",
+			"he's independently mapped the Thinning's onset to within one month of the true date",
+			"his data, combined with Hawthorn's trade route observations, could prove the Thinning is accelerating"
+		]
+	},
+	"schedule": {
+		"morning": { "location": "loomhearth_guild_hall", "activity": "ward inspections, data collection" },
+		"afternoon": { "location": "loomhearth_ward_stations", "activity": "field maintenance, documenting anomalies" },
+		"evening": { "location": "loomhearth_elm_quarters", "activity": "updating his private journal, cross-referencing data" },
+		"night": { "location": "loomhearth_elm_quarters", "activity": "analyzing patterns, planning reform strategy" }
+	},
+	"disposition": {},
+	"dispositionPermanent": {},
+	"alive": true,
+	"location": "loomhearth_guild_hall",
+	"backstory": "Elm is a Wardkeeper — a working-rank guild member who maintains wards in the field. He's not a politician by nature; he's a documentarian. But his meticulous data collection over three years has led him to conclusions the guild leadership doesn't want to hear. He carries a leather satchel of tools, not a ceremonial staff. He rolls up his sleeves. He does the work. And the work has shown him that something is fundamentally wrong with the standard approach to ward maintenance.",
+	"secret": "His private ward-anomaly journal is more comprehensive than anyone suspects. Cross-referenced with trade records, weather patterns, and ceremony schedules, he's independently mapped the Thinning's true onset to within one month. His data is a smoking gun.",
+	"motivation": "Fix the ward system based on what the data actually says, not what doctrine claims",
+	"tensions": [
+		"loyal to the guild's mission while undermining its leadership",
+		"quiet personality forced into a reformist role by his own data",
+		"calculating enough to play politics but honest enough to hate doing it"
+	],
+	"interactionHistory": [],
+	"relationships": {
+		"knotmother_sable": {
+			"targetId": "knotmother_sable",
+			"attitude": -5,
+			"tags": ["superior", "obstacle", "grudging_respect"],
+			"knownFacts": ["Sable has her own anomaly data she won't share", "Sable's institutional caution is killing the reform effort"],
+			"history": "Elm's thorough documentation has embarrassed Sable twice. She can't fire him because his work is too good."
+		}
+	},
+	"questConnections": ["main_quest_act2", "ward_anomaly_quest", "release_path"],
+	"arc": "quiet_reformist"
+}

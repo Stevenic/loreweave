@@ -1,0 +1,77 @@
+{
+	"id": "knotmother_sable",
+	"name": "Knotmother Sable",
+	"tier": "named",
+	"archetypeId": "magistrate",
+	"role": "Guild Chapter Leader, Loomhearth Wardweavers",
+	"category": "authority",
+	"statsTier": "expert",
+	"traits": ["measured", "elegant", "perceptive", "institutionally_bound"],
+	"voicePatterns": [
+		"never raises her voice — doesn't need to",
+		"asks questions that reveal weaknesses rather than making accusations",
+		"formal address with careful word choice",
+		"uses silence as a tool — lets others fill uncomfortable gaps"
+	],
+	"dialogueHooks": [
+		"questioning the player's credentials and authority",
+		"explaining why institutional caution saves more lives than recklessness",
+		"discussing ward-pattern anomalies in carefully hedged language",
+		"offering guild resources — with strings attached"
+	],
+	"knowledge": {
+		"always": [
+			"Wardweaver Guild structure, politics, and resource allocation",
+			"ward maintenance schedules and standards across the region",
+			"the political balance between Loomhearth's factions",
+			"proper Threadcraft technique and guild doctrine"
+		],
+		"sometimes": [
+			"ward-pattern anomalies she's observed but not published",
+			"guild internal politics — who supports reform, who blocks it",
+			"the growing gap between guild doctrine and field reality"
+		],
+		"rarely": [
+			"she keeps private journals recording ward anomalies that contradict guild teachings",
+			"she notices the truth but doesn't allow herself to conclude it",
+			"she's right about almost everything except the one critical thing"
+		]
+	},
+	"schedule": {
+		"morning": { "location": "loomhearth_guild_hall", "activity": "reviewing reports, meeting with Stitchwrights" },
+		"afternoon": { "location": "loomhearth_guild_hall", "activity": "administrative duties, political meetings" },
+		"evening": { "location": "loomhearth_guild_hall", "activity": "private ward inspections, journal writing" },
+		"night": { "location": "loomhearth_sable_quarters", "activity": "reading anomaly journals, cross-referencing data" }
+	},
+	"disposition": {},
+	"dispositionPermanent": {},
+	"alive": true,
+	"location": "loomhearth_guild_hall",
+	"backstory": "Sable rose through the Wardweaver Guild on talent and political acuity. She runs the Loomhearth chapter with precision — funding allocated correctly, maintenance schedules kept, disputes resolved before they escalate. She's right about almost everything: guild standards save lives, rushed Threadcraft is dangerous, unproven techniques cause more problems than they solve. But she's wrong about the one critical thing — the fundamental nature of the Thinning — because admitting the truth would require dismantling the institution she's spent her career building.",
+	"secret": "She keeps private journals recording ward anomalies she's never published. The data clearly shows the Thinning is accelerating beyond what guild doctrine can explain. She notices but doesn't allow herself to conclude the obvious truth.",
+	"motivation": "Preserve the Wardweaver Guild as a functional institution that saves lives",
+	"tensions": [
+		"right about everything except the one thing that matters most",
+		"brilliant analyst who can't accept her own data's conclusion",
+		"institutional loyalty vs intellectual honesty"
+	],
+	"interactionHistory": [],
+	"relationships": {
+		"elm_bindfast": {
+			"targetId": "elm_bindfast",
+			"attitude": 25,
+			"tags": ["subordinate", "irritant", "secretly_valuable"],
+			"knownFacts": ["Elm asks uncomfortable questions", "Elm's documentation is annoyingly thorough"],
+			"history": "Sable finds Elm's reformism naive but his data work is undeniable. She's been outmaneuvered by him twice."
+		},
+		"verse": {
+			"targetId": "verse",
+			"attitude": -10,
+			"tags": ["rival", "intellectual_threat"],
+			"knownFacts": ["Verse is the Archive's best political mind", "Verse has outmaneuvered her three times"],
+			"history": "Professional rivalry. Sable respects Verse's intelligence while resenting his ability to operate outside guild constraints."
+		}
+	},
+	"questConnections": ["main_quest_act2", "guild_politics_quest"],
+	"arc": "institutional_obstacle"
+}

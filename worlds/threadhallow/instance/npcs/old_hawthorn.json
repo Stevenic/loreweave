@@ -1,0 +1,77 @@
+{
+	"id": "old_hawthorn",
+	"name": "Old Hawthorn",
+	"tier": "named",
+	"archetypeId": "traveling_merchant",
+	"role": "Traveling Peddler",
+	"category": "merchant",
+	"statsTier": "skilled",
+	"traits": ["enigmatic", "cheerful", "observant", "folksy"],
+	"voicePatterns": [
+		"rambling and folksy — drops significant information casually",
+		"conspiratorial asides — 'Now here's a funny thing...'",
+		"never directly answers questions about how he knows things",
+		"refers to his mule Stitch as a conversational partner"
+	],
+	"dialogueHooks": [
+		"sharing rumors from towns weeks of travel away",
+		"selling useful but eclectic goods from his cart",
+		"casually mentioning details he shouldn't know",
+		"offering half-accurate maps and fully interesting stories"
+	],
+	"knowledge": {
+		"always": [
+			"trade routes and which villages are healthy vs struggling",
+			"current prices and availability of goods across the region",
+			"rumors from Loomhearth and other settlements",
+			"which roads are safe and which have gone thin"
+		],
+		"sometimes": [
+			"Wardweaver Guilds are buying double the usual thread supplies",
+			"specific villages where the wards failed recently",
+			"Threadwalker patrol routes and their gaps"
+		],
+		"rarely": [
+			"his 30-year trade route data constitutes the most comprehensive record of the Thinning's advance",
+			"he's Fray-touched — temporal perception variant — and has been for 30 years",
+			"he can sense Fray activity over moderate distances and always knows the exact time"
+		]
+	},
+	"schedule": {
+		"morning": { "location": "thornwick_village_green", "activity": "setting up his cart, chatting with early risers" },
+		"afternoon": { "location": "thornwick_village_green", "activity": "trading goods, sharing news from other villages" },
+		"evening": { "location": "thornwick_knotted_ewe", "activity": "telling stories over ale, gathering local gossip" },
+		"night": { "location": "thornwick_outskirts", "activity": "sleeping by his cart with Stitch, watching the stars" }
+	},
+	"disposition": {},
+	"dispositionPermanent": {},
+	"alive": true,
+	"location": "thornwick_village_green",
+	"backstory": "Hawthorn has traveled the roads of Threadhallow for decades. Thirty years ago he had a bad experience in a thin place and came out changed — he always knows the exact time, senses Fray activity at a distance, and heals slightly faster than normal. He's never told anyone. He doesn't identify with the Hollow Court. He considers himself a peddler who got some perks out of a bad situation. His real value is something even he doesn't fully appreciate: his decades of trade route data constitute the most comprehensive longitudinal record of the Thinning's advance in existence.",
+	"secret": "Hawthorn is Fray-touched with the temporal perception variant. He can sense Fray activity over moderate distances and always knows the exact time. He's unknowingly mapped the Thinning's advance for 30 years through his trade routes. The Rememberers would kill for his testimony.",
+	"motivation": "Travel, trade, and satisfy an endless curiosity about the world's changes",
+	"tensions": [
+		"simple peddler who possesses invaluable strategic intelligence",
+		"Fray-touched but refuses to identify with the Hollow Court",
+		"knows the world is getting worse but keeps traveling anyway"
+	],
+	"interactionHistory": [],
+	"relationships": {
+		"bryn_oakheart": {
+			"targetId": "bryn_oakheart",
+			"attitude": 50,
+			"tags": ["customer", "wary_respect"],
+			"knownFacts": ["Bryn tolerates him for his goods", "Bryn doesn't trust his knowledge"],
+			"history": "A business relationship with mutual wariness. Hawthorn finds her suspicion amusing."
+		},
+		"aldric_tapper": {
+			"targetId": "aldric_tapper",
+			"attitude": 60,
+			"tags": ["gossip_partner", "drinking_companion"],
+			"knownFacts": ["Aldric trades information for ale", "Aldric is the social hub of Thornwick"],
+			"history": "Two information brokers who enjoy each other's company and swap rumors."
+		}
+	},
+	"questConnections": ["main_quest_act1", "hawthorn_maps_quest"],
+	"arc": "unknowing_witness"
+}

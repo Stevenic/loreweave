@@ -1,0 +1,77 @@
+{
+	"id": "pathmaster_longstitch",
+	"name": "Pathmaster Aldric Longstitch",
+	"tier": "named",
+	"archetypeId": "captain",
+	"role": "Mending Path Leader",
+	"category": "authority",
+	"statsTier": "veteran",
+	"traits": ["soft-spoken", "careful", "honest", "steady"],
+	"voicePatterns": [
+		"soft-spoken — thinks before every answer",
+		"honest about limitations without being defeatist",
+		"measured cadence — speaks like someone accustomed to delivering bad news gently",
+		"occasional dry humor about how long he's been walking thin places"
+	],
+	"dialogueHooks": [
+		"discussing Threadwalker patrol reports and emerging threats",
+		"offering expedition sanctions and Mending Path resources",
+		"mediating between the three Threadwalker orders",
+		"sharing hard-won field wisdom about surviving thin places"
+	],
+	"knowledge": {
+		"always": [
+			"Threadwalker patrol coverage and current gaps",
+			"the Mending Path's traditional techniques and their effectiveness",
+			"political dynamics between the three Threadwalker orders",
+			"which thin places are most dangerous and why"
+		],
+		"sometimes": [
+			"the old methods are failing — patrol reports show accelerating degradation",
+			"specific incidents where traditional techniques should have worked but didn't",
+			"Farweft's transfer request and the circumstances around Hest's disappearance"
+		],
+		"rarely": [
+			"he's mildly Fray-touched — lost his sense of smell, can feel thin places before seeing them",
+			"he's never told anyone about his Fray-touch",
+			"he privately acknowledges the New Stitch may be right about needing new approaches"
+		]
+	},
+	"schedule": {
+		"morning": { "location": "loomhearth_pathmasters_lodge", "activity": "reviewing overnight patrol reports" },
+		"afternoon": { "location": "loomhearth_pathmasters_lodge", "activity": "meetings with order leaders, expedition planning" },
+		"evening": { "location": "loomhearth_waypost_tavern", "activity": "quiet meal with returning patrol teams" },
+		"night": { "location": "loomhearth_pathmasters_lodge", "activity": "updating maps, writing correspondence to other lodges" }
+	},
+	"disposition": {},
+	"dispositionPermanent": {},
+	"alive": true,
+	"location": "loomhearth_pathmasters_lodge",
+	"backstory": "Longstitch has walked the thin places for thirty years. The scar from temple to jaw is a Fray burn from his second decade. The slight hip hitch is from a fall in his third. His coat is the oldest in any order — heavily patched, held together by stubbornness and quality thread. He leads the Mending Path not because he's the strongest but because he's the most trusted. He's honest about what works and what doesn't, which is rarer than talent in leadership positions.",
+	"secret": "He's mildly Fray-touched — lost his sense of smell years ago, gained the ability to feel thin places before seeing them. He's never told anyone, not even the Frayborn who would welcome the kinship.",
+	"motivation": "Keep walkers alive and doing useful work, regardless of which order they belong to",
+	"tensions": [
+		"leads the traditionalist order while privately doubting tradition is enough",
+		"Fray-touched leader of an order that fears the Fray",
+		"the adult in the room who's tired of being the only one"
+	],
+	"interactionHistory": [],
+	"relationships": {
+		"farweft": {
+			"targetId": "farweft",
+			"attitude": 55,
+			"tags": ["former_subordinate", "concern", "respect"],
+			"knownFacts": ["Farweft is the best field walker in any order", "Farweft's grief over Hest drives him"],
+			"history": "Longstitch approved Farweft's transfer without argument. He understood. He still worries."
+		},
+		"thinwalker": {
+			"targetId": "thinwalker",
+			"attitude": 30,
+			"tags": ["philosophical_opposite", "reluctant_respect"],
+			"knownFacts": ["Thinwalker survived what should have killed her", "The Frayborn offer something the other orders don't"],
+			"history": "Officially disapproves. Privately corresponds with Thinwalker about Fray-touch phenomena."
+		}
+	},
+	"questConnections": ["main_quest_act2", "expedition_sanctions"],
+	"arc": "pragmatic_facilitator"
+}

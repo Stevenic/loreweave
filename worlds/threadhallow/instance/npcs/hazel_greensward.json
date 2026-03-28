@@ -1,0 +1,67 @@
+{
+	"id": "hazel_greensward",
+	"name": "Hazel Greensward",
+	"tier": "named",
+	"archetypeId": "village_elder",
+	"role": "Lead Farmer",
+	"category": "service",
+	"statsTier": "commoner",
+	"traits": ["tough", "practical", "generous", "no-nonsense"],
+	"voicePatterns": [
+		"blunt and practical — no time for fancy words",
+		"speaks in terms of seasons, soil, and weather",
+		"generous with food but sharp with opinions",
+		"'If the ground's good, the people eat. If it's not, we starve. Simple.'"
+	],
+	"dialogueHooks": [
+		"discussing crop yields and how the Thinning is affecting the soil",
+		"offering food to travelers — hospitality is non-negotiable",
+		"complaining about the ward-circle weakening and what it means for the harvest",
+		"providing practical village knowledge about paths, water sources, and dangers"
+	],
+	"knowledge": {
+		"always": [
+			"crop conditions and food supply status for Thornwick",
+			"which fields are producing and which are failing",
+			"the farmstead's daily operations and labor needs",
+			"practical paths around Thornwick and seasonal flooding patterns"
+		],
+		"sometimes": [
+			"crops near the Thinning Forest edge are growing wrong — twisted, oversized, tasteless",
+			"the soil itself feels different near thin places — colder, somehow",
+			"she's seen Fray-touched animals crossing her fields at night"
+		],
+		"rarely": [
+			"the oldest field — the one closest to the Loom Stone — always produces the best harvest regardless of weather"
+		]
+	},
+	"schedule": {
+		"morning": { "location": "thornwick_farmstead", "activity": "working the fields, directing farmhands" },
+		"afternoon": { "location": "thornwick_farmstead", "activity": "tending livestock, maintaining fences and irrigation" },
+		"evening": { "location": "thornwick_knotted_ewe", "activity": "sharing a meal, trading gossip about the harvest" },
+		"night": { "location": "thornwick_greensward_farm", "activity": "planning tomorrow's work, reviewing stores" }
+	},
+	"disposition": {},
+	"dispositionPermanent": {},
+	"alive": true,
+	"location": "thornwick_farmstead",
+	"backstory": "Hazel runs the Greensward farm, the largest agricultural operation in Thornwick. She feeds the village. That's not a metaphor — without her farm, Thornwick starves. She's practical, generous with food, and sharp with opinions. She doesn't care about Threadcraft politics; she cares about soil, rain, and whether the ward-circle holds long enough for the harvest to come in.",
+	"secret": "The oldest field — closest to the Loom Stone — always produces the best harvest regardless of weather or season. Hazel knows this but has never connected it to the weave. She just thinks it's 'good ground.'",
+	"motivation": "Feed Thornwick through the crisis, protect the farmstead",
+	"tensions": [
+		"feeds everyone but no one thinks about where food comes from until it stops",
+		"practical to a fault — dismisses magical explanations for things she can observe with her own eyes"
+	],
+	"interactionHistory": [],
+	"relationships": {
+		"bryn_oakheart": {
+			"targetId": "bryn_oakheart",
+			"attitude": 60,
+			"tags": ["leader", "partner", "respect"],
+			"knownFacts": ["Bryn relies on the farm", "Bryn understands practical concerns"],
+			"history": "Two pragmatic women who respect each other's work. Hazel is Bryn's most reliable ally."
+		}
+	},
+	"questConnections": ["farmstead_economy"],
+	"arc": "practical_backbone"
+}

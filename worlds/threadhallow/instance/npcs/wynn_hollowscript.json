@@ -1,0 +1,70 @@
+{
+	"id": "wynn_hollowscript",
+	"name": "Wynn Hollowscript",
+	"tier": "named",
+	"archetypeId": "hermit",
+	"role": "Thread-Linguist, Self-Exiled Rememberer",
+	"category": "wanderer",
+	"statsTier": "expert",
+	"traits": ["brilliant", "isolated", "passionate", "fragile"],
+	"voicePatterns": [
+		"talks to herself — answers her own questions in different tones",
+		"addresses Threadlines as if they're listening (they are)",
+		"intensely protective of her work — 20 years of notation in personal shorthand",
+		"desperately lonely — voice catches when someone genuinely listens"
+	],
+	"dialogueHooks": [
+		"excitedly explaining Threadline vibration patterns",
+		"testing whether the player can perceive what she perceives",
+		"defending her 20 years of exile as necessary, not mad",
+		"cautiously sharing her framework for decoding Weaver language"
+	],
+	"knowledge": {
+		"always": [
+			"Threadline vibration patterns carry structured information",
+			"the Threadfall Expanse has the strongest visible Threadlines in the region",
+			"20 years of notation documenting Threadline communication patterns",
+			"time moves strangely but consistently in high-weave areas"
+		],
+		"sometimes": [
+			"her notation system for recording Threadline frequencies",
+			"patterns repeat in cycles that correlate with the Wheel of Binding",
+			"certain Threadline clusters respond to human voice — especially singing"
+		],
+		"rarely": [
+			"three months before leaving the Archive, she played a Binding Song fragment backward near a Threadline and it moved toward her",
+			"she ran — returned a year later — never repeated the experiment",
+			"she will repeat it when the player is present, proving two-way communication is possible"
+		]
+	},
+	"schedule": {
+		"morning": { "location": "threadfall_expanse_camp", "activity": "recording Threadline readings, comparing to previous days" },
+		"afternoon": { "location": "threadfall_expanse_camp", "activity": "walking between Threadline clusters, singing test patterns" },
+		"evening": { "location": "threadfall_expanse_camp", "activity": "organizing notation pages, cross-referencing 20 years of data" },
+		"night": { "location": "threadfall_expanse_camp", "activity": "listening to the Threadlines hum in the dark" }
+	},
+	"disposition": {},
+	"dispositionPermanent": {},
+	"alive": true,
+	"location": "threadfall_expanse_camp",
+	"backstory": "Wynn was a Field-Scholar of the Rememberers — brilliant, restless, convinced that the answers weren't in the Archive but in the field. Twenty years ago she left, and everyone assumed she'd gone mad. She wasn't mad — she was right. Threadline vibration patterns carry structured information. She's spent two decades in the Threadfall Expanse, alone, developing a notation system in personal shorthand that no one else can read. She's been having a one-sided conversation with the Weavers for twenty years. She just didn't know they were on the other end.",
+	"secret": "Three months before leaving the Archive, she played a Binding Song fragment backward near a Threadline and it moved toward her. She ran. She returned a year later. She never repeated the experiment — until the player arrives. That moment proves mortal-Weaver dialogue is possible.",
+	"motivation": "Prove that the Threadlines carry language, not just energy — and decode it",
+	"tensions": [
+		"exceptional mind left alone too long — brilliance and isolation are both real",
+		"desperately lonely but terrified of being dismissed as mad",
+		"sitting on the most important discovery in 1,200 years in a tent in a field"
+	],
+	"interactionHistory": [],
+	"relationships": {
+		"verse": {
+			"targetId": "verse",
+			"attitude": 60,
+			"tags": ["former_colleague", "advocate", "missed"],
+			"knownFacts": ["Verse was the only one who didn't call her mad", "Verse still holds her position at the Archive"],
+			"history": "Wynn misses Verse more than anyone. He was her strongest advocate. She sometimes wonders if he still believes in her work."
+		}
+	},
+	"questConnections": ["main_quest_act3", "companion_wynn", "silence_speaks_quest", "harmony_path"],
+	"arc": "isolated_genius_to_first_speaker"
+}

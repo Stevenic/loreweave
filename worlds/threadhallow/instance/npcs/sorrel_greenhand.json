@@ -1,0 +1,77 @@
+{
+	"id": "sorrel_greenhand",
+	"name": "Sorrel Greenhand",
+	"tier": "named",
+	"archetypeId": "herbalist",
+	"role": "Ex-Wardweaver Apprentice",
+	"category": "craft",
+	"statsTier": "skilled",
+	"traits": ["talented", "guilt-ridden", "defensive", "perceptive"],
+	"voicePatterns": [
+		"defensive and sharp, then vulnerable when guard drops",
+		"talks to herself — been alone too long",
+		"addresses trees and Threadlines as if they're listening",
+		"precise technical vocabulary when discussing Threadcraft"
+	],
+	"dialogueHooks": [
+		"defensively explaining why she left Thornwick",
+		"describing the Thinning's advance from her forest camp",
+		"reluctantly discussing the Binding Song verses she knows",
+		"talking about Maren with guilt and grief"
+	],
+	"knowledge": {
+		"always": [
+			"she knows three of the five Binding Song verses",
+			"the Thinning Forest is getting worse — Threadlines are loosening",
+			"Maren Ashwick was her mentor and they parted badly",
+			"basic Wardweaver techniques for maintaining Threadlines"
+		],
+		"sometimes": [
+			"the specific pattern of Threadline degradation she's observed",
+			"Wardweaver Guild politics — why the guilds abandoned village practitioners",
+			"the location of thin places near Thornwick"
+		],
+		"rarely": [
+			"she's been hearing patterns in the Threadlines — not words, but structured information",
+			"she suspects the patterns are not random — something is trying to communicate",
+			"Maren's grandmother Aldith may have known about this phenomenon"
+		]
+	},
+	"schedule": {
+		"morning": { "location": "thinning_forest_camp", "activity": "maintaining Threadlines near her camp, gathering herbs" },
+		"afternoon": { "location": "thinning_forest_camp", "activity": "practicing Threadcraft alone, mending small tears" },
+		"evening": { "location": "thinning_forest_camp", "activity": "listening to the Threadlines, recording observations in a journal" },
+		"night": { "location": "thinning_forest_camp", "activity": "restless sleep, bad dreams about Maren" }
+	},
+	"disposition": {},
+	"dispositionPermanent": {},
+	"alive": true,
+	"location": "thinning_forest_camp",
+	"backstory": "Sorrel was Maren Ashwick's apprentice — the old Wardweaver's last hope for a successor. Two years ago, Sorrel and Maren fought. Maren wanted Sorrel to commit fully to the Wardweaver path; Sorrel felt trapped. She said things she regrets. She left. Maren died before they reconciled. Now Sorrel lives alone at the edge of the Thinning, unable to go home from guilt and unable to leave because she can feel the weave loosening. She performs small maintenance — not enough to fix anything, but enough to know how bad it's getting.",
+	"secret": "Sorrel has been hearing something in the Threadlines. Not words — patterns. Structured information. She thinks she's imagining it. She isn't. She's one of the rare mortals who can perceive the Weavers' distributed consciousness.",
+	"motivation": "Atone for abandoning Maren, but terrified of failing as Wardweaver",
+	"tensions": [
+		"desperately wants to help but paralyzed by guilt",
+		"has the talent Thornwick needs but not the confidence",
+		"hearing something impossible and afraid to trust her own perception"
+	],
+	"interactionHistory": [],
+	"relationships": {
+		"bryn_oakheart": {
+			"targetId": "bryn_oakheart",
+			"attitude": 25,
+			"tags": ["authority", "guilt"],
+			"knownFacts": ["Bryn needs her to come back", "Bryn is holding the village together alone"],
+			"history": "Sorrel respects Bryn but avoids her — Bryn represents the responsibility Sorrel ran from."
+		},
+		"colm_bindstone": {
+			"targetId": "colm_bindstone",
+			"attitude": 45,
+			"tags": ["elder", "tradition", "comfort"],
+			"knownFacts": ["Colm performs the ceremonies", "Colm disapproved of her leaving"],
+			"history": "Colm was like a grandfather to her. His disappointment hurts more than anyone's."
+		}
+	},
+	"questConnections": ["main_quest_act1", "binding_song_quest", "companion_sorrel"],
+	"arc": "guilt_ridden_recluse"
+}

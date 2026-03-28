@@ -1,0 +1,68 @@
+{
+	"id": "rowan_ironhand",
+	"name": "Rowan Ironhand",
+	"tier": "named",
+	"archetypeId": "blacksmith",
+	"role": "Village Blacksmith",
+	"category": "craft",
+	"statsTier": "skilled",
+	"traits": ["quiet", "competent", "observant", "steady"],
+	"voicePatterns": [
+		"few words, chosen carefully — lets his work speak",
+		"short declarative sentences about craft and materials",
+		"observant comments about things others miss",
+		"speaks with the rhythm of someone used to hammer-strikes"
+	],
+	"dialogueHooks": [
+		"offering to repair or improve equipment",
+		"commenting on the quality of metal and materials",
+		"noting that his forge fire has been burning differently since the Thinning started",
+		"quietly observing village tensions without taking sides"
+	],
+	"knowledge": {
+		"always": [
+			"state of Thornwick's tools, weapons, and hardware",
+			"which materials are getting harder to source",
+			"basic metalworking and repair capabilities",
+			"the forge has been in his family for three generations"
+		],
+		"sometimes": [
+			"his forge fire follows Threadlines — it burns hotter near ward-circles",
+			"certain metals behave differently near thin places",
+			"travelers from Loomhearth mentioned Wardweaver tool orders increasing"
+		],
+		"rarely": [
+			"he's noticed that iron worked during the Binding Song ceremonies has subtly different properties",
+			"he keeps samples of this 'ceremony iron' but has told no one"
+		]
+	},
+	"schedule": {
+		"morning": { "location": "thornwick_smithy", "activity": "stoking the forge, starting the day's work" },
+		"afternoon": { "location": "thornwick_smithy", "activity": "filling orders, repairs, custom work" },
+		"evening": { "location": "thornwick_knotted_ewe", "activity": "quiet drink, listening more than talking" },
+		"night": { "location": "thornwick_ironhand_cottage", "activity": "sharpening tools, maintaining equipment" }
+	},
+	"disposition": {},
+	"dispositionPermanent": {},
+	"alive": true,
+	"location": "thornwick_smithy",
+	"backstory": "Rowan's family has run the Thornwick forge for three generations. He's a craftsman, not a talker. He observes everything and says little. His forge is the practical backbone of the village — without it, nothing gets fixed, no tools get made, and Thornwick slowly falls apart. He's noticed things about his craft that connect to the weave in ways he doesn't fully understand.",
+	"secret": "Iron worked during Binding Song ceremonies has subtly different properties — stronger, more resonant. Rowan keeps samples of this 'ceremony iron' and has never told anyone. This is an early hint of Thread-Iron crafting that Wren Looseweft will pioneer in Act II.",
+	"motivation": "Keep the forge running and Thornwick's tools in working order",
+	"tensions": [
+		"notices magical properties in his craft but identifies as purely practical",
+		"quiet observer who sees tensions others miss but rarely intervenes"
+	],
+	"interactionHistory": [],
+	"relationships": {
+		"bryn_oakheart": {
+			"targetId": "bryn_oakheart",
+			"attitude": 55,
+			"tags": ["leader", "respect"],
+			"knownFacts": ["Bryn keeps things running", "Bryn always pays her forge bills on time"],
+			"history": "Professional respect. Rowan admires Bryn's work ethic."
+		}
+	},
+	"questConnections": ["equipment_crafting"],
+	"arc": "quiet_craftsman"
+}

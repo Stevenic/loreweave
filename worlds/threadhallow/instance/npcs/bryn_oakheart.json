@@ -1,0 +1,91 @@
+{
+	"id": "bryn_oakheart",
+	"name": "Bryn Oakheart",
+	"tier": "named",
+	"archetypeId": "village_elder",
+	"role": "Village Headwoman",
+	"category": "authority",
+	"statsTier": "skilled",
+	"traits": ["diplomatic", "burdened", "pragmatic", "stubborn"],
+	"voicePatterns": [
+		"direct and clipped, wastes no words",
+		"farming metaphors — 'We plant with what we have, not what we wish for'",
+		"exhausted authority — carries weight of the village"
+	],
+	"dialogueHooks": [
+		"requesting help with the Hollowing preparation",
+		"coordinating village defenses and ward maintenance",
+		"mediating disputes between villagers",
+		"assigning tasks tied to Thornwick's survival"
+	],
+	"knowledge": {
+		"always": [
+			"Maren Ashwick died three weeks ago — Thornwick has no Wardweaver",
+			"the Hollowing ceremony is six weeks away and no one can lead it",
+			"Sorrel Greenhand left two years ago after a fight with Maren",
+			"the ward-circle around Thornwick is weakening"
+		],
+		"sometimes": [
+			"Colm Bindstone has been performing the Binding Song solo for three years",
+			"Old Hawthorn knows more than a peddler should",
+			"the Thinning Forest is advancing closer to the village each season",
+			"Wardweaver Guilds in Loomhearth have been buying extra thread"
+		],
+		"rarely": [
+			"she can hear the ward-circle humming — learned from a grandmother's lullaby",
+			"she suspects Colm is channeling real Threadcraft without knowing it",
+			"her nephew Rook has the same hearing ability she does"
+		]
+	},
+	"schedule": {
+		"morning": { "location": "thornwick_village_green", "activity": "rounds through settlement, checking on people and assessing damage" },
+		"afternoon": { "location": "thornwick_elders_hall", "activity": "meetings, dispute resolution, coordinating supplies" },
+		"evening": { "location": "thornwick_knotted_ewe", "activity": "community gathering, listening to concerns over ale" },
+		"night": { "location": "thornwick_oakheart_cottage", "activity": "reading correspondence, worrying about the Hollowing" }
+	},
+	"disposition": {},
+	"dispositionPermanent": {},
+	"alive": true,
+	"location": "thornwick_elders_hall",
+	"backstory": "Bryn took over as headwoman after her predecessor died in a winter fever. She never wanted the job but no one else would do it. She runs Thornwick like a good farmer runs a field — with attention, effort, and no illusions. Maren's death hit the village hard, and Bryn is holding everything together through sheer stubbornness while privately terrified about the approaching Hollowing ceremony that no one can perform.",
+	"secret": "Bryn can hear the ward-circle humming. She's never told anyone. She doesn't have the Sight — she has a grandmother's lullaby that accidentally taught her to listen. She doesn't know this is significant.",
+	"motivation": "Keep Thornwick alive through the Hollowing, by any means necessary",
+	"tensions": [
+		"pragmatist who secretly possesses an unexplained magical ability",
+		"projects confidence while privately terrified",
+		"trusts tradition but knows tradition isn't enough anymore"
+	],
+	"interactionHistory": [],
+	"relationships": {
+		"sorrel_greenhand": {
+			"targetId": "sorrel_greenhand",
+			"attitude": 40,
+			"tags": ["former_ward", "hope"],
+			"knownFacts": ["Sorrel left after fighting with Maren", "Sorrel is living in the Thinning Forest alone"],
+			"history": "Bryn watched Sorrel grow up. She understands why Sorrel left but needs her back desperately."
+		},
+		"colm_bindstone": {
+			"targetId": "colm_bindstone",
+			"attitude": 65,
+			"tags": ["elder", "trusted_advisor", "tradition"],
+			"knownFacts": ["Colm has performed ceremonies solo for years", "Colm knows more about the weave than he lets on"],
+			"history": "They argue constantly about the right approach but trust each other completely when it matters."
+		},
+		"aldric_tapper": {
+			"targetId": "aldric_tapper",
+			"attitude": 30,
+			"tags": ["friend", "rival", "gossip"],
+			"knownFacts": ["Aldric undermines her authority subtly", "Aldric wants Thornwick more open to outsiders"],
+			"history": "Friends who drive each other crazy. Bryn thinks Aldric is reckless; Aldric thinks Bryn is rigid."
+		},
+		"old_hawthorn": {
+			"targetId": "old_hawthorn",
+			"attitude": 20,
+			"tags": ["outsider", "useful", "suspicious"],
+			"knownFacts": ["Hawthorn knows things he shouldn't", "His goods are useful but his knowledge is unsettling"],
+			"history": "Bryn tolerates Hawthorn because the village needs his trade goods, but she doesn't trust him."
+		}
+	},
+	"questConnections": ["main_quest_act1", "hollowing_preparation"],
+	"arc": "desperate_leader"
+}

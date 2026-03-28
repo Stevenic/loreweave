@@ -1,0 +1,70 @@
+{
+	"id": "glasseye",
+	"name": "Glasseye",
+	"tier": "named",
+	"archetypeId": "hermit",
+	"role": "Salvager with Pattern Sight",
+	"category": "wanderer",
+	"statsTier": "skilled",
+	"traits": ["quiet", "precise", "poetic", "observant"],
+	"voicePatterns": [
+		"quiet — not shy, just economical with words",
+		"describes reality with poetic precision about weave structure",
+		"speaks about what he sees as if describing architecture, not magic",
+		"occasional long pauses while watching something invisible to others"
+	],
+	"dialogueHooks": [
+		"describing the weave's structure in a way no one else can see",
+		"guiding salvage operations with supernatural perception",
+		"offering to show the player what the weave looks like through his eyes",
+		"reacting to the revelation that the Weavers are alive"
+	],
+	"knowledge": {
+		"always": [
+			"the physical layout of frayed zones — safe paths, structural weak points",
+			"Hollow Court salvage techniques and survival protocols",
+			"what the weave looks like as architecture — stress points, load-bearing threads",
+			"which Fray-touched manifestations are stable and which are degenerating"
+		],
+		"sometimes": [
+			"specific structural weaknesses in the weave that could be exploited or reinforced",
+			"the pattern behind seemingly random Fray incursions",
+			"where Loom Stones are located based on Threadline convergences he can see"
+		],
+		"rarely": [
+			"in the deepest frayed zones, the chaos has structure — not random, but architecture",
+			"he's seen things moving in the Threadlines — he thought they were dead dreams",
+			"he suspects what he's seeing is the Tapestry's original design or blueprint"
+		]
+	},
+	"schedule": {
+		"morning": { "location": "hollowreach_anchor_square", "activity": "surveying the weave state, checking structural stability" },
+		"afternoon": { "location": "frayed_zone_edge", "activity": "salvage operations, guiding Hollow Court teams" },
+		"evening": { "location": "hollowreach_anchor_square", "activity": "reporting findings, resting his eyes from pattern-sight" },
+		"night": { "location": "hollowreach_quarters", "activity": "sketching what he sees, trying to make it legible to others" }
+	},
+	"disposition": {},
+	"dispositionPermanent": {},
+	"alive": true,
+	"location": "hollowreach_anchor_square",
+	"backstory": "Glasseye — no one remembers his real name, and he doesn't correct them — has the rarest form of Fray-touch: full pattern sight. His eyes are silvered like mercury, with no visible iris or pupil. He sees the weave as architecture. He sees stress points, load-bearing threads, and structural weaknesses that are invisible to everyone else. He wraps his eyes in dark cloth in bright sunlight. He describes what he sees with the precision of an engineer reading blueprints, not the awe of a mystic receiving visions.",
+	"secret": "In the deepest frayed zones, what appears as chaos to everyone else looks like structure to him — architecture, not destruction. He suspects it's the Tapestry's original design or blueprint, visible only where the surface weave has eroded away. He can also see things moving in the Threadlines — he thought they were dead dreams. When he learns the Weavers are alive, everything reorganizes.",
+	"motivation": "Understand what he sees — map the invisible architecture of reality",
+	"tensions": [
+		"sees more than anyone but struggles to communicate what he perceives",
+		"engineer's mind in a world that calls him mystic or monster",
+		"quiet observer whose perception is critical to every faction's plans"
+	],
+	"interactionHistory": [],
+	"relationships": {
+		"wren_looseweft": {
+			"targetId": "wren_looseweft",
+			"attitude": 75,
+			"tags": ["partner", "trust", "complementary"],
+			"knownFacts": ["Wren builds what he maps", "Wren never flinches at what he describes"],
+			"history": "They work together seamlessly. Glasseye sees the structure; Wren builds to it."
+		}
+	},
+	"questConnections": ["main_quest_act3", "restoration_path", "harmony_path", "release_path"],
+	"arc": "observer_to_participant"
+}

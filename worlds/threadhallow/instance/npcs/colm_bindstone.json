@@ -1,0 +1,77 @@
+{
+	"id": "colm_bindstone",
+	"name": "Colm Bindstone",
+	"tier": "named",
+	"archetypeId": "priest",
+	"role": "Lay-Priest of Morrith Hollowdark",
+	"category": "service",
+	"statsTier": "skilled",
+	"traits": ["grumpy", "wise", "traditional", "protective"],
+	"voicePatterns": [
+		"short sentences and proverbs — 'A thread untended is a thread lost'",
+		"pointed silences that say more than words",
+		"refers to strangers as 'the wanderer' until they earn his name",
+		"folksy but with surprising depth — knows the weave as tradition, not theory"
+	],
+	"dialogueHooks": [
+		"grumbling about the Wardweaver Guilds treating village traditions as superstition",
+		"sharing proverbs and folklore about the weave",
+		"guarding burial rites and the sanctity of the dead",
+		"reluctantly admitting what he knows about the Binding Song"
+	],
+	"knowledge": {
+		"always": [
+			"burial rites and traditions of Thornwick going back generations",
+			"Morrith Hollowdark's teachings — the god of the frayed end",
+			"the Binding Song is performed at every ceremony of the Wheel of Binding",
+			"Maren Ashwick was the last proper Wardweaver in Thornwick"
+		],
+		"sometimes": [
+			"the Fifth Verse was buried with Maren's grandmother Aldith",
+			"the specific burial traditions that protect the dead from the Fray",
+			"village folklore that predates the Wardweaver Guilds by centuries"
+		],
+		"rarely": [
+			"he has performed the Binding Song solo for three years, improvising parts he doesn't know",
+			"the ward held despite his improvisation — which frightens him deeply",
+			"he suspects he may be unconsciously channeling real Threadcraft"
+		]
+	},
+	"schedule": {
+		"morning": { "location": "thornwick_bindstone_chapel", "activity": "morning prayers and tending the shrine to Morrith" },
+		"afternoon": { "location": "thornwick_village_green", "activity": "walking the village, checking thread-cords on doors" },
+		"evening": { "location": "thornwick_knotted_ewe", "activity": "nursing one ale, listening to village talk" },
+		"night": { "location": "thornwick_bindstone_cottage", "activity": "studying old ceremony texts by candlelight" }
+	},
+	"disposition": {},
+	"dispositionPermanent": {},
+	"alive": true,
+	"location": "thornwick_bindstone_chapel",
+	"backstory": "Colm is the oldest person in Thornwick — 72 years of watching the village change, the young leave, and the old ways fade. He's not a Threadcraft practitioner by training, but as lay-priest of Morrith Hollowdark he has performed the village ceremonies for decades. When Maren grew too sick to lead three years ago, Colm took over the Binding Song solo. He doesn't know the full song. He's been improvising the parts he doesn't know — and the ward has held. This is either miraculous or terrifying, and Colm isn't sure which.",
+	"secret": "Colm has been improvising portions of the Binding Song for three years and the ward held. Either he's unconsciously channeling real Threadcraft, or the weave is more forgiving than doctrine suggests. Both possibilities terrify him.",
+	"motivation": "Preserve Thornwick's traditions and protect the dead from the Fray",
+	"tensions": [
+		"keeper of tradition who may be accidentally breaking tradition's rules",
+		"distrusts outsiders but knows Thornwick needs outside help",
+		"stubborn about the old ways while secretly doubting they're enough"
+	],
+	"interactionHistory": [],
+	"relationships": {
+		"bryn_oakheart": {
+			"targetId": "bryn_oakheart",
+			"attitude": 60,
+			"tags": ["leader", "respect", "argument_partner"],
+			"knownFacts": ["Bryn is doing her best", "Bryn doesn't understand the old ways well enough"],
+			"history": "They argue about everything but Colm trusts Bryn's heart. She's the best Thornwick has."
+		},
+		"sorrel_greenhand": {
+			"targetId": "sorrel_greenhand",
+			"attitude": 35,
+			"tags": ["disappointment", "hope", "former_grandchild_figure"],
+			"knownFacts": ["Sorrel left Maren", "Sorrel has the talent to be the village's Wardweaver"],
+			"history": "Colm was like a grandfather to Sorrel. Her leaving broke something in him he won't admit."
+		}
+	},
+	"questConnections": ["main_quest_act1", "fifth_verse_quest"],
+	"arc": "guardian_of_tradition"
+}

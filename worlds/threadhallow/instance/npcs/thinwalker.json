@@ -1,0 +1,77 @@
+{
+	"id": "thinwalker",
+	"name": "Thinwalker",
+	"tier": "named",
+	"archetypeId": "hermit",
+	"role": "Founder of the Frayborn Order",
+	"category": "wanderer",
+	"statsTier": "veteran",
+	"traits": ["calm", "unsettling", "insightful", "philosophical"],
+	"voicePatterns": [
+		"calmest person in any room — deeply, unnervingly calm",
+		"speaks about the Fray with intimacy, not reverence or fear",
+		"precise economy of movement and language — nothing wasted",
+		"asks questions that reframe the entire conversation"
+	],
+	"dialogueHooks": [
+		"offering a radically different perspective on the Fray as potential, not threat",
+		"describing controlled Fray exposure as education, not corruption",
+		"challenging assumptions about the weave's nature and purpose",
+		"sharing observations from the deepest frayed zones"
+	],
+	"knowledge": {
+		"always": [
+			"Frayborn philosophy — the Fray teaches what the weave hides",
+			"practical techniques for surviving and learning from Fray exposure",
+			"the spectrum of Fray-touch manifestations and their patterns",
+			"which frayed zones are educational and which are genuinely lethal"
+		],
+		"sometimes": [
+			"her survival of two days in a fully frayed zone — what she learned there",
+			"the relationship between the Fray and the Tapestry's original design",
+			"Frayborn initiation practices and their careful methodology"
+		],
+		"rarely": [
+			"she can hear the Weavers — fragments, emotions, recurring motifs",
+			"she thought they were echoes of dead beings — relieved to learn they're alive",
+			"the deepest frayed zones have structure — not chaos, but architecture"
+		]
+	},
+	"schedule": {
+		"morning": { "location": "frayborn_camp", "activity": "meditation at the edge of a thin place" },
+		"afternoon": { "location": "frayborn_camp", "activity": "teaching initiates, guiding controlled exposure sessions" },
+		"evening": { "location": "frayborn_camp", "activity": "listening to the Fray, recording impressions" },
+		"night": { "location": "frayborn_camp", "activity": "deep contemplation, processing what the Fray reveals" }
+	},
+	"disposition": {},
+	"dispositionPermanent": {},
+	"alive": true,
+	"location": "frayborn_territory",
+	"backstory": "Thinwalker's given name is lost — she insists on the title. She survived two days in a fully frayed zone that should have killed her, and came out transformed. Not broken — changed. She founded the Frayborn as a third way: neither the Mending Path's fear-based avoidance nor the New Stitch's reckless experimentation, but controlled, intentional Fray exposure as a path to understanding. Her calm is genuine — she's been to the worst place the world has to offer and it showed her something beautiful.",
+	"secret": "She can hear the Weavers — fragments, emotions, recurring motifs in the Fray. She assumed they were echoes of dead beings. When the player confirms the Weavers are alive, everything she's experienced reorganizes into a conversation she didn't know she was having.",
+	"motivation": "Teach that the Fray is not the enemy — it's the question the world is asking",
+	"tensions": [
+		"deeply unsettling to everyone she meets despite being genuinely kind",
+		"her philosophy challenges every faction's foundational assumptions",
+		"hearing beings she assumed were dead — what does it mean that they're alive?"
+	],
+	"interactionHistory": [],
+	"relationships": {
+		"pathmaster_longstitch": {
+			"targetId": "pathmaster_longstitch",
+			"attitude": 50,
+			"tags": ["secret_correspondent", "mutual_data_sharing"],
+			"knownFacts": ["Longstitch is Fray-touched and doesn't know she knows", "Longstitch shares patrol data secretly"],
+			"history": "They correspond privately. Officially philosophical opposites, practically sharing data that benefits both orders."
+		},
+		"grand_knotmother_aelith": {
+			"targetId": "grand_knotmother_aelith",
+			"attitude": 55,
+			"tags": ["secret_correspondent", "surprising_alliance"],
+			"knownFacts": ["Aelith has been sharing ward-pattern anomaly data for five years", "The greatest traditionalist secretly collaborates with the greatest heretic"],
+			"history": "Five years of quiet correspondence. Data demands honesty even when ideology doesn't."
+		}
+	},
+	"questConnections": ["main_quest_act2", "frayborn_philosophy_quest"],
+	"arc": "philosophical_anchor"
+}

@@ -1,0 +1,147 @@
+{
+	"id": "thornwick",
+	"name": "Thornwick",
+	"tier": "hamlet",
+	"center": { "x": 512, "y": 512 },
+	"radius": 12,
+	"biome": "forest",
+	"wardStrength": 62,
+	"locations": [
+		{
+			"id": "thornwick_knotted_ewe",
+			"archetypeId": "common_tavern",
+			"name": "The Knotted Ewe",
+			"category": "tavern",
+			"position": { "x": 510, "y": 511 },
+			"settlementId": "thornwick",
+			"features": ["worn wooden bar with thread-pattern carvings", "hearth with iron spit", "mounted sheep skull above the door — ward charm", "creaking floor that Aldric knows every squeak of"],
+			"objects": ["ale barrels with thread-branded lids", "board of posted notices", "collection of mugs — each regular has their own", "Aldric's hidden ledger under the bar"],
+			"npcArchetypes": ["innkeeper"],
+			"exits": ["front door to village green", "back door to Aldric's private quarters", "cellar hatch behind the bar"],
+			"atmosphere": {
+				"sounds": ["fire crackling", "murmured conversation", "mugs clinking", "wind creaking the sign outside"],
+				"smells": ["wood smoke", "mutton stew", "spilled ale", "beeswax from the bar polish"],
+				"lighting": ["warm firelight", "tallow candles on each table", "dim corners for private talk"]
+			}
+		},
+		{
+			"id": "thornwick_smithy",
+			"archetypeId": "blacksmith",
+			"name": "Ironhand's Forge",
+			"category": "shop",
+			"position": { "x": 514, "y": 510 },
+			"settlementId": "thornwick",
+			"features": ["open-air forge with stone chimney", "tool racks organized with military precision", "quenching trough fed by a small stream", "samples of ceremony iron on a high shelf — unlabeled"],
+			"objects": ["anvil worn smooth from three generations of use", "bellows with leather patches", "racks of finished tools and repairs", "small collection of metal samples in labeled boxes"],
+			"npcArchetypes": ["blacksmith"],
+			"exits": ["wide entrance facing village green", "path to the stream behind"],
+			"atmosphere": {
+				"sounds": ["hammer on anvil", "bellows hissing", "metal hissing in water", "fire roaring"],
+				"smells": ["hot metal", "coal smoke", "quench steam", "leather from the apron"],
+				"lighting": ["forge glow — orange and shifting", "natural daylight through the open front", "sparks like brief stars"]
+			}
+		},
+		{
+			"id": "thornwick_general_store",
+			"archetypeId": "general_store",
+			"name": "Greensward Provisions",
+			"category": "shop",
+			"position": { "x": 511, "y": 514 },
+			"settlementId": "thornwick",
+			"features": ["stone-and-timber building with green shutters", "shelves packed floor to ceiling", "balance scale on the counter", "dried herbs hanging from the rafters"],
+			"objects": ["barrels of grain and salt", "rope, candles, and basic tools", "small selection of medicines", "Hazel's handwritten price list"],
+			"npcArchetypes": ["shopkeeper"],
+			"exits": ["front door to village path", "storeroom in the back"],
+			"atmosphere": {
+				"sounds": ["wooden floor creaking", "jars clinking", "Hazel's voice carrying from the back"],
+				"smells": ["dried herbs", "grain dust", "lamp oil", "stored apples"],
+				"lighting": ["natural light from shuttered windows", "oil lamp on the counter"]
+			}
+		},
+		{
+			"id": "thornwick_bindstone_chapel",
+			"archetypeId": "village_shrine",
+			"name": "Bindstone Chapel",
+			"category": "temple",
+			"position": { "x": 513, "y": 513 },
+			"settlementId": "thornwick",
+			"features": ["small stone chapel with a frayed-thread motif above the door", "seven prayer knots on the wall — one for each Loom-Born god", "well-worn kneeling stones", "alcove where Colm keeps the ceremony texts"],
+			"objects": ["ceremonial thread-cord on the altar", "candles in iron holders — always lit", "burial register going back 200 years", "Maren's memorial thread pinned to the wall"],
+			"npcArchetypes": ["priest"],
+			"exits": ["arched doorway to the village path", "side door to the burial ground"],
+			"atmosphere": {
+				"sounds": ["quiet — thick walls muffle the village", "candle flames guttering", "Colm's voice in prayer"],
+				"smells": ["old stone", "candle wax", "dried flowers", "incense of woven herbs"],
+				"lighting": ["dim candlelight", "single window casting a beam across the altar", "shadows in the corners that feel deliberate"]
+			}
+		},
+		{
+			"id": "thornwick_elders_hall",
+			"archetypeId": "town_hall",
+			"name": "Elder's Hall",
+			"category": "civic",
+			"position": { "x": 512, "y": 512 },
+			"settlementId": "thornwick",
+			"features": ["largest building in Thornwick — timber frame with stone foundation", "long table with 8 chairs — only 4 regularly used", "map of the region on the wall, marked with Bryn's notes", "ward-circle anchor point in the floor — the settlement's magical center"],
+			"objects": ["Bryn's seal of office", "ledger of village accounts", "stack of unresolved petitions", "Maren's ward maintenance journal — found after her death"],
+			"npcArchetypes": ["village_elder"],
+			"exits": ["main door to village green", "side door to Bryn's private office"],
+			"atmosphere": {
+				"sounds": ["Bryn's pen scratching", "occasional visitor knocking", "the ward-circle humming faintly — only some can hear it"],
+				"smells": ["ink and parchment", "old wood", "faint ozone from the ward anchor"],
+				"lighting": ["large windows — well-lit during day", "oil lamps at night", "the ward anchor glows faintly in darkness"]
+			}
+		},
+		{
+			"id": "thornwick_herbalist",
+			"archetypeId": "herbalist_stall",
+			"name": "Maren's Herb Garden",
+			"category": "shop",
+			"position": { "x": 509, "y": 513 },
+			"settlementId": "thornwick",
+			"features": ["open garden beside a small cottage", "raised beds with medicinal herbs", "drying racks under a thatched overhang", "Maren's old workbench — untouched since her death"],
+			"objects": ["mortar and pestle collection", "labeled jars of dried remedies", "Maren's handwritten herb guide", "small ward-charm hanging over the door"],
+			"npcArchetypes": ["herbalist"],
+			"exits": ["garden gate to village path", "cottage door — locked since Maren's death"],
+			"atmosphere": {
+				"sounds": ["bees in the garden", "wind through herbs", "birds in the cottage eaves"],
+				"smells": ["lavender", "mint", "dried chamomile", "earth after rain"],
+				"lighting": ["open sky — full sunlight", "dappled shade under the overhang"]
+			}
+		},
+		{
+			"id": "thornwick_village_green",
+			"archetypeId": "market_square",
+			"name": "Thornwick Green",
+			"category": "civic",
+			"position": { "x": 512, "y": 511 },
+			"settlementId": "thornwick",
+			"features": ["open grass square at the village center", "ancient oak with thread-charms in its branches", "stone well with a carved Weaver's knot", "flat stones used for Hawthorn's market stall"],
+			"objects": ["community notice board", "seasonal decorations from the last ceremony", "Hawthorn's cart when he's in town", "worn gathering stones where elders once sat"],
+			"npcArchetypes": ["traveling_merchant"],
+			"exits": ["paths to all major buildings", "road south to the wider world", "trail north to the Thinning Forest"],
+			"atmosphere": {
+				"sounds": ["children playing", "chickens scratching", "wind in the oak's branches", "the well's creak"],
+				"smells": ["fresh grass", "woodsmoke from nearby hearths", "Hawthorn's cart goods when he's here"],
+				"lighting": ["open sky", "oak shade dappling the green", "lanterns hung for ceremonies"]
+			}
+		},
+		{
+			"id": "thornwick_farmstead",
+			"archetypeId": "farmstead",
+			"name": "Greensward Farm",
+			"category": "residence",
+			"position": { "x": 516, "y": 516 },
+			"settlementId": "thornwick",
+			"features": ["largest farm in Thornwick — wheat fields, vegetable gardens, livestock", "stone farmhouse with attached barn", "the oldest field — closest to the Loom Stone — always produces best", "irrigation channels from the stream"],
+			"objects": ["farm tools in the barn", "root cellar with winter stores", "Hazel's seed collection", "wool stores from Tam's flock"],
+			"npcArchetypes": ["village_elder"],
+			"exits": ["farm path to village green", "field paths toward the Loom Stone", "track to Tam's sheep meadow"],
+			"atmosphere": {
+				"sounds": ["livestock", "wind through wheat", "water in irrigation channels", "Hazel giving orders"],
+				"smells": ["turned earth", "hay", "animal warmth", "bread baking in the farmhouse"],
+				"lighting": ["wide open sky", "barn shadow", "warm farmhouse glow in evening"]
+			}
+		}
+	]
+}

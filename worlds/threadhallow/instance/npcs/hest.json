@@ -1,0 +1,77 @@
+{
+	"id": "hest",
+	"name": "Hest",
+	"tier": "named",
+	"archetypeId": "ranger",
+	"role": "The Walker Who Came Back",
+	"category": "wanderer",
+	"statsTier": "expert",
+	"traits": ["calibrated", "patient", "bridge-minded", "altered"],
+	"voicePatterns": [
+		"slow speech — chooses words with the care of someone who had no one to talk to for two years",
+		"listens to things unheard — pauses mid-sentence to attend to the Fray",
+		"speaks about the Fray with the intimacy of someone who lived inside it",
+		"gentle humor about his own strangeness — 'My left hand disagrees about what time it is'"
+	],
+	"dialogueHooks": [
+		"describing what it was like inside the sealed thin place for two years",
+		"sharing insights about the Fray that only firsthand experience provides",
+		"reconnecting with Farweft — navigating the gap between then and now",
+		"demonstrating Fray-weaving — giving temporary form to raw Fray energy"
+	],
+	"knowledge": {
+		"always": [
+			"what it's like inside a sealed thin place — time perception, sensory effects",
+			"the Fray is not hostile — it's waiting, it's always been waiting",
+			"Threadwalker patrol techniques enhanced by Fray understanding",
+			"how to navigate frayed zones by feeling rather than sight"
+		],
+		"sometimes": [
+			"the sealed thin place had structure — not random chaos",
+			"Fray-touched materials respond to intention if you know how to ask",
+			"the boundary between weave and Fray is not a wall but a gradient"
+		],
+		"rarely": [
+			"he can weave Fray material — take unstructured Fray potential and give it temporary form",
+			"he can make tools, shelters, and crude wards from raw Fray energy",
+			"his technique combined with Wren's Thread-Iron could revolutionize ward maintenance"
+		]
+	},
+	"schedule": {
+		"morning": { "location": "varies", "activity": "adjusting to freedom — walking, re-learning open spaces" },
+		"afternoon": { "location": "varies", "activity": "practicing Fray-weaving in controlled conditions" },
+		"evening": { "location": "varies", "activity": "talking with whoever will listen — relearning conversation" },
+		"night": { "location": "varies", "activity": "light sleep — still listens to the Fray out of habit" }
+	},
+	"disposition": {},
+	"dispositionPermanent": {},
+	"alive": true,
+	"location": "sealed_thin_place",
+	"backstory": "Hest was Farweft's patrol partner — the best team in the Mending Path. Two years ago, during a routine patrol, the ground opened and the Fray pulled him into a sealed thin place. Farweft watched it happen. Everyone assumed Hest was dead. He wasn't. He spent two years inside a pocket of raw Fray energy, and it changed him. His skin is translucent. His left hand trembles from a half-second temporal desync. His Threadwalker coat has Fray-crystallized fibers woven into the fabric. But his mind is intact — more than intact. He understands the Fray at a level no one else does.",
+	"secret": "He can weave Fray material — take unstructured Fray potential and give it temporary form. Tools, shelters, crude wards from raw energy. This ability, combined with Wren's Thread-Iron forging, creates game-changing ward maintenance mechanics that don't depend on the Weavers.",
+	"motivation": "Bridge the gap between those who fear the Fray and those who embrace it",
+	"tensions": [
+		"belongs to both the Threadwalker world and the Hollow Court — first person in both",
+		"reconnecting with Farweft across a two-year gap of grief and change",
+		"possesses abilities that could save the world but that most people find terrifying"
+	],
+	"interactionHistory": [],
+	"relationships": {
+		"farweft": {
+			"targetId": "farweft",
+			"attitude": 80,
+			"tags": ["partner", "grief_reunion", "changed"],
+			"knownFacts": ["Farweft never stopped looking", "Farweft transferred orders because of his disappearance"],
+			"history": "Two years of silence between them. The reunion is complicated — Hest has changed, and Farweft has been carrying guilt. But the bond is real."
+		},
+		"wren_looseweft": {
+			"targetId": "wren_looseweft",
+			"attitude": 60,
+			"tags": ["kindred", "collaborator"],
+			"knownFacts": ["Wren works with Fray-touched materials", "Wren's forge techniques complement his Fray-weaving"],
+			"history": "They've only just met but recognize each other immediately — two people who turned Fray-touch into craft."
+		}
+	},
+	"questConnections": ["walkers_silence_quest", "companion_farweft"],
+	"arc": "returned_bridge_builder"
+}

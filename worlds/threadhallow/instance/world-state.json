@@ -1,0 +1,33 @@
+{
+	"seed": "7741208231546891237",
+	"time": {
+		"day": 1,
+		"hour": 8,
+		"minute": 0
+	},
+	"weather": "clear",
+	"season": "autumn",
+	"events": [
+		{
+			"type": "world_event",
+			"id": "maren_death",
+			"description": "Maren Ashwick, Thornwick's last Wardweaver, died three weeks ago. The village has no one to lead the Binding Song.",
+			"dayOccurred": -21,
+			"resolved": false
+		},
+		{
+			"type": "world_event",
+			"id": "hollowing_approaching",
+			"description": "The Hollowing — the most important ceremony of the Wheel of Binding — is 42 days away. Without a Wardweaver, the ceremony will fail and Thornwick's ward-circle will collapse.",
+			"dayOccurred": 0,
+			"resolved": false
+		},
+		{
+			"type": "world_event",
+			"id": "thinning_advance",
+			"description": "The Thinning Forest edge has advanced 200 meters closer to Thornwick this season. Thin places are forming in ring 2 territory.",
+			"dayOccurred": -30,
+			"resolved": false
+		}
+	]
+}

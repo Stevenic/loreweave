@@ -1,0 +1,69 @@
+{
+	"id": "rook_ashwick",
+	"name": "Rook Ashwick",
+	"tier": "named",
+	"archetypeId": "village_elder",
+	"role": "Thornwick's Voice at the Table",
+	"category": "authority",
+	"statsTier": "commoner",
+	"traits": ["earnest", "overwhelmed", "practical", "growing"],
+	"voicePatterns": [
+		"young voice in rooms full of old authority — slightly too fast",
+		"earnest without being naive — he knows he's out of his depth",
+		"echoes Bryn's pragmatism but with less certainty",
+		"uses 'we' when talking about Thornwick — genuinely communal identity"
+	],
+	"dialogueHooks": [
+		"representing Common Folk concerns at faction-level negotiations",
+		"asking the player for advice — out of his depth but trying",
+		"reporting on Thornwick's status as the crisis escalates",
+		"rallying ordinary people for the finale"
+	],
+	"knowledge": {
+		"always": [
+			"Thornwick's current state — supplies, morale, ward status",
+			"what Common Folk need and fear",
+			"Bryn's strategies and her assessment of the factions",
+			"the practical impact of the Thinning on everyday life"
+		],
+		"sometimes": [
+			"how other villages are coping — or not coping",
+			"which faction representatives can be trusted at their word",
+			"what Thornwick's people are willing to sacrifice for survival"
+		],
+		"rarely": [
+			"he can hear the ward-circle humming — same ability as Bryn",
+			"he's terrified this means something and hasn't told anyone"
+		]
+	},
+	"schedule": {
+		"morning": { "location": "varies_with_act", "activity": "preparing for faction meetings, reviewing notes" },
+		"afternoon": { "location": "varies_with_act", "activity": "attending negotiations, advocating for Common Folk" },
+		"evening": { "location": "varies_with_act", "activity": "writing reports to send back to Bryn" },
+		"night": { "location": "varies_with_act", "activity": "anxious preparation, reading Bryn's response letters" }
+	},
+	"disposition": {},
+	"dispositionPermanent": {},
+	"alive": true,
+	"location": "thornwick",
+	"backstory": "Rook is Bryn's nephew — 24, sandy-haired, lean, sunburned. He's a farmer's son who never expected to represent his village at continental-level negotiations. But Bryn can't leave Thornwick, and someone has to speak for the Common Folk when the factions argue about the world's fate. Rook is that someone. He's terrified, underprepared, and more capable than he knows.",
+	"secret": "Like Bryn, Rook can hear the ward-circle humming. The same grandmother's lullaby, the same accidental training. He hasn't told anyone because he's afraid it means he'll be pulled into the Threadcraft world he doesn't understand.",
+	"motivation": "Represent Thornwick and the Common Folk — make sure ordinary people aren't forgotten in the grand plan",
+	"tensions": [
+		"out of his depth but rising to meet the challenge",
+		"carries Bryn's pragmatism without her decades of experience",
+		"hearing the ward-circle like his aunt but afraid of what it means"
+	],
+	"interactionHistory": [],
+	"relationships": {
+		"bryn_oakheart": {
+			"targetId": "bryn_oakheart",
+			"attitude": 90,
+			"tags": ["aunt", "mentor", "trust"],
+			"knownFacts": ["Bryn chose him for this because she trusts him", "Bryn hears the ward-circle too but never said so"],
+			"history": "Rook idolizes his aunt. She sent him because she believes in him even when he doesn't believe in himself."
+		}
+	},
+	"questConnections": ["main_quest_act4", "common_folk_rally"],
+	"arc": "overwhelmed_to_advocate"
+}

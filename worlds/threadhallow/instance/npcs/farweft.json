@@ -1,0 +1,77 @@
+{
+	"id": "farweft",
+	"name": "Farweft",
+	"tier": "named",
+	"archetypeId": "ranger",
+	"role": "Threadwalker of the New Stitch",
+	"category": "wanderer",
+	"statsTier": "expert",
+	"traits": ["intense", "driven", "grief-hardened", "teaching"],
+	"voicePatterns": [
+		"intense and clipped — speaks like someone rationing energy",
+		"technical when discussing Threadlines — precise, no embellishment",
+		"teaches without meaning to — corrects dangerous misconceptions reflexively",
+		"quiet grief surfaces as long pauses before mentioning the past"
+	],
+	"dialogueHooks": [
+		"assessing the weave state of the current area",
+		"teaching the player about Threadwalker patrol techniques",
+		"discussing the split between Mending Path and New Stitch",
+		"reluctantly sharing stories of his lost patrol partner Hest"
+	],
+	"knowledge": {
+		"always": [
+			"Threadwalker patrol routes and current danger zones",
+			"how to read weave stability by sight and feel",
+			"the political split between Mending Path, New Stitch, and Frayborn",
+			"practical survival techniques in thin and frayed zones"
+		],
+		"sometimes": [
+			"the Mending Path's rituals are failing — old techniques don't hold like they used to",
+			"New Stitch is developing experimental binding methods that work but are unproven long-term",
+			"specific locations of sealed thin places where the Fray breaks through"
+		],
+		"rarely": [
+			"his patrol partner Hest disappeared into a sealed thin place two years ago",
+			"he still performs the Mending Path's Silence Toast privately despite transferring to New Stitch",
+			"he suspects Hest may still be alive in the sealed pocket"
+		]
+	},
+	"schedule": {
+		"morning": { "location": "patrol_route", "activity": "checking Threadlines, maintaining patrol markers" },
+		"afternoon": { "location": "patrol_route", "activity": "surveying thin places, documenting changes" },
+		"evening": { "location": "campfire", "activity": "sharpening tools, reviewing the day's observations" },
+		"night": { "location": "campfire", "activity": "light sleep, one ear on the weave" }
+	},
+	"disposition": {},
+	"dispositionPermanent": {},
+	"alive": true,
+	"location": "loomhearth_outskirts",
+	"backstory": "Farweft was Mending Path for a decade — traditional, disciplined, paired with his partner Hest on the most dangerous routes. Two years ago, Hest was pulled into a sealed thin place during a routine patrol. Farweft watched it happen and couldn't stop it. He transferred to the New Stitch afterward, angry at the Mending Path's inflexibility and desperate for new techniques that might have saved Hest. He's the best field walker in either order but belongs fully to neither.",
+	"secret": "He still performs the Silence Toast — a Mending Path grief ritual — privately every night. He transferred orders out of anger, not conviction. He suspects Hest survived in the sealed thin place based on Threadline readings he's taken near the site.",
+	"motivation": "Find new techniques that work where the old ones failed. Find Hest.",
+	"tensions": [
+		"transferred orders out of anger, not belief — belongs to neither fully",
+		"teaches others but can't accept that some things aren't his fault",
+		"grief for Hest drives him but also blinds him to present connections"
+	],
+	"interactionHistory": [],
+	"relationships": {
+		"pathmaster_longstitch": {
+			"targetId": "pathmaster_longstitch",
+			"attitude": 20,
+			"tags": ["former_superior", "frustration", "respect"],
+			"knownFacts": ["Longstitch is a good man trapped in old thinking", "Longstitch approved the transfer without argument"],
+			"history": "Farweft respects Longstitch personally but resents the institution he represents."
+		},
+		"wren_looseweft": {
+			"targetId": "wren_looseweft",
+			"attitude": 45,
+			"tags": ["mutual_respect", "different_worlds"],
+			"knownFacts": ["Wren leads the Hollow Court settlement", "Wren treats Fray transformation practically"],
+			"history": "They've met on patrol routes. Farweft admires Wren's pragmatism but doesn't understand her acceptance of the Fray."
+		}
+	},
+	"questConnections": ["main_quest_act2", "companion_farweft", "walkers_silence_quest"],
+	"arc": "grief_to_bridge_builder"
+}

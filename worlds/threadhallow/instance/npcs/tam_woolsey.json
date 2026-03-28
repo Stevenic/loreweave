@@ -1,0 +1,68 @@
+{
+	"id": "tam_woolsey",
+	"name": "Tam Woolsey",
+	"tier": "named",
+	"archetypeId": "village_elder",
+	"role": "Shepherd",
+	"category": "service",
+	"statsTier": "commoner",
+	"traits": ["kind", "earnest", "nervous", "genuine"],
+	"voicePatterns": [
+		"apologetic and hesitant — 'I'm sorry to bother you with this'",
+		"genuine worry that disarms — no pretense, no agenda",
+		"talks about his sheep with real affection",
+		"young voice, not yet hardened by the world"
+	],
+	"dialogueHooks": [
+		"asking for help with his sheep that came back changed from the Thinning Forest",
+		"sharing what he's seen at the forest edge while grazing",
+		"expressing the Common Folk fear of things changing",
+		"offering simple gratitude that means more than coin"
+	],
+	"knowledge": {
+		"always": [
+			"his three sheep came back wrong from the Thinning Forest",
+			"the forest edge has shifted closer this season",
+			"he knows every path around Thornwick from grazing routes",
+			"Maren used to ward the sheep-paths and no one does it now"
+		],
+		"sometimes": [
+			"specific locations where the Thinning is worst near Thornwick",
+			"animals have been behaving strangely — birds avoiding certain groves",
+			"he saw lights in the forest at night — not fireflies"
+		],
+		"rarely": [
+			"one of the changed sheep seems to respond to singing — Tam doesn't know why"
+		]
+	},
+	"schedule": {
+		"morning": { "location": "thornwick_farmstead", "activity": "feeding sheep, checking the flock" },
+		"afternoon": { "location": "thornwick_outskirts", "activity": "grazing the flock near the village, avoiding the forest edge" },
+		"evening": { "location": "thornwick_knotted_ewe", "activity": "quiet ale in the corner, listening to adults talk" },
+		"night": { "location": "thornwick_woolsey_cottage", "activity": "sleeping, worried about the flock" }
+	},
+	"disposition": {},
+	"dispositionPermanent": {},
+	"alive": true,
+	"location": "thornwick_farmstead",
+	"backstory": "Tam is 19 — the youngest adult in Thornwick's core cast. He inherited his family's flock and takes the responsibility seriously. He's not interested in cosmology, factional politics, or ancient mysteries. He just wants his sheep to be safe and the forest to stop being strange. When three of his sheep came back changed from the Thinning Forest, he didn't know who else to ask for help.",
+	"secret": "One of the changed sheep responds to singing in a way that suggests the Fray transformation preserved some kind of pattern sensitivity. Tam doesn't understand the significance.",
+	"motivation": "Protect his flock and keep things normal",
+	"tensions": [
+		"wants normalcy in a world that's becoming anything but",
+		"brave enough to ask for help but scared of the answer",
+		"simple perspective that cuts through factional complexity"
+	],
+	"interactionHistory": [],
+	"relationships": {
+		"bryn_oakheart": {
+			"targetId": "bryn_oakheart",
+			"attitude": 70,
+			"tags": ["leader", "protector", "trust"],
+			"knownFacts": ["Bryn keeps the village running", "Bryn told him to ask the newcomer for help"],
+			"history": "Tam trusts Bryn completely. She's the adult he goes to when things go wrong."
+		}
+	},
+	"questConnections": ["lost_flock_quest"],
+	"arc": "everyman_witness"
+}

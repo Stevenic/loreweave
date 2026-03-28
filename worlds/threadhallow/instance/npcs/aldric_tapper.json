@@ -1,0 +1,84 @@
+{
+	"id": "aldric_tapper",
+	"name": "Aldric Tapper",
+	"tier": "named",
+	"archetypeId": "innkeeper",
+	"role": "Pub Owner, The Knotted Ewe",
+	"category": "service",
+	"statsTier": "commoner",
+	"traits": ["warm", "conspiratorial", "perceptive", "gossipy"],
+	"voicePatterns": [
+		"warm and inviting — 'Sit, sit. First one's on the house.'",
+		"conspiratorial lean-in when sharing rumors",
+		"always offering a drink during conversation",
+		"knows when to listen and when to talk"
+	],
+	"dialogueHooks": [
+		"offering drinks and drawing out conversation",
+		"sharing rumors and gossip from around the village",
+		"subtly questioning newcomers about their business",
+		"hinting at tensions between villagers"
+	],
+	"knowledge": {
+		"always": [
+			"who's been arguing with whom in Thornwick",
+			"travelers who've passed through recently and what they said",
+			"the general mood of the village — who's scared, who's angry",
+			"the Knotted Ewe is the only social hub in Thornwick"
+		],
+		"sometimes": [
+			"Bryn is more worried than she lets on",
+			"Colm has been spending extra time at the chapel lately",
+			"some villagers are talking about leaving before the Hollowing",
+			"Hawthorn's rumors about other settlements struggling"
+		],
+		"rarely": [
+			"he overheard Maren talking to herself about 'the listeners' before she died",
+			"he keeps a hidden ledger of every interesting thing travelers have told him for years"
+		]
+	},
+	"schedule": {
+		"morning": { "location": "thornwick_knotted_ewe", "activity": "cleaning, restocking, preparing food" },
+		"afternoon": { "location": "thornwick_knotted_ewe", "activity": "serving the lunch crowd, collecting gossip" },
+		"evening": { "location": "thornwick_knotted_ewe", "activity": "peak hours — serving drinks, facilitating conversation" },
+		"night": { "location": "thornwick_knotted_ewe", "activity": "closing up, reviewing the day's rumors" }
+	},
+	"disposition": {},
+	"dispositionPermanent": {},
+	"alive": true,
+	"location": "thornwick_knotted_ewe",
+	"backstory": "Aldric built the Knotted Ewe from nothing and it's his life's work. He sees himself as Thornwick's social architect — the person who keeps people talking, trading, and connected. He subtly undermines Bryn's authority not from ambition but from a genuine belief that she's too rigid and the village needs to be more open to trade and new ideas. He and Bryn are friends who drive each other crazy.",
+	"secret": "Aldric keeps a hidden ledger of every interesting piece of information travelers have shared with him over the years. He also overheard Maren talking to herself about 'the listeners' shortly before she died.",
+	"motivation": "Keep Thornwick connected to the wider world, one conversation at a time",
+	"tensions": [
+		"social architect who occasionally spreads the wrong information",
+		"genuinely cares about the village but undermines its leader",
+		"warm host who is also calculating about what he shares and withholds"
+	],
+	"interactionHistory": [],
+	"relationships": {
+		"bryn_oakheart": {
+			"targetId": "bryn_oakheart",
+			"attitude": 35,
+			"tags": ["friend", "rival", "frustration"],
+			"knownFacts": ["Bryn is too rigid", "Bryn is also the best leader they have"],
+			"history": "Friends who argue constantly. Aldric wants Thornwick open; Bryn wants it safe. Both are right."
+		},
+		"old_hawthorn": {
+			"targetId": "old_hawthorn",
+			"attitude": 65,
+			"tags": ["gossip_partner", "information_source"],
+			"knownFacts": ["Hawthorn always has the best news", "Hawthorn knows things he shouldn't"],
+			"history": "Two information brokers who enjoy swapping rumors over ale."
+		},
+		"tam_woolsey": {
+			"targetId": "tam_woolsey",
+			"attitude": 55,
+			"tags": ["regular", "protective"],
+			"knownFacts": ["Tam is scared but good-hearted", "Tam's sheep are the village's wool supply"],
+			"history": "Aldric looks out for Tam — the kid reminds him of his own son who left for Loomhearth."
+		}
+	},
+	"questConnections": ["rumor_mill_quests"],
+	"arc": "village_social_hub"
+}

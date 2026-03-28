@@ -1,0 +1,61 @@
+{
+	"tier": "hamlet",
+	"requiredBuildings": [
+		"common_tavern",
+		"blacksmith",
+		"general_store",
+		"village_shrine",
+		"town_hall",
+		"herbalist_stall"
+	],
+	"recommendedBuildings": [
+		"farmstead",
+		"market_square"
+	],
+	"namedNPCSlots": [
+		"leader",
+		"innkeeper",
+		"artisan",
+		"healer",
+		"farmer",
+		"outsider",
+		"troublemaker",
+		"secret_keeper"
+	],
+	"ambientNPCRange": { "min": 10, "max": 15 },
+	"ambientNPCDistribution": {
+		"guard": { "min": 0, "max": 1 },
+		"farmer": { "min": 3, "max": 5 },
+		"child": { "min": 2, "max": 4 },
+		"villager": { "min": 3, "max": 4 },
+		"wanderer": { "min": 0, "max": 1 }
+	},
+	"rings": [
+		{
+			"ring": 1,
+			"description": "Safe exploration — sheep meadows, the old well path, herb gathering grounds. Maren's ward-circle still holds here.",
+			"travelTime": "5 minutes walk",
+			"danger": "safe",
+			"crRange": ["0", "1/4"],
+			"locationArchetypes": ["forest_clearing", "crossroads", "riverside_camp", "ancient_tree"]
+		},
+		{
+			"ring": 2,
+			"description": "Unsettled territory — the Thinning Forest edge, abandoned farmsteads, thin places beginning to form. Weave is unstable.",
+			"travelTime": "30 minutes walk",
+			"danger": "unsettled",
+			"crRange": ["1/4", "1"],
+			"locationArchetypes": ["cave_entrance", "ruins", "fairy_ring", "stone_bridge"]
+		},
+		{
+			"ring": 3,
+			"description": "Dangerous — deep Thinning Forest, frayed zones, the Loom Stone site. Ward protection does not reach here.",
+			"travelTime": "half-day journey",
+			"danger": "dangerous",
+			"crRange": ["1", "3"],
+			"locationArchetypes": ["cave_system", "abandoned_mine", "swamp_hollow", "haunted_manor"]
+		}
+	],
+	"initialWardStrength": 62,
+	"timePressure": "The Hollowing ceremony is 6 weeks away. Without a Wardweaver to lead the Binding Song, the ward-circle will fail. Ward strength decays ~2% per week without maintenance. Below 40%, Fray creatures begin appearing inside the settlement boundary."
+}

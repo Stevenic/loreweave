@@ -1,0 +1,77 @@
+{
+	"id": "verse",
+	"name": "Verse",
+	"tier": "named",
+	"archetypeId": "priest",
+	"role": "Keeper of the Third Verse, Senior Rememberer",
+	"category": "service",
+	"statsTier": "expert",
+	"traits": ["brilliant", "warm", "scattered_appearance", "politically_savvy"],
+	"voicePatterns": [
+		"runs five conversations simultaneously — finishes thoughts from three topics ago",
+		"optimistic energy that lifts rooms — infectious enthusiasm for knowledge",
+		"scattered appearance but razor-sharp processing",
+		"uses analogies from weaving, music, and mathematics interchangeably"
+	],
+	"dialogueHooks": [
+		"enthusiastically sharing theories about the Binding Songs",
+		"negotiating archive access with political finesse",
+		"connecting disparate pieces of information the player has gathered",
+		"proposing experiments to test hypotheses about the weave"
+	],
+	"knowledge": {
+		"always": [
+			"the Archive of Threads collection and its organization",
+			"the eight Binding Song ceremonies of the Wheel of Binding",
+			"historical records of the Weavers' disappearance — official and unofficial",
+			"Rememberer factions and their competing theories"
+		],
+		"sometimes": [
+			"his unpublished theory that Binding Songs are conversations, not rituals",
+			"anomalies in historical records that suggest the Weavers didn't leave voluntarily",
+			"political dynamics between the Archive and the Wardweaver Guild"
+		],
+		"rarely": [
+			"he once heard a Binding Song answer during a solstice ceremony — a lower tone, like the song played backward and slower",
+			"he's never been able to prove or reproduce it",
+			"his theory, if correct, means every ceremony for 1,200 years has been a one-sided conversation"
+		]
+	},
+	"schedule": {
+		"morning": { "location": "loomhearth_archive", "activity": "research, cataloging new acquisitions" },
+		"afternoon": { "location": "loomhearth_archive", "activity": "meetings with scholars, cross-referencing sources" },
+		"evening": { "location": "loomhearth_archive", "activity": "writing, theorizing, connecting dots" },
+		"night": { "location": "loomhearth_verse_quarters", "activity": "reading by candlelight, falling asleep in a chair" }
+	},
+	"disposition": {},
+	"dispositionPermanent": {},
+	"alive": true,
+	"location": "loomhearth_archive",
+	"backstory": "Verse earned his name — his given name is forgotten by everyone including himself. He's the Keeper of the Third Verse, a title that means he's responsible for a specific section of the Binding Song's historical documentation. But he's more than an archivist: he's the best political mind in the Archive, having outmaneuvered Knotmother Sable three times on funding disputes. His scattered appearance masks a processor that runs faster than anyone expects.",
+	"secret": "During a solstice ceremony years ago, he heard the Binding Song answer. A lower tone, like the song played backward and slower. He's never proven it. If his theory is correct — that Binding Songs are conversations, not rituals — then every ceremony for 1,200 years has been mortals talking to Weavers who were listening but couldn't reply.",
+	"motivation": "Prove that the Binding Songs are dialogue, not liturgy — and establish first contact",
+	"tensions": [
+		"brilliant theorist who can't prove his most important theory",
+		"politically savvy scholar in an institution that rewards caution over discovery",
+		"warm and generous while playing a long political game"
+	],
+	"interactionHistory": [],
+	"relationships": {
+		"knotmother_sable": {
+			"targetId": "knotmother_sable",
+			"attitude": 15,
+			"tags": ["rival", "obstacle", "worthy_opponent"],
+			"knownFacts": ["Sable controls guild resources", "Sable's journals contain data she won't publish"],
+			"history": "Three political victories against her. Verse respects Sable's mind but sees her institutional loyalty as intellectual cowardice."
+		},
+		"wynn_hollowscript": {
+			"targetId": "wynn_hollowscript",
+			"attitude": 75,
+			"tags": ["kindred_spirit", "lost_colleague", "hope"],
+			"knownFacts": ["Wynn left the Archive 20 years ago", "Wynn was studying Threadline patterns"],
+			"history": "Verse was Wynn's strongest advocate at the Archive. He's never stopped believing her departure was the institution's loss."
+		}
+	},
+	"questConnections": ["main_quest_act2", "archive_access_quest", "harmony_path"],
+	"arc": "theory_to_proof"
+}

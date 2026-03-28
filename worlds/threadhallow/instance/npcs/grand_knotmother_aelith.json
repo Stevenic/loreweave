@@ -1,0 +1,77 @@
+{
+	"id": "grand_knotmother_aelith",
+	"name": "Grand Knotmother Aelith",
+	"tier": "named",
+	"archetypeId": "magistrate",
+	"role": "Head of All Wardweaver Guilds",
+	"category": "authority",
+	"statsTier": "veteran",
+	"traits": ["pragmatist", "commanding", "weary", "decisive"],
+	"voicePatterns": [
+		"formal with 'we' — drops the royal 'we' when being honest",
+		"small-framed but commands rooms through presence, not volume",
+		"careful political language that can shift to blunt honesty without warning",
+		"hates being forced into decisions but respects those who force her with good evidence"
+	],
+	"dialogueHooks": [
+		"weighing whether to support radical action or preserve institutional stability",
+		"demanding evidence before committing guild resources",
+		"revealing her five-year correspondence with Thinwalker",
+		"making the final political choice based on player evidence"
+	],
+	"knowledge": {
+		"always": [
+			"continental-scale ward maintenance operations and their status",
+			"guild politics across all chapters — who's loyal, who's wavering",
+			"the full scope of the Thinning's impact across the region",
+			"twenty-two years of institutional compromise and its costs"
+		],
+		"sometimes": [
+			"which guild chapters are concealing ward failures",
+			"the actual state of the ward network vs what's publicly reported",
+			"reform proposals she's shelved for political reasons"
+		],
+		"rarely": [
+			"she's had a five-year quiet correspondence with Thinwalker about ward-pattern anomalies",
+			"the greatest traditionalist has been secretly collaborating with the greatest heretic",
+			"she shares data because the data demands it, regardless of ideology"
+		]
+	},
+	"schedule": {
+		"morning": { "location": "stitchford_grand_loom", "activity": "reviewing chapter reports from across the region" },
+		"afternoon": { "location": "stitchford_grand_loom", "activity": "political meetings, chapter coordination" },
+		"evening": { "location": "stitchford_grand_loom", "activity": "private correspondence, strategic planning" },
+		"night": { "location": "stitchford_aelith_chambers", "activity": "reading Thinwalker's latest letter, weighing impossible choices" }
+	},
+	"disposition": {},
+	"dispositionPermanent": {},
+	"alive": true,
+	"location": "stitchford_grand_loom",
+	"backstory": "Aelith has held the fractious Wardweaver Guild together for twenty-two years through compromise, careful inaction, and an unwillingness to let the perfect be the enemy of the functional. She's small-framed with white coiled hair secured by golden thread-pin wards. Her blackthorn staff has a living ward-thread wrapped around it — one of the few true ward artifacts left. She's a pragmatist, not an ideologue, and when the evidence is compelling enough, she'll back whatever saves the most lives.",
+	"secret": "Five years ago she began corresponding secretly with Thinwalker — the Frayborn founder. The greatest traditionalist in the Wardweaver world sharing data with the greatest heretic. She does it because the data demands it. Their combined anomaly records are the most complete picture of the Thinning in existence.",
+	"motivation": "Make the choice that saves the most lives, even if it destroys the institution she built",
+	"tensions": [
+		"22 years of careful compromise reaching their limit",
+		"institutional loyalty vs the evidence that the institution can't solve this alone",
+		"secretly collaborating with the faction her guild officially opposes"
+	],
+	"interactionHistory": [],
+	"relationships": {
+		"knotmother_sable": {
+			"targetId": "knotmother_sable",
+			"attitude": 40,
+			"tags": ["subordinate", "capable", "limited"],
+			"knownFacts": ["Sable runs Loomhearth well", "Sable's institutional loyalty blinds her to the bigger picture"],
+			"history": "Aelith appointed Sable because she's competent. She worries Sable's rigidity will become a problem."
+		},
+		"thinwalker": {
+			"targetId": "thinwalker",
+			"attitude": 50,
+			"tags": ["secret_correspondent", "data_partner", "heretic_ally"],
+			"knownFacts": ["Thinwalker's Fray data fills gaps in guild records", "Their correspondence would be a scandal if discovered"],
+			"history": "Five years of letters. They've never met in person. Aelith respects Thinwalker's mind and fears what admitting that publicly would cost."
+		}
+	},
+	"questConnections": ["main_quest_act4", "guild_alliance_quest"],
+	"arc": "pragmatist_forced_to_choose"
+}

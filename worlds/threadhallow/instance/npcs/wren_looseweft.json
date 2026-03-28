@@ -1,0 +1,77 @@
+{
+	"id": "wren_looseweft",
+	"name": "Wren Looseweft",
+	"tier": "named",
+	"archetypeId": "blacksmith",
+	"role": "Blacksmith of the Hollow Court",
+	"category": "craft",
+	"statsTier": "expert",
+	"traits": ["grounded", "pragmatic", "dry-humored", "dignified"],
+	"voicePatterns": [
+		"dry humor — treats impossible situations as craft problems",
+		"forge metaphors — 'You don't curse the metal for bending. You adjust the technique.'",
+		"no patience for self-pity — cuts through emotional noise",
+		"speaks about Fray transformation as material property change, not tragedy"
+	],
+	"dialogueHooks": [
+		"explaining how she forges with Fray-touched materials",
+		"organizing salvage runs into frayed zones",
+		"providing the Hollow Court perspective on the Fray as resource, not curse",
+		"offering to craft Thread-Iron tools if the player brings materials"
+	],
+	"knowledge": {
+		"always": [
+			"Hollow Court settlement operations and survival techniques",
+			"which frayed zones are stable enough to salvage",
+			"practical effects of Fray transformation on people and materials",
+			"Thread-Iron crafting basics — working metal infused with Fray energy"
+		],
+		"sometimes": [
+			"the Hollow Court's political relationship with other factions",
+			"specific properties of Fray-touched materials and their applications",
+			"locations of valuable salvage in the frayed zones"
+		],
+		"rarely": [
+			"she has nascent pattern sight — she sees weave structure through forge fire",
+			"forge-fire follows Threadlines when she works near them",
+			"she's developing Thread-Iron techniques that could revolutionize ward maintenance"
+		]
+	},
+	"schedule": {
+		"morning": { "location": "hollowreach_forge", "activity": "stoking the forge, planning the day's work" },
+		"afternoon": { "location": "hollowreach_forge", "activity": "forging Thread-Iron, filling repair orders" },
+		"evening": { "location": "hollowreach_anchor_square", "activity": "community meeting, organizing tomorrow's salvage" },
+		"night": { "location": "hollowreach_quarters", "activity": "sketching designs, experimenting with Fray-metal alloys" }
+	},
+	"disposition": {},
+	"dispositionPermanent": {},
+	"alive": true,
+	"location": "hollowreach_forge",
+	"backstory": "Wren was a village blacksmith before the Fray took her settlement. She didn't flee — she adapted. When her skin began to refract light strangely and her eyes shifted, she treated it the way she'd treat any material change: observe, adjust technique, keep working. She organized the survivors, found a stable zone in the Frayed territory, and built Hollowreach through sheer organizational will. She's the Hollow Court's de facto leader not by election but by being the person who got things done when no one else could.",
+	"secret": "Wren has nascent pattern sight — the rarest form of Fray-touch. She sees weave structure through forge-fire, and the fire follows Threadlines when she works near them. She doesn't call it 'sight' — she calls it 'reading the grain.' Her Thread-Iron techniques are the beginning of something revolutionary.",
+	"motivation": "Build a future for the Fray-touched that doesn't depend on anyone's pity or permission",
+	"tensions": [
+		"de facto leader who never wanted to lead — she wanted to forge",
+		"pragmatic to a fault — sometimes dismisses emotional needs as weakness",
+		"possesses an extraordinary gift she refuses to call magical"
+	],
+	"interactionHistory": [],
+	"relationships": {
+		"glasseye": {
+			"targetId": "glasseye",
+			"attitude": 70,
+			"tags": ["trusted", "complementary", "Fray-kin"],
+			"knownFacts": ["Glasseye sees things no one else can", "Glasseye's quiet observations have saved lives"],
+			"history": "Wren trusts Glasseye's perception implicitly. They complement each other — she builds, he sees."
+		},
+		"farweft": {
+			"targetId": "farweft",
+			"attitude": 40,
+			"tags": ["outsider", "mutual_respect"],
+			"knownFacts": ["Farweft patrols near Hollowreach", "Farweft is more open-minded than most walkers"],
+			"history": "Cautious respect. Farweft doesn't flinch around the Fray-touched, which Wren appreciates."
+		}
+	},
+	"questConnections": ["main_quest_act2", "companion_wren", "forge_in_the_fray_quest"],
+	"arc": "survivor_to_pioneer"
+}
